@@ -1,4 +1,7 @@
 <?php
+
+// Email is broken fix by using a modern, secure approach with PHPMailer and Gmail SMTP!!!!!!
+
 $message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
