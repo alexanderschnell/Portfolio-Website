@@ -1,6 +1,6 @@
 <?php
-// portfolio.php
-// Define your portfolio items
+
+// My portfolio items
 $portfolio_items = [
     [
         'title' => 'Project 1',
@@ -83,7 +83,7 @@ nav ul li a {
     color: #333333;
     text-decoration: none;
     font-weight: 500;
-    font-size: 16px; /* Adjust this value as needed */
+    font-size: 16px; 
     transition: color 0.3s ease;
 }
 
@@ -97,7 +97,7 @@ h1 {
     color: #36454F;
     font-weight: 700;
     margin: 0;
-    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); /* Adjusted text shadow */
+    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
     padding-left: 25px;
 }
 
@@ -105,7 +105,7 @@ main {
     padding: 30px;
     text-align: center;
     padding-bottom: 100px;
-    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); /* Adjusted text shadow */
+    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
     font-size: 20px;
 }
 
@@ -140,18 +140,18 @@ main p {
     height: 300px;
     overflow: hidden;
     transition: transform 0.3s ease;
-    background-color: #f0f0f0; /* This can be removed if you don't want any background color */
+    background-color: #f0f0f0; 
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px; /* Optional: for rounded corners */
+    border-radius: 8px; 
     box-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
 }
 
 .image-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Changed from 'contain' to 'cover' */
+    object-fit: cover; 
     transition: transform 0.3s ease;
 }
 
@@ -217,7 +217,7 @@ footer {
 footer p {
     font-family: 'Montserrat', sans-serif;;
     margin: 0;
-    padding-left: 20px; /* Adjust this value to move text more or less to the right */
+    padding-left: 20px; 
     text-align: left;
 }
 /* Existing dark mode styles */
@@ -277,7 +277,6 @@ body.dark-mode #dark-mode-toggle {
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="portfolio.php">Portfolio</a></li>
-                <li><a href="about.php">About</a></li>
                 <li><a href="contact.php">Contact</a></li>
             </ul>
         </nav>
@@ -286,7 +285,6 @@ body.dark-mode #dark-mode-toggle {
     <main>
     <div class="portfolio-container">
     <?php
-    // Render first two items
     echo renderPortfolioItem($portfolio_items[0]);
     echo renderPortfolioItem($portfolio_items[1]);
     echo renderPortfolioItem($portfolio_items[2]);
