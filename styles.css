@@ -29,7 +29,7 @@ nav ul li a {
     color: #333333;
     text-decoration: none;
     font-weight: 500;
-    font-size: 16px; /* Adjust this value as needed */
+    font-size: 16px; 
     transition: color 0.3s ease;
 }
 
@@ -43,14 +43,23 @@ h1 {
     color: #3498db;
     font-weight: 700;
     margin: 0;
-    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); /* Adjusted text shadow */
+    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
     padding-left: 25px;
 }
 
 main {
-    padding-top: 180px;
+    padding-top: 115px;
     text-align: center;
 }
+
+#dynamic-greeting {
+    font-size: 80px;
+    color: #3498db;
+    margin-bottom: 40px;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
+}
+
 
 main h3 {
     font-family: 'Montserrat', sans-serif;
@@ -60,7 +69,7 @@ main h3 {
     text-align: left;
     padding-left: 150px;
     color: #3498db;
-    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); /* Adjusted text shadow */
+    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
 }
 
 
@@ -90,13 +99,6 @@ main h4 {
     background-color: #D4AF37;
 }
 
-#dynamic-greeting {
-    font-size: 50px;
-    color: #3498db;
-    margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif;
-    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); /* Adjusted text shadow */
-}
 
 footer {
     background-color: #ffffff;
@@ -114,6 +116,6 @@ footer {
 footer p {
     font-family: 'Montserrat', sans-serif;;
     margin: 0;
-    padding-left: 20px; /* Adjust this value to move text more or less to the right */
+    padding-left: 20px; 
     text-align: left;
 }

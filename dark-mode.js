@@ -1,4 +1,4 @@
-// Create a function to toggle dark mode
+// Dark Mode function 
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     
