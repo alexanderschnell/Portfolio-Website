@@ -17,7 +17,8 @@ body {
 }
 
 header {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #ffffff;
+    color: #333333;
     padding: 0.8rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -27,6 +28,7 @@ header {
     top: 0;
     z-index: 1000;
     box-sizing: border-box;
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.3);
 }
 
 
@@ -117,6 +119,7 @@ nav ul {
     display: flex;
     gap: 30px;
     margin: 0;
+   
 }
 
 nav ul li a {
