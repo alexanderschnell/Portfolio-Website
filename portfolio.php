@@ -102,7 +102,7 @@ h1 {
 }
 
 main {
-    padding: 30px;
+    padding: 80px;
     text-align: center;
     padding-bottom: 100px;
     text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3); 
