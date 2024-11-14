@@ -151,6 +151,22 @@ footer p {
     margin: 0;
 }
 
+span {
+    width: 800px;
+    height: 240px;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 4px 4px 5px #3498db;
+
+}
+
+
     </style>
 </head>
 <body>
@@ -170,8 +186,12 @@ footer p {
             <h2 id="dynamic-greeting"></h2>
         </section>        
         <section class="about-section">
+           
     <h3>About Me</h3>
-    <h4>My name is Alexander Schnell. I am a level 2 student at Algonquin College studying Computer Engineering Technology - Computing Science. I am currently seeking co-op opportunities to gain real world expierence. I am always interested in learning new technologies and figuring out how they work.</h4>    
+    <h4><span> My name is Alexander Schnell. I am a level 2 student at Algonquin College studying Computer Engineering Technology - Computing Science. I am currently seeking co-op opportunities to gain real world expierence. I am increasingly interested in learning new technologies and figuring out how they work.</span></h4>   
+    <div class="box">
+
+</div> 
 </section>
     </main>
     <footer>
