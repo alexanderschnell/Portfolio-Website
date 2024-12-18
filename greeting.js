@@ -4,14 +4,17 @@ function updateGreeting() {
     let greeting;
 
     if (currentHour < 12) {
-        greeting = "Good morning... Welcome to my website!";
+        greeting = "Good morning.";
     } else if (currentHour < 18) {
-        greeting = "Good afternoon... Welcome to my website!";
+        greeting = "Good afternoon.";
     } else {
-        greeting = "Good evening... Welcome to my website!";
+        greeting = "Good evening.";
     }
 
     greetingElement.textContent = `${greeting}`;
+
+    // Add fade-in effect class when greeting is updated
+    greetingElement.style.animation = "fade-in 2s ease-in forwards";
 }
 
 document.addEventListener('DOMContentLoaded', updateGreeting);
