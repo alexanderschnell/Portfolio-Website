@@ -4,286 +4,282 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexander Schnell - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="dark-mode.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Core styles */
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #F5F5F5;
-            color: #36454F;
-        }
-
-        /* Header styles (preserved from original) */
-     header {
-         background-color: #ffffff;
-         color: #333333;
-         height: 60px;
-         display: flex;
-         justify-content: flex-end; /* Align navigation bar to the right */
-         align-items: center;
-         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-         padding: 0 2rem;
-     }
-
-
-
-
-        nav ul {
-            font-family: 'Montserrat', sans-serif;
-            list-style-type: none;
-            padding-right: 25px;
-            display: flex;
-            gap: 30px;
-        }
-
-        nav ul li a {
-            color: #333333;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
-
-        nav ul li a:hover {
-            color: #00BFA5;
-        }
-
-        /* Main content styles */
-        main {
-            padding: 40px 40px 40px 40px; /* Reduced top padding from 40px to 20px */
-            max-width: 1200px;
-            margin: 0 auto;
-            margin-bottom: 150px; /* Space for footer */
-        }
-
-        /* GitHub repos section styles */
-        .github-repos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-
-      .repo-card {
-          background: #ffffff;
-          border-radius: 8px;
-          padding: 20px;
-          box-shadow: 0 2px 4px rgba(128, 128, 128, 0.4) !important;
-          transition: transform 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          min-height: 200px;
-          position: relative; /* For absolute positioning of the link */
-      }
-
-      .repo-card:hover {
-          transform: translateY(-5px);
-      }
-
-      .repo-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start; /* Align to top */
-          margin-bottom: 15px;
-          position: relative; /* For proper stacking context */
-      }
-
-      .repo-header h3 {
-          margin: 0;
-          color: #333333;
-          font-family: 'Montserrat', sans-serif;
-          padding-right: 30px; /* Make space for the link icon */
-      }
-
-      .repo-header a {
-          position: absolute;
-          top: 0;
-          right: 0;
-          color: #666;
-          transition: color 0.3s ease;
-      }
-
-      .repo-header a:hover {
-          color: #00BFA5;
-      }
-
-      .repo-description {
-          flex-grow: 1;
-          margin-bottom: 15px;
-      }
-
-      .repo-stats {
-          display: flex;
-          gap: 15px;
-          font-size: 0.9rem;
-          color: #666;
-          margin-top: auto;
-          justify-content: flex-start;
-          align-items: center;
-      }
-
-      .repo-stats span {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          padding: 10px;
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 2px 2px 2px #808080;
-          height: 20px;
-      }
-
-     footer {
-                 background-color: #ffffff;
-                 color: #333333;
-                 height: 60px;
-                 display: flex;
-                 justify-content: space-between;
-                 align-items: center;
-                 box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-                 padding: 0 20px;
-                 position: absolute;
-                 bottom: 0;
-                 left: 0;
-                 right: 0;
-             }
-
-       footer p {
-           font-family: 'Montserrat', sans-serif;
+       * {
            margin: 0;
+           padding: 0;
+           box-sizing: border-box;
        }
 
-       span {
-           width: 800px;
-           height: auto;
-           justify-content: center;
-           padding: 10px;
-           background-color: white;
+       body {
+           font-family: 'Montserrat', sans-serif;
+           line-height: 1.6;
+           margin: 0;
+           padding: 0;
+           background-color: #F5F5F5;
+           color: #36454F;
+           min-height: 100vh;
+           position: relative;
+           padding-bottom: 70px;
+           transition: background-color 0.3s ease;
+       }
+
+       header {
+           background-color: rgba(255, 255, 255, 0.95);
+           color: #333333;
+           height: 70px;
+           display: flex;
+           justify-content: flex-end;
+           align-items: center;
+           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+           padding: 0 2rem;
+           position: relative;
+           z-index: 10;
+           transition: background-color 0.3s ease;
+       }
+
+       nav ul {
+           list-style-type: none;
+           display: flex;
+           gap: 40px;
+           padding-right: 25px;
+       }
+
+       nav ul li a {
+           color: #333333;
+           text-decoration: none;
+           font-weight: 500;
+           font-size: 18px;
+           padding: 8px 16px;
+           border-radius: 4px;
+           transition: all 0.3s ease;
+       }
+
+       nav ul li a:hover {
+           color: #00BFA5;
+           background-color: rgba(0, 191, 165, 0.1);
+       }
+
+       main {
+           padding: 40px;
+           max-width: 1200px;
+           margin: 0 auto;
+       }
+
+       h2 {
+           font-family: 'Montserrat', sans-serif;
+           font-size: 32px;
+           font-weight: 700;
+           color: #333;
+           margin-bottom: 30px;
+           text-align: center;
+       }
+
+       .github-repos {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+           gap: 20px;
+           padding: 20px 0;
+       }
+
+       .repo-card {
+           background: #ffffff;
            border-radius: 8px;
-           display: inline-block;
-           box-shadow: 4px 4px 5px #3498db;
+           padding: 20px;
+           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+           transition: transform 0.3s ease, box-shadow 0.3s ease;
+           display: flex;
+           flex-direction: column;
+           min-height: 200px;
+           position: relative;
        }
 
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #333;
-            color: #f5f5f5;
-        }
+       .repo-card:hover {
+           transform: translateY(-5px);
+           box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+       }
 
-        body.dark-mode header {
-            background-color: #222;
-            color: #f5f5f5;
-        }
+       .repo-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: flex-start;
+           margin-bottom: 15px;
+       }
 
-        /* Update the dark mode nav hover color */
-        body.dark-mode nav ul li a:hover {
-            color: #00BFA5;  /* Changed from #3498db */
-        }
-    body.dark-mode nav ul li a {
-        color: #f5f5f5;  /* Makes links white in dark mode */
-    }
+       .repo-header h3 {
+           margin: 0;
+           color: #333333;
+           font-family: 'Montserrat', sans-serif;
+           padding-right: 30px;
+       }
 
-        body.dark-mode header h1 {
-            color: #ffffff;
-        }
+       .repo-header a {
+           color: #666;
+           transition: color 0.3s ease;
+       }
 
-      /* Dark mode adjustments */
-      body.dark-mode .repo-card {
-          background-color: #222;
-          color: #f5f5f5;
-      }
+       .repo-header a:hover {
+           color: #00BFA5;
+       }
 
-      body.dark-mode .repo-header h3 {
-          color: #ffffff;
-      }
+       .repo-description {
+           flex-grow: 1;
+           margin-bottom: 15px;
+           color: #666;
+       }
 
-      body.dark-mode .repo-stats {
-          color: #aaa;
-      }
+       .repo-stats {
+           display: flex;
+           gap: 15px;
+           font-size: 0.9rem;
+           color: #666;
+           margin-top: auto;
+       }
 
-      body.dark-mode .repo-stats span {
-          background-color: #333;
-          color: #ffffff;
-          box-shadow: 2px 2px 2px #4a4a4a;
-      }
-        /* Make sure SVG icons are also white in dark mode */
-        body.dark-mode .repo-stats span svg {
-            fill: #ffffff;
-        }
+       .repo-stats span {
+           display: flex;
+           align-items: center;
+           gap: 5px;
+           padding: 4px 8px;
+           background-color: rgba(0, 0, 0, 0.05);
+           border-radius: 4px;
+       }
 
-        body.dark-mode footer {
-            background-color: #222;
-            color: #f5f5f5;
-        }
+       footer {
+           background-color: rgba(255, 255, 255, 0.95);
+           color: #333333;
+           height: 70px;
+           display: grid;
+           grid-template-columns: 1fr auto 1fr;
+           align-items: center;
+           box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+           padding: 0 40px;
+           position: absolute;
+           bottom: 0;
+           left: 0;
+           right: 0;
+           transition: background-color 0.3s ease;
+       }
 
-     /* Dark Mode Toggle Button - Default Light Mode */
-     #dark-mode-toggle {
-         background-color: #f5f5f5;
-         color: #333;
-         border: none;
-         padding: 10px 20px;
-         border-radius: 5px;
-         cursor: pointer;
-         transition: all 0.3s ease;
-         margin-right: 20px;
-     }
+       .social-links {
+           justify-self: start;
+           display: flex;
+           gap: 20px;
+           align-items: center;
+       }
 
-     /* Light Mode Hover */
-     #dark-mode-toggle:hover {
-         background-color: #00BFA5; /* Green color on hover */
-         color: #ffffff;
-     }
+       .social-links a {
+           color: #333333;
+           text-decoration: none;
+           transition: color 0.3s ease;
+       }
 
-     /* Dark Mode - Default */
-     body.dark-mode #dark-mode-toggle {
-         background-color: #333;
-         color: #f5f5f5;
-     }
+       .social-links a:hover {
+           color: #00BFA5;
+       }
 
-     /* Dark Mode Hover */
-     body.dark-mode #dark-mode-toggle:hover {
-         background-color: #00BFA5; /* Green color on hover */
-         color: #ffffff; /* White text for better contrast */
-     }
+       #dark-mode-toggle {
+           justify-self: end;
+           background-color: #f5f5f5;
+           color: #333;
+           border: none;
+           padding: 12px 24px;
+           border-radius: 6px;
+           cursor: pointer;
+           transition: all 0.3s ease;
+           font-family: 'Montserrat', sans-serif;
+           font-weight: 500;
+           font-size: 16px;
+       }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            main {
-                padding: 20px;
-            }
+       #dark-mode-toggle:hover {
+           background-color: #00BFA5;
+           color: #ffffff;
+           transform: translateY(-1px);
+       }
 
-            nav ul {
-                gap: 15px;
-                padding-right: 15px;
-            }
+       /* Dark mode styles */
+       body.dark-mode {
+           background-color: #1a1a1a;
+           color: #f5f5f5;
+       }
 
-            h1 {
-                padding-left: 15px;
-            }
-        }
+       body.dark-mode header {
+           background-color: rgba(34, 34, 34, 0.95);
+       }
 
-      /* Light mode styles for h2 */
-      h2 {
-          font-family: 'Montserrat', sans-serif;
-          font-size: 32px;
-          font-weight: 700;
-          color: #333;  /* Text color for light mode */
-          background-color: transparent;  /* Optional background */
-          margin-bottom: 20px;
-          text-align: center;
-      }
+       body.dark-mode nav ul li a {
+           color: #f5f5f5;
+       }
 
-      /* Dark mode styles for h2 */
-      body.dark-mode h2 {
-          color: #f5f5f5;  /* White text color for dark mode */
-      }   /* Center the heading */
-    }
+       body.dark-mode nav ul li a:hover {
+           color: #00BFA5;
+           background-color: rgba(0, 191, 165, 0.1);
+       }
 
+       body.dark-mode h2 {
+           color: #f5f5f5;
+       }
+
+       body.dark-mode .repo-card {
+           background-color: #222;
+           color: #f5f5f5;
+       }
+
+       body.dark-mode .repo-header h3 {
+           color: #f5f5f5;
+       }
+
+       body.dark-mode .repo-description {
+           color: #ccc;
+       }
+
+       body.dark-mode .repo-stats {
+           color: #aaa;
+       }
+
+       body.dark-mode .repo-stats span {
+           background-color: rgba(255, 255, 255, 0.1);
+       }
+
+       body.dark-mode footer {
+           background-color: rgba(34, 34, 34, 0.95);
+           color: #f5f5f5;
+       }
+
+       body.dark-mode .social-links a {
+           color: #f5f5f5;
+       }
+
+       body.dark-mode .social-links a:hover {
+           color: #00BFA5;
+       }
+
+       body.dark-mode #dark-mode-toggle {
+           background-color: #333;
+           color: #f5f5f5;
+       }
+
+       body.dark-mode #dark-mode-toggle:hover {
+           background-color: #00BFA5;
+           color: #ffffff;
+       }
+
+       @media (max-width: 768px) {
+           main {
+               padding: 20px;
+           }
+
+           nav ul {
+               gap: 20px;
+               padding-right: 15px;
+           }
+
+           footer {
+               padding: 0 20px;
+           }
+       }
     </style>
 </head>
 <body>
@@ -305,81 +301,24 @@
     </main>
 
     <footer>
+        <div class="social-links">
+            <a href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/alexander-schnell-8064262b1" target="_blank" rel="noopener noreferrer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+            </a>
+        </div>
         <p>&copy; <?php echo date("Y"); ?> Alexander Schnell. All rights reserved.</p>
-        <button id="dark-mode-toggle">Toggle Dark Mode</button>
+        <button id="dark-mode-toggle">Dark Mode</button>
     </footer>
 
-    <script>
-       // Add this language color mapping
-       const languageColors = {
-           "JavaScript": "#f1e05a",
-           "Python": "#3572A5",
-           "Java": "#b07219",
-           "HTML": "#e34c26",
-           "CSS": "#563d7c",
-           "TypeScript": "#2b7489",
-           "PHP": "#4F5D95",
-           "C++": "#f34b7d",
-           "C#": "#178600",
-           "Ruby": "#701516",
-           // Add more languages as needed
-       };
-
-       async function loadGitHubRepos() {
-           const username = 'alexanderschnell';
-           const reposContainer = document.getElementById('github-repos');
-
-           try {
-               const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&direction=desc&per_page=6`);
-               const repos = await response.json();
-
-               reposContainer.innerHTML = repos.map(repo => `
-                   <div class="repo-card">
-                       <div class="repo-header">
-                           <h3>${repo.name}</h3>
-                           <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
-                               <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                   <path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 1 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-                                   <path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-                               </svg>
-                           </a>
-                       </div>
-                       <div class="repo-description">
-                           <p>${repo.description || 'No description available'}</p>
-                       </div>
-                       <div class="repo-stats">
-                           ${repo.language ? `
-                               <span>
-                                   <svg width="12" height="12" viewBox="0 0 12 12">
-                                       <circle cx="6" cy="6" r="6" fill="${languageColors[repo.language] || '#888888'}"/>
-                                   </svg>
-                                   ${repo.language}
-                               </span>
-                           ` : ''}
-                           <span>
-                               <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                   <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/>
-                               </svg>
-                               ${repo.stargazers_count}
-                           </span>
-                           <span>
-                               <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                   <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0z"/>
-                               </svg>
-                               ${repo.forks_count}
-                           </span>
-                       </div>
-                   </div>
-               `).join('');
-           } catch (error) {
-               console.error('Error fetching GitHub repos:', error);
-               reposContainer.innerHTML = '<p>Error loading repositories</p>';
-           }
-       }
-
-        // Load repos when the page loads
-        loadGitHubRepos();
-    </script>
+    <!-- Scripts -->
     <script src="dark-mode.js"></script>
+    <script src="github-repos.js"></script>
 </body>
 </html>
