@@ -19,15 +19,19 @@
         }
 
         /* Header styles (preserved from original) */
-        header {
-            background-color: #ffffff;
-            color: #333333;
-            padding: 0.3rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+     header {
+         background-color: #ffffff;
+         color: #333333;
+         height: 60px;
+         display: flex;
+         justify-content: flex-end; /* Align navigation bar to the right */
+         align-items: center;
+         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+         padding: 0 2rem;
+     }
+
+
+
 
         nav ul {
             font-family: 'Montserrat', sans-serif;
@@ -46,25 +50,15 @@
         }
 
         nav ul li a:hover {
-            color: #3498db;
-        }
-
-        h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 26px;
-            color: #36454F;
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3);
-            padding-left: 25px;
+            color: #00BFA5;
         }
 
         /* Main content styles */
         main {
-            padding: 85px 40px 40px 40px; /* Reduced top padding from 40px to 20px */
+            padding: 40px 40px 40px 40px; /* Reduced top padding from 40px to 20px */
             max-width: 1200px;
             margin: 0 auto;
-            margin-bottom: 100px; /* Space for footer */
+            margin-bottom: 150px; /* Space for footer */
         }
 
         /* GitHub repos section styles */
@@ -79,67 +73,85 @@
           background: #ffffff;
           border-radius: 8px;
           padding: 20px;
-          box-shadow: 0 2px 4px rgba(128, 128, 128, 0.4) !important; /* Grey shadow with !important */
+          box-shadow: 0 2px 4px rgba(128, 128, 128, 0.4) !important;
           transition: transform 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          min-height: 200px;
+          position: relative; /* For absolute positioning of the link */
       }
 
-        .repo-card:hover {
-            transform: translateY(-5px);
-        }
+      .repo-card:hover {
+          transform: translateY(-5px);
+      }
 
-        .repo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+      .repo-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start; /* Align to top */
+          margin-bottom: 15px;
+          position: relative; /* For proper stacking context */
+      }
 
-        .repo-header h3 {
-            margin: 0;
-            color: #3498db;
-            font-family: 'Montserrat', sans-serif;
-        }
+      .repo-header h3 {
+          margin: 0;
+          color: #333333;
+          font-family: 'Montserrat', sans-serif;
+          padding-right: 30px; /* Make space for the link icon */
+      }
 
-        .repo-header a {
-            color: #666;
-            transition: color 0.3s ease;
-        }
+      .repo-header a {
+          position: absolute;
+          top: 0;
+          right: 0;
+          color: #666;
+          transition: color 0.3s ease;
+      }
 
-        .repo-header a:hover {
-            color: #3498db;
-        }
+      .repo-header a:hover {
+          color: #00BFA5;
+      }
 
-        .repo-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 15px;
-        }
+      .repo-description {
+          flex-grow: 1;
+          margin-bottom: 15px;
+      }
 
-       .repo-stats span {
-           display: flex;
-           align-items: center;
-           gap: 5px;
-           padding: 10px;
-           background-color: white;
-           border-radius: 8px;
-           box-shadow: 2px 2px 2px #808080;  /* Changed to grey */
-       }
+      .repo-stats {
+          display: flex;
+          gap: 15px;
+          font-size: 0.9rem;
+          color: #666;
+          margin-top: auto;
+          justify-content: flex-start;
+          align-items: center;
+      }
 
-       footer {
-           background-color: #ffffff;
-           color: #333333;
-           padding: 0.3rem 20px;
-           width: 100%;
-           box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           box-sizing: border-box;
-           position: fixed;
-           bottom: 0;
-       }
+      .repo-stats span {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 10px;
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 2px 2px 2px #808080;
+          height: 20px;
+      }
+
+     footer {
+                 background-color: #ffffff;
+                 color: #333333;
+                 height: 60px;
+                 display: flex;
+                 justify-content: space-between;
+                 align-items: center;
+                 box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+                 padding: 0 20px;
+                 position: absolute;
+                 bottom: 0;
+                 left: 0;
+                 right: 0;
+             }
 
        footer p {
            font-family: 'Montserrat', sans-serif;
@@ -168,34 +180,37 @@
             color: #f5f5f5;
         }
 
-        body.dark-mode nav ul li a {
-            color: #f5f5f5;
+        /* Update the dark mode nav hover color */
+        body.dark-mode nav ul li a:hover {
+            color: #00BFA5;  /* Changed from #3498db */
         }
+    body.dark-mode nav ul li a {
+        color: #f5f5f5;  /* Makes links white in dark mode */
+    }
 
         body.dark-mode header h1 {
             color: #ffffff;
         }
 
+      /* Dark mode adjustments */
       body.dark-mode .repo-card {
           background-color: #222;
           color: #f5f5f5;
-          box-shadow: 0 2px 4px rgba(128, 128, 128, 0.4) !important; /* Same shadow for dark mode */
       }
 
-        body.dark-mode .repo-header h3 {
-            color: #3498db;
-        }
+      body.dark-mode .repo-header h3 {
+          color: #ffffff;
+      }
 
-        body.dark-mode .repo-stats {
-            color: #aaa;
-        }
+      body.dark-mode .repo-stats {
+          color: #aaa;
+      }
 
-       /* In your dark mode styles */
-       body.dark-mode .repo-stats span {
-           background-color: #333;  /* Dark grey background for the boxes */
-           color: #ffffff;         /* White text */
-           box-shadow: 2px 2px 2px #4a4a4a;  /* Dark grey shadow */
-       }
+      body.dark-mode .repo-stats span {
+          background-color: #333;
+          color: #ffffff;
+          box-shadow: 2px 2px 2px #4a4a4a;
+      }
         /* Make sure SVG icons are also white in dark mode */
         body.dark-mode .repo-stats span svg {
             fill: #ffffff;
@@ -206,20 +221,35 @@
             color: #f5f5f5;
         }
 
-        #dark-mode-toggle {
-            background-color: #f5f5f5;
-            color: #333;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-right: 20px;
-        }
+     /* Dark Mode Toggle Button - Default Light Mode */
+     #dark-mode-toggle {
+         background-color: #f5f5f5;
+         color: #333;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         margin-right: 20px;
+     }
 
-        body.dark-mode #dark-mode-toggle {
-            background-color: #333;
-            color: #f5f5f5;
-        }
+     /* Light Mode Hover */
+     #dark-mode-toggle:hover {
+         background-color: #00BFA5; /* Green color on hover */
+         color: #ffffff;
+     }
+
+     /* Dark Mode - Default */
+     body.dark-mode #dark-mode-toggle {
+         background-color: #333;
+         color: #f5f5f5;
+     }
+
+     /* Dark Mode Hover */
+     body.dark-mode #dark-mode-toggle:hover {
+         background-color: #00BFA5; /* Green color on hover */
+         color: #ffffff; /* White text for better contrast */
+     }
 
         /* Responsive design */
         @media (max-width: 768px) {
@@ -236,11 +266,28 @@
                 padding-left: 15px;
             }
         }
+
+      /* Light mode styles for h2 */
+      h2 {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 32px;
+          font-weight: 700;
+          color: #333;  /* Text color for light mode */
+          background-color: transparent;  /* Optional background */
+          margin-bottom: 20px;
+          text-align: center;
+      }
+
+      /* Dark mode styles for h2 */
+      body.dark-mode h2 {
+          color: #f5f5f5;  /* White text color for dark mode */
+      }   /* Center the heading */
+    }
+
     </style>
 </head>
 <body>
     <header>
-        <h1>My Portfolio</h1>
         <nav>
             <ul>
                 <li><a href="index.php">Home</a></li>
@@ -251,7 +298,7 @@
     </header>
 
     <main>
-        <h2>My GitHub Projects</h2>
+        <h2>My Projects</h2>
         <div id="github-repos" class="github-repos">
             <!-- Repositories will be loaded here -->
         </div>
@@ -297,7 +344,9 @@
                                </svg>
                            </a>
                        </div>
-                       <p>${repo.description || 'No description available'}</p>
+                       <div class="repo-description">
+                           <p>${repo.description || 'No description available'}</p>
+                       </div>
                        <div class="repo-stats">
                            ${repo.language ? `
                                <span>
