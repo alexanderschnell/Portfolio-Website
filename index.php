@@ -31,7 +31,6 @@ header {
     box-shadow: 0 -1px 4px rgba(0,0,0,0.3);
 }
 
-
 h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 26px;
