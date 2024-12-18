@@ -4,11 +4,11 @@ function updateGreeting() {
     let greeting;
 
     if (currentHour < 12) {
-        greeting = "Good morning!";
+        greeting = "Good morning... Welcome to my website!";
     } else if (currentHour < 18) {
-        greeting = "Good afternoon!";
+        greeting = "Good afternoon... Welcome to my website!";
     } else {
-        greeting = "Good evening!";
+        greeting = "Good evening... Welcome to my website!";
     }
 
     greetingElement.textContent = `${greeting}`;

@@ -114,24 +114,35 @@ if (isset($_SESSION['message'])) {
             background-color: #D4AF37;
         }
 
-        footer {
-            background-color: #ffffff;
-            color: #333333;
-            padding: 0.3rem;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      footer {
+          background-color: #ffffff;
+          color: #333333;
+          padding: 0.3rem 20px;
+          width: 100%;
+          box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-sizing: border-box;
+          position: fixed;
+          bottom: 0;
+      }
 
-        footer p {
-            margin: 0;
-            padding-left: 20px;
-            text-align: left;
-        }
+      footer p {
+          font-family: 'Montserrat', sans-serif;
+          margin: 0;
+      }
+
+      span {
+          width: 800px;
+          height: auto;
+          justify-content: center;
+          padding: 10px;
+          background-color: white;
+          border-radius: 8px;
+          display: inline-block;
+          box-shadow: 4px 4px 5px #3498db;
+      }
 
         /* Dark mode styles */
         body.dark-mode {

@@ -7,29 +7,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dark-mode.css">
     <style>
-
 /* Reset and base styles */
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #F5F5F5;  /* Light mode default */
 }
 
-header {
-    background-color: #ffffff;
-    color: #333333;
-    padding: 0.8rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-    box-sizing: border-box;
-    box-shadow: 0 -1px 4px rgba(0,0,0,0.3);
-}
+ header {
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0.3rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
 h1 {
     font-family: 'Montserrat', sans-serif;
@@ -43,95 +40,56 @@ h1 {
 
 /* Main content layout */
 main {
-    padding-top: 0;  /* Remove top padding since we're using full viewport height */
-    max-width: 100%;  /* Allow full width for greeting */
-    margin: 0;
-}
-
-.greeting-section {
-    height: 100vh;
+    height: calc(100vh - 120px);
+    margin-top: 60px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 5rem;
 }
 
 #dynamic-greeting {
-    font-size: clamp(40px, 8vw, 80px);
+    font-size: clamp(20px, 8vw, 60px);
     color: #3498db;
     font-family: 'Montserrat', sans-serif;
     text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3);
     margin: 0;
     text-align: center;
-    padding: 0 20px;
-}
-
-/* ABOUT SECTION STYLES */
-.about-section {
-    padding: 10px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;  /* Center children horizontally */
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    min-height: 100vh;  /* Full viewport height for second section */
-    justify-content: center;  /* Center content vertically */
-}
-
-
-/* About section heading */
-main h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 40px;
-    color: #3498db;
-    text-shadow: 1px 1px 2px rgba(54, 69, 79, 0.3);
-    text-align: center;  /* Center the heading */
-    margin: 0 0 30px 0;  /* Changed padding to margin for spacing */
-    width: 100%;
-    max-width: 800px;  /* Match the text width */
 }
 
 /* About section text */
 main h4 {
     font-family: 'Montserrat', sans-serif;
     font-size: 25px;
-    color: #3498db;
-    text-align: center;  /* Center the text */
+    color: #4a4a4a;
+    text-align: center;
     max-width: 800px;
-    padding: 0 20px;  /* Responsive padding */
+    padding: 0 20px;
     line-height: 1.6;
     margin: 0;
 }
 
-.about-section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    
-}
-
 /* NAV BAR STYLES */
 nav ul {
-    font-family: 'Montserrat', sans-serif;
-    list-style-type: none;
-    padding-right: 45px;
-    display: flex;
-    gap: 30px;
-    margin: 0;
-   
-}
+       font-family: 'Montserrat', sans-serif;
+                   list-style-type: none;
+                   padding-right: 25px;
+                   display: flex;
+                   gap: 30px;
+               }
 
-nav ul li a {
-    color: #333333;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 16px;
-    transition: color 0.3s ease;
-}
+        nav ul li a {
+            color: #333333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
 
-nav ul li a:hover {
-    color: #3498db;
-}
+        nav ul li a:hover {
+            color: #3498db;
+        }
 
 footer {
     background-color: #ffffff;
@@ -143,6 +101,8 @@ footer {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
 }
 
 footer p {
@@ -152,20 +112,70 @@ footer p {
 
 span {
     width: 800px;
-    height: 240px;
+    height: auto;
     justify-content: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 20px;
     background-color: white;
     border-radius: 8px;
     display: inline-block;
     box-shadow: 4px 4px 5px #3498db;
-
+    transition: all 0.3s ease;
 }
 
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+}
 
+body.dark-mode header {
+    background-color: rgba(34, 34, 34, 0.9);
+}
+
+body.dark-mode nav ul li a {
+    color: #f5f5f5;
+}
+
+body.dark-mode nav ul li a:hover {
+    color: #3498db;
+}
+
+body.dark-mode footer {
+    background-color: rgba(34, 34, 34, 0.9);
+    color: #f5f5f5;
+}
+
+body.dark-mode span {
+    background-color: #2d2d2d;
+    color: #f5f5f5;
+    box-shadow: 4px 4px 5px rgba(52, 152, 219, 0.5);
+}
+
+body.dark-mode main h4 {
+    color: #f5f5f5;
+}
+
+/* Toggle button styles */
+#dark-mode-toggle {
+    background-color: #f5f5f5;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body.dark-mode #dark-mode-toggle {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+#dark-mode-toggle:hover {
+    background-color: #3498db;
+    color: #ffffff;
+}
     </style>
 </head>
 <body>
@@ -181,18 +191,10 @@ span {
     </header>
 
     <main>
-        <section class="greeting-section">
-            <h2 id="dynamic-greeting"></h2>
-        </section>        
-        <section class="about-section">
-           
-    <h3>About Me</h3>
-    <h4><span> My name is Alexander Schnell. I am a level 2 student at Algonquin College studying Computer Engineering Technology - Computing Science. I am currently seeking co-op opportunities to gain real world expierence. I am increasingly interested in learning new technologies and figuring out how they work.</span></h4>   
-    <div class="box">
-
-</div> 
-</section>
+        <h2 id="dynamic-greeting"></h2>
+        <h4><span>My name is Alex, a third semester Computer Engineering Technology - Computing Science student at Algonquin College's CO-OP program. I am actively seeking internship opportunities to apply my technical skills and gain hands-on industry experience. As a naturally curious individual with a passion for learning, I thrive on exploring new technologies and understanding their underlying mechanisms.</span></h4>
     </main>
+
     <footer>
         <p>&copy; <?php echo date("Y"); ?> Alexander Schnell. All rights reserved.</p>
         <button id="dark-mode-toggle">Toggle Dark Mode</button>
