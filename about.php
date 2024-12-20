@@ -3,31 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexander Schnell - Portfolio</title>
+    <title>Alexander Schnell - About</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-/* Reset default margin, padding, and box-sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body Styles */
 body {
     font-family: 'Montserrat', sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
+    height: 100vh;
+    overflow: hidden;
     background-color: #F5F5F5;
-    color: #36454F;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    position: relative;
     transition: background-color 0.3s ease;
 }
 
-/* Body Background Pattern */
 body::before {
     content: '';
     position: fixed;
@@ -38,9 +31,10 @@ body::before {
     background: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M18 17v-2h-1v2h-2v1h2v2h1v-2h2v-1h-2zm0-15V0h-1v2h-2v1h2v2h1V3h2V2h-2zM3 17v-2H2v2H0v1h2v2h1v-2h2v-1H3zM3 2V0H2v2H0v1h2v2h1V3h2V2H3z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
+    transform-origin: center;
 }
 
-/* Header and Navigation Styles */
+/* Header Styles */
 header {
     background-color: rgba(255, 255, 255, 0.95);
     color: #333333;
@@ -77,112 +71,154 @@ nav ul li a:hover {
     background-color: rgba(0, 191, 165, 0.1);
 }
 
-/* Mobile Menu Button */
 .mobile-menu-btn {
     display: none;
-    background: none;
-    border: none;
-    color: inherit;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.mobile-menu-btn svg {
-    stroke: #333333;
 }
 
 /* Main Content Styles */
 main {
-    flex: 1 0 auto;
-    padding: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
+    position: relative;
+    height: calc(100vh - 140px);
+    overflow-x: auto;
+}
+
+img {
+    position: fixed;
+    top: 50%;
+    left: 25%;
+    width: 300px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(2.5);
+    transform-origin: center;
+    z-index: 0;
+}
+
+.about-container {
+    position: fixed;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    width: 50%;
+    padding: 48px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    display: flex;
+    align-items: flex-start; /* Changed from center to flex-start */
+    justify-content: center;
+}
+
+.about-content {
     width: 100%;
-    padding-bottom: 90px;
-    position: relative;
-    z-index: 1;
-}
-
-h2 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-/* Repository Card Styles */
-.github-repos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
-    min-height: 200px;
-    position: relative;
-}
-
-.repo-card {
-    background: #ffffff;
-    border-radius: 8px;
+    max-width: 600px;
+    min-height: calc(100vh - 200px); /* Changed from height to min-height */
+    transform: scale(1);
+    transform-origin: center center;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    min-height: 200px;
-    position: relative;
-}
-
-.repo-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.repo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-}
-
-.repo-header h3 {
-    margin: 0;
-    color: #333333;
-    font-family: 'Montserrat', sans-serif;
     padding-right: 30px;
+    overflow-y: auto; /* Add scroll if content exceeds container */
 }
 
-.repo-header a {
-    color: #666;
-    transition: color 0.3s ease;
+/* Update the scrollbar styles to target about-content instead of about-container */
+.about-content::-webkit-scrollbar {
+    width: 8px;
 }
 
-.repo-header a:hover {
-    color: #00BFA5;
+.about-content::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.repo-description {
-    flex-grow: 1;
-    margin-bottom: 15px;
-    color: #666;
-}
-
-.repo-stats {
-    display: flex;
-    gap: 15px;
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: auto;
-}
-
-.repo-stats span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 8px;
-    background-color: rgba(0, 0, 0, 0.05);
+.about-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
+}
+
+/* Add dark mode support for the scrollbar */
+body.dark-mode .about-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.about-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.about-text {
+    flex: none;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: #444;
+}
+
+/* Skills Section */
+.skills-section {
+    flex: none;
+    margin: 2.5rem 0;
+}
+
+.skills-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+}
+
+.skill-tag {
+    padding: 8px 16px;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+}
+
+/* Language-specific colors */
+.skill-tag.javascript { background-color: #f1e05a; color: #000; }
+.skill-tag.python { background-color: #3572A5; }
+.skill-tag.java { background-color: #b07219; }
+.skill-tag.html { background-color: #e34c26; }
+.skill-tag.css { background-color: #563d7c; }
+.skill-tag.typescript { background-color: #2b7489; }
+.skill-tag.php { background-color: #4F5D95; }
+.skill-tag.cpp { background-color: #f34b7d; }
+.skill-tag.csharp { background-color: #178600; }
+.skill-tag.ruby { background-color: #701516; }
+.skill-tag.c { background-color: #555555; }
+
+/* Quote Section */
+.quote-section {
+    background-color: #f0f0f0;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.quote-section blockquote {
+    margin-bottom: 10px;
+}
+
+.quote-section cite {
+    display: block;
+    margin-top: 15px;
+    text-align: right;
+    padding-right: 10px;
 }
 
 /* Footer Styles */
@@ -200,15 +236,8 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
-    z-index: 100;
+    z-index: 10;
     transition: background-color 0.3s ease;
-}
-
-footer p {
-    font-size: 0.8rem;
-    margin: 0;
-    text-align: center;
 }
 
 .social-links {
@@ -228,21 +257,26 @@ footer p {
     color: #00BFA5;
 }
 
-/* Dark Mode Toggle */
-#dark-mode-toggle {
-    justify-self: end;
-    background: rgba(0, 0, 0, 0.05);
-    border: none;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    padding: 0;
+footer p {
+    font-size: 0.8rem;
+    margin: 0;
+    text-align: center;
 }
+
+#dark-mode-toggle {
+            justify-self: end;
+            background: rgba(0, 0, 0, 0.05); /* Light grey background in light mode */
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
 
 #dark-mode-toggle svg {
     width: 24px;
@@ -254,15 +288,19 @@ footer p {
 #dark-mode-toggle:hover {
     background-color: rgba(0, 191, 165, 0.1);
 }
-
+body.dark-mode #dark-mode-toggle {
+    background: rgba(255, 255, 255, 0.1); /* Lighter grey background in dark mode */
+}
+body.dark-mode #dark-mode-toggle:hover {
+    background-color: rgba(0, 191, 165, 0.1);
+}
 /* Dark Mode Styles */
 body.dark-mode {
     background-color: #1a1a1a;
-    color: #f5f5f5;
 }
 
 body.dark-mode::before {
-    background: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.05'%3E%3Cpath d='M18 17v-2h-1v2h-2v1h2v2h1v-2h2v-1h-2zm0-15V0h-1v2h-2v1h2v2h1V3h2V2h-2zM3 17v-2H2v2H0v1h2v2h1v-2h2v-1H3zM3 2V0H2v2H0v1h2v2h1V3h2V2H3z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M18 17v-2h-1v2h-2v1h2v2h1v-2h2v-1h-2zm0-15V0h-1v2h-2v1h2v2h1V3h2V2h-2zM3 17v-2H2v2H0v1h2v2h1v-2h2v-1H3zM3 2V0H2v2H0v1h2v2h1V3h2V2H3z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 body.dark-mode header {
@@ -278,29 +316,30 @@ body.dark-mode nav ul li a:hover {
     background-color: rgba(0, 191, 165, 0.1);
 }
 
-body.dark-mode h2 {
+body.dark-mode .about-container {
+    background: rgba(34, 34, 34, 0.95);
+}
+
+body.dark-mode .about-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .about-content h1,
+body.dark-mode .skills-section h2 {
     color: #f5f5f5;
 }
 
-body.dark-mode .repo-card {
-    background-color: #222;
+body.dark-mode .about-text p {
+    color: #ddd;
+}
+
+body.dark-mode .quote-section {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .quote-section blockquote,
+body.dark-mode .quote-section cite {
     color: #f5f5f5;
-}
-
-body.dark-mode .repo-header h3 {
-    color: #f5f5f5;
-}
-
-body.dark-mode .repo-description {
-    color: #ccc;
-}
-
-body.dark-mode .repo-stats {
-    color: #aaa;
-}
-
-body.dark-mode .repo-stats span {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode footer {
@@ -316,17 +355,8 @@ body.dark-mode .social-links a:hover {
     color: #00BFA5;
 }
 
-body.dark-mode #dark-mode-toggle {
-    background-color: #333;
-    color: #f5f5f5;
-}
-
 body.dark-mode #dark-mode-toggle svg {
     fill: #f5f5f5;
-}
-
-body.dark-mode #dark-mode-toggle:hover {
-    background-color: rgba(0, 191, 165, 0.1);
 }
 
 body.dark-mode #dark-mode-toggle {
@@ -334,7 +364,6 @@ body.dark-mode #dark-mode-toggle {
           color: #f5f5f5;
       }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
     body {
         height: 100vh;
@@ -344,29 +373,66 @@ body.dark-mode #dark-mode-toggle {
     main {
         position: absolute;
         top: 70px;
-        bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+        bottom: calc(185px + env(safe-area-inset-bottom, 0px));
         left: 0;
         right: 0;
-        padding: 30px;
+        padding: 15px;
         overflow-y: auto;
         height: auto;
         margin: 0;
     }
-h2{
-margin-bottom: 12px;
-}
 
-    .github-repos {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 15px;
-        margin-left: -2.5px;
-        margin-bottom: 10px;
+    img {
+        display: none;
     }
 
-    .repo-card {
-        margin: 0;
-        width: 100%;  /* Fix missing semicolon */
+    .about-container {
+        position: relative;
+        width: 100%;
+        top: 0;
+        right: 0;
+        height: auto;
+        min-height: calc(100% - 20px);
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .about-content {
+        width: 100%;
+        padding-bottom: 30px;
+    }
+
+    .about-content h1 {
+        font-size: 2rem;
+        margin-top: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .about-text p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .skills-section {
+        margin: 2rem 0;
+    }
+
+    .skills-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .skills-container {
+        gap: 8px;
+    }
+
+    .skill-tag {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    .quote-section {
+        padding: 15px;
+        margin-bottom: 5px;
     }
 
     header {
@@ -376,19 +442,6 @@ margin-bottom: 12px;
         right: 0;
         height: 70px;
         z-index: 1000;
-    }
-
-    .mobile-menu-btn {
-        display: block;
-        background: none;
-        border: none;
-        color: inherit;
-        padding: 10px;
-        cursor: pointer;
-        position: absolute;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
     }
 
     nav ul {
@@ -416,6 +469,31 @@ margin-bottom: 12px;
         width: 100%;
     }
 
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 10px;
+        cursor: pointer;
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .mobile-menu-btn svg {
+        stroke: #333333;
+    }
+
+    body.dark-mode .mobile-menu-btn svg {
+        stroke: #f5f5f5;
+    }
+
+    body.dark-mode nav ul {
+        background: rgba(34, 34, 34, 0.95);
+    }
+
     footer {
                            position: fixed;
                            bottom: 0;
@@ -439,26 +517,18 @@ margin-bottom: 12px;
     }
 
     .social-links {
-            justify-self: center;
-            display: flex;
-            padding-top: 5px;
-            gap: 20px;
-            align-items: center;
-        }
+                          justify-self: center;
+                          display: flex;
+                          padding-top: 5px;
+                          gap: 20px;
+                          align-items: center;
+                      }
 
     #dark-mode-toggle {
         justify-self: center;
     }
-
-    body.dark-mode nav ul {
-        background: rgba(34, 34, 34, 0.95);
-    }
-
-    body.dark-mode .mobile-menu-btn svg {
-        stroke: #f5f5f5;
-    }
 }
-           </style>
+    </style>
 </head>
 <body>
     <header>
@@ -469,20 +539,48 @@ margin-bottom: 12px;
                         </svg>
                     </button>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="portfolio.php">Portfolio</a></li>
-                <li><a href="contact.php">Contact</a></li>
+               <li><a href="index.php">Home</a></li>
+               <li><a href="about.php">About</a></li>
+               <li><a href="portfolio.php">Portfolio</a></li>
+               <li><a href="contact.php">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
-        <h2>My Projects</h2>
-        <div id="github-repos" class="github-repos">
-            <!-- Repositories will be loaded here -->
-        </div>
-    </main>
+   <main>
+       <img src="chief.png" width="300" height="300">
+       <!-- Add this inside your <main> tag, after the image -->
+       <div class="about-container">
+           <div class="about-content">
+               <h1>About Me</h1>
+               <div class="about-text">
+                   <p>Hello! My name is Alex, a passionate developer focused on creating elegant and efficient solutions to complex problems.</p>
+                   <p>With a background in Audio Engineering and Welding/Fabrication, I bring a unique perspective to every project I undertake. I believe in writing clean, maintainable code and creating intuitive user experiences.</p>
+                   <p>When I'm not programming, you can find me practicing Muay Thai, Skateboarding or Fishing. I'm always eager to learn new technologies and tackle challenging projects that push my boundaries.</p>
+               </div>
+
+               <div class="skills-section">
+                   <h2>Technical Skills</h2>
+                  <div class="skills-container">
+                      <div class="skill-tag java">Java</div>
+                      <div class="skill-tag c">C</div>
+                      <div class="skill-tag html">HTML</div>
+                      <div class="skill-tag css">CSS</div>
+                      <div class="skill-tag php">PHP</div>
+                      <div class="skill-tag javascript">JavaScript</div>
+                  </div>
+               </div>
+
+               <div class="quote-section">
+                   <blockquote>
+                       "The most certain way to succeed is always to try just one more time."
+                   </blockquote>
+                   <cite>— Thomas Edison</cite>
+               </div>
+           </div>
+       </div>
+   </main>
+
 
     <footer>
         <div class="social-links">
@@ -505,18 +603,19 @@ margin-bottom: 12px;
                         </svg>
                     </button>
     </footer>
+    <script src="greeting.js"></script>
     <script src="dark-mode.js"></script>
-    <script src="github-repos.js"></script>
     <script>
-    document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-        document.querySelector('nav ul').classList.toggle('show');
-    });
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('show');
+        });
 
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('nav')) {
-            document.querySelector('nav ul').classList.remove('show');
-        }
-    });
-    </script>
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('nav')) {
+                document.querySelector('nav ul').classList.remove('show');
+            }
+        });
+        </script>
 </body>
 </html>
