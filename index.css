@@ -1,0 +1,399 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #F5F5F5;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+header {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333333;
+    height: 70px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 2rem;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+main {
+    position: absolute;
+    top: 70px;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px)); /* Account for footer height plus safe area */
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    overflow-y: auto;
+}
+
+.turquoise-container {
+    background: linear-gradient(135deg, #00BFA5 0%, #00897B 100%);
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 3rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.turquoise-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.name-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slide-up 0.8s ease forwards;
+}
+
+.name-line {
+    font-size: 5rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    margin: 0;
+    display: block;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 40px;
+    padding-right: 25px;
+}
+
+nav ul li a {
+    color: #333333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #00BFA5;
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+.mobile-menu-btn {
+    display: none;
+}
+
+footer {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333333;
+    height: 70px; /* Match header height */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 2rem; /* Match header padding */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: background-color 0.3s ease;
+}
+
+footer p {
+    font-size: 0.8rem;
+    margin: 0;
+    text-align: center;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+}
+
+body.dark-mode header {
+    background-color: rgba(34, 34, 34, 0.95);
+}
+
+body.dark-mode nav ul li a {
+    color: #f5f5f5;
+}
+
+body.dark-mode nav ul li a:hover {
+    color: #00BFA5;
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+body.dark-mode footer {
+    background-color: rgba(34, 34, 34, 0.95);
+    color: #f5f5f5;
+}
+
+#dark-mode-toggle {
+    justify-self: end;
+    background: rgba(0, 0, 0, 0.05); /* Light grey background in light mode */
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+#dark-mode-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: #333333;
+    transition: all 0.3s ease;
+}
+
+#dark-mode-toggle:hover {
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+/* Dark mode specific styles */
+body.dark-mode #dark-mode-toggle svg {
+    fill: #f5f5f5;
+}
+
+
+body.dark-mode #dark-mode-toggle {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+body.dark-mode #dark-mode-toggle:hover {
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+.greeting {
+    position: absolute;
+    bottom: 30px;
+    right: 45px;
+    font-size: 3rem;
+    font-weight: 500;
+    color: white;
+    text-align: right;
+    opacity: 0;
+    animation: fade-in 2s ease-in forwards 1s;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.social-links {
+    justify-self: start;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.social-links a {
+    color: #333333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #00BFA5;
+}
+
+body.dark-mode .social-links a {
+    color: #f5f5f5;
+}
+
+body.dark-mode .social-links a:hover {
+    color: #00BFA5;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+
+    body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    main {
+        position: fixed;
+        top: 70px; /* Header height */
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px)); /* Footer height + safe area */
+        left: 0;
+        right: 0;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .turquoise-container {
+        width: 100%;
+        height: 100%;
+        padding: 25px;
+        gap: 1rem; /* Reduced gap */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between; /* Changed to space-between */
+        position: relative;
+        overflow: hidden; /* Added to ensure no scroll */
+    }
+
+    .name-container {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 0; /* Remove bottom margin */
+    }
+
+    .name-line {
+        font-size: 3rem;
+        line-height: 1.1;
+    }
+
+    nav ul {
+        gap: 20px;
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    nav ul.show {
+        display: flex;
+    }
+
+    nav ul li a {
+        font-size: 16px;
+        padding: 12px 16px;
+        display: block;
+        width: 100%;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 10px;
+        cursor: pointer;
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .mobile-menu-btn svg {
+        stroke: #333333;
+    }
+
+    body.dark-mode .mobile-menu-btn svg {
+        stroke: #f5f5f5;
+    }
+
+    body.dark-mode nav ul {
+        background: rgba(34, 34, 34, 0.95);
+    }
+
+    .greeting {
+        position: relative; /* Changed from absolute */
+        bottom: 0;
+        right: 0;
+        font-size: 1.5rem;
+        margin: 0;
+        align-self: flex-end; /* Added to align to right */
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        min-height: calc(70px + env(safe-area-inset-bottom, 0px));
+        padding: 0 0.5rem;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.95);
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+    }
+
+    footer p {
+        justify-self: center;
+        text-align: center;
+        font-size: 0.7rem;
+    }
+
+    .social-links {
+        justify-self: center;
+        display: flex;
+        padding-top: 5px;
+        gap: 20px;
+        align-items: center;
+    }
+
+    #dark-mode-toggle {
+        justify-self: center;
+
+    }
+}
