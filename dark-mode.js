@@ -1,21 +1,35 @@
-// Dark Mode function 
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-
-    // Save the user's preference in localStorage
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
-}
-
-// Check for saved user preference, if any, on load of the website
 document.addEventListener('DOMContentLoaded', () => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
-    const button = document.getElementById('dark-mode-toggle');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const sunPath = darkModeToggle.querySelector('.sun');
+    const moonPath = darkModeToggle.querySelector('.moon');
 
+    // Check if user preference exists in localStorage
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    // Set initial state based on localStorage
     if (isDarkMode) {
         document.body.classList.add('dark-mode');
+        sunPath.style.display = 'none';
+        moonPath.style.display = 'block';
+    } else {
+        document.body.classList.remove('dark-mode');
+        sunPath.style.display = 'block';
+        moonPath.style.display = 'none';
     }
 
-    // Add event listener to toggle button
-    button.addEventListener('click', toggleDarkMode);
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        // Update localStorage with new preference
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+
+        // Toggle icon
+        if (document.body.classList.contains('dark-mode')) {
+            sunPath.style.display = 'none';
+            moonPath.style.display = 'block';
+        } else {
+            sunPath.style.display = 'block';
+            moonPath.style.display = 'none';
+        }
+    });
 });
