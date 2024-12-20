@@ -77,10 +77,14 @@ nav ul li a:hover {
 
 /* Main Content Styles */
 main {
-    position: relative;
-    height: calc(100vh - 140px);
-    overflow-x: auto;
+    position: fixed;
+    top: 70px; /* Header height */
+    bottom: 70px; /* Footer height */
+    left: 0;
+    right: 0;
+    overflow: hidden;
 }
+
 
 img {
     position: fixed;
@@ -97,26 +101,55 @@ img {
     position: fixed;
     right: 0;
     top: 70px;
-    bottom: 0;
+    bottom: 70px;
     width: 50%;
-    padding: 48px;
+    padding: 40px;
     background: rgba(255, 255, 255, 0.95);
     box-shadow: -2px 0 10px rgba(0,0,0,0.1);
     overflow-y: auto;
-    display: flex;
-    align-items: flex-start; /* Changed from center to flex-start */
+    display: flex;  /* This flex is for scrolling */
+    align-items: flex-start;
+    justify-content: center;
+}
+
+
+/* Apply scrollbar styles to about-container instead of main */
+.about-container::-webkit-scrollbar {
+    width: 12px;
+}
+
+.about-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.about-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 3px solid #F5F5F5;
+}
+
+/* Dark mode scrollbar */
+body.dark-mode .about-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid #1a1a1a;
+}
+
+body.dark-mode .about-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.about-wrapper {
+    min-height: 100%;
+    display: flex;  /* This flex is for centering */
+    align-items: center;
     justify-content: center;
 }
 
 .about-content {
     width: 100%;
     max-width: 600px;
-    min-height: calc(100vh - 200px); /* Changed from height to min-height */
-    transform: scale(1);
-    transform-origin: center center;
-    padding: 20px;
-    padding-right: 30px;
-    overflow-y: auto; /* Add scroll if content exceeds container */
+    padding: 15px;
+    padding-right: 25px;
 }
 
 /* Update the scrollbar styles to target about-content instead of about-container */
@@ -141,8 +174,8 @@ body.dark-mode .about-content::-webkit-scrollbar-thumb {
 .about-content h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-top: -2rem;
-    margin-bottom: 2rem;
+    margin-top: -1rem; /* Reduced from -2rem */
+    margin-bottom: 1.5rem; /* Reduced from 2rem */
     color: #333;
 }
 
@@ -151,22 +184,21 @@ body.dark-mode .about-content::-webkit-scrollbar-thumb {
 }
 
 .about-text p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+    font-size: 1rem; /* Slightly smaller */
+    line-height: 1.6; /* Reduced from 1.8 */
+    margin-bottom: 1rem; /* Reduced from 1.5rem */
     color: #444;
 }
 
-/* Skills Section */
 .skills-section {
     flex: none;
-    margin: 2.5rem 0;
+    margin: 1.5rem 0; /* Reduced from 2.5rem */
 }
 
 .skills-section h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem; /* Slightly smaller */
     font-weight: 600;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem; /* Reduced from 1.5rem */
     color: #333;
 }
 
@@ -202,23 +234,56 @@ body.dark-mode .about-content::-webkit-scrollbar-thumb {
 /* Quote Section */
 .quote-section {
     background-color: #f0f0f0;
-    padding: 20px;
+    padding: 25px 30px; /* More padding for breathing room */
     width: 100%;
     max-width: 600px;
-    margin: 2rem auto;
-    border-radius: 5px;
+    margin: 2.5rem 0 0 0;
+    border-radius: 8px;
     box-sizing: border-box;
+    position: relative;
 }
 
 .quote-section blockquote {
-    margin-bottom: 10px;
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-style: italic;
+    position: relative;
+    padding: 0.5rem 2rem;
+    text-align: center;
+}
+
+.quote-section blockquote::before {
+    content: '"';
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    font-size: 3rem;
+    color: #00BFA5;
+    font-family: Georgia, serif;
+    opacity: 0.5;
+    line-height: 1;
+}
+
+.quote-section blockquote::after {
+    content: '"';
+    position: absolute;
+    right: 0;
+    bottom: -0.8rem;
+    font-size: 3rem;
+    color: #00BFA5;
+    font-family: Georgia, serif;
+    opacity: 0.5;
+    line-height: 1;
 }
 
 .quote-section cite {
     display: block;
-    margin-top: 15px;
+    margin-top: 12px;
     text-align: right;
-    padding-right: 10px;
+    font-style: normal;
+    font-size: 0.9rem;
+    color: #666;
 }
 
 /* Footer Styles */
@@ -337,9 +402,14 @@ body.dark-mode .quote-section {
     background-color: #2a2a2a;
 }
 
+
 body.dark-mode .quote-section blockquote,
 body.dark-mode .quote-section cite {
     color: #f5f5f5;
+}
+
+body.dark-mode .quote-section blockquote::before {
+    opacity: 0.7;
 }
 
 body.dark-mode footer {
@@ -552,6 +622,9 @@ body.dark-mode #dark-mode-toggle {
        <!-- Add this inside your <main> tag, after the image -->
        <div class="about-container">
            <div class="about-content">
+               <div class="about-container">
+                       <div class="about-wrapper">
+                           <div class="about-content">
                <h1>About Me</h1>
                <div class="about-text">
                    <p>Hello! My name is Alex, a passionate developer focused on creating elegant and efficient solutions to complex problems.</p>
@@ -576,6 +649,9 @@ body.dark-mode #dark-mode-toggle {
                        "The most certain way to succeed is always to try just one more time."
                    </blockquote>
                    <cite>— Thomas Edison</cite>
+                          </div>
+                       </div>
+                   </div>
                </div>
            </div>
        </div>

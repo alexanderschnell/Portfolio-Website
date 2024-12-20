@@ -21,10 +21,13 @@ body {
     padding: 0;
     background-color: #F5F5F5;
     color: #36454F;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     transition: background-color 0.3s ease;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
 }
 
 /* Body Background Pattern */
@@ -93,14 +96,39 @@ nav ul li a:hover {
 
 /* Main Content Styles */
 main {
-    flex: 1 0 auto;
+    position: fixed;
+    top: 70px;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
     padding: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    padding-bottom: 90px;
-    position: relative;
-    z-index: 1;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar */
+main::-webkit-scrollbar {
+    width: 12px;
+}
+
+main::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+main::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 3px solid #F5F5F5;
+}
+
+/* Dark mode scrollbar */
+body.dark-mode main::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid #1a1a1a;
+}
+
+body.dark-mode main::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 h2 {
@@ -200,7 +228,7 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
+
     z-index: 100;
     transition: background-color 0.3s ease;
 }

@@ -95,18 +95,20 @@ if (isset($_SESSION['message'])) {
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #F5F5F5;
-            color: #36454F;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.3s ease;
-        }
+       body {
+           font-family: 'Montserrat', sans-serif;
+           line-height: 1.6;
+           margin: 0;
+           padding: 0;
+           background-color: #F5F5F5;
+           color: #36454F;
+           min-height: 100vh; /* Change from height to min-height */
+           display: flex;
+           flex-direction: column;
+           transition: background-color 0.3s ease;
+           overflow: hidden;
+       }
+
 
         body::before {
             content: '';
@@ -164,15 +166,43 @@ if (isset($_SESSION['message'])) {
 
         /* Main Content Styles */
         main {
-            flex: 1 0 auto;
+            position: fixed;
+            top: 70px; /* Header height */
+            bottom: 70px; /* Footer height */
+            left: 0;
+            right: 0;
+            overflow-y: auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
             padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            padding-bottom: 90px;
-            position: relative;
-            z-index: 1;
+            -webkit-overflow-scrolling: touch;
         }
+
+    /* Custom scrollbar */
+    main::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    main::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    main::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        border: 3px solid #F5F5F5;
+    }
+
+    /* Dark mode scrollbar */
+    body.dark-mode main::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border: 3px solid #1a1a1a;
+    }
+
+    body.dark-mode main::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
 
         /* Footer Styles */
         footer {
@@ -185,7 +215,6 @@ if (isset($_SESSION['message'])) {
             box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
             padding: 0 2rem;
             margin-top: auto;
-            width: 100%;
             z-index: 100;
         }
 
