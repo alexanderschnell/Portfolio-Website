@@ -1,0 +1,874 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #F5F5F5;
+    position: relative;
+    transition: background-color 0.3s ease;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
+
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M18 17v-2h-1v2h-2v1h2v2h1v-2h2v-1h-2zm0-15V0h-1v2h-2v1h2v2h1V3h2V2h-2zM3 17v-2H2v2H0v1h2v2h1v-2h2v-1H3zM3 2V0H2v2H0v1h2v2h1V3h2V2H3z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    transform-origin: center;
+}
+
+/* Header Styles */
+header {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333333;
+    height: 70px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 2rem;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 40px;
+    padding-right: 25px;
+}
+
+nav ul li a {
+    color: #333333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #00BFA5;
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+.mobile-menu-btn {
+    display: none;
+}
+
+/* Main Content Styles */
+main {
+    flex: 1;
+    margin-bottom: 70px;
+    position: relative;
+    overflow: auto;
+    height: calc(100vh - 140px);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+img {
+    position: fixed;
+    top: 50%;
+    left: 25%;
+    width: 300px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1.5);
+    transform-origin: center;
+    z-index: 0;
+}
+
+/* Replace all the about-container related CSS with this */
+.about-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    min-width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 1;
+}
+
+/* Base scrollbar styles */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 3px solid rgba(255, 255, 255, 0.95);
+}
+
+/* Dark mode scrollbar */
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid #1a1a1a;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+
+body.dark-mode .about-container {
+    background: rgba(34, 34, 34, 0.95);
+}
+
+.about-wrapper {
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.about-content {
+    width: 100%;
+    max-width: 600px;
+    background: inherit;
+    height: auto;
+    padding-right: 25px;
+}
+
+
+.about-wrapper {
+    min-height: 100%;
+    display: flex; /* This flex is for centering */
+    align-items: center;
+    justify-content: center;
+}
+
+.about-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+    padding-right: 25px;
+}
+
+.about-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: -1rem; /* Reduced from -2rem */
+    margin-bottom: 1.5rem; /* Reduced from 2rem */
+    color: #333;
+}
+
+.about-text {
+    flex: none;
+}
+
+.about-text p {
+    font-size: 1rem; /* Slightly smaller */
+    line-height: 1.6; /* Reduced from 1.8 */
+    margin-bottom: 1rem; /* Reduced from 1.5rem */
+    color: #444;
+}
+
+.skills-section {
+    flex: none;
+    margin: 1.5rem 0; /* Reduced from 2.5rem */
+}
+
+.skills-section h2 {
+    font-size: 1.6rem; /* Slightly smaller */
+    font-weight: 600;
+    margin-bottom: 1rem; /* Reduced from 1.5rem */
+    color: #333;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+}
+
+.skill-tag {
+    padding: 8px 16px;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+}
+
+/* Language-specific colors */
+.skill-tag.javascript {
+    background-color: #f1e05a;
+    color: #000;
+}
+
+.skill-tag.python {
+    background-color: #3572A5;
+}
+
+.skill-tag.java {
+    background-color: #b07219;
+}
+
+.skill-tag.html {
+    background-color: #e34c26;
+}
+
+.skill-tag.css {
+    background-color: #563d7c;
+}
+
+.skill-tag.typescript {
+    background-color: #2b7489;
+}
+
+.skill-tag.php {
+    background-color: #4F5D95;
+}
+
+.skill-tag.cpp {
+    background-color: #f34b7d;
+}
+
+.skill-tag.csharp {
+    background-color: #178600;
+}
+
+.skill-tag.ruby {
+    background-color: #701516;
+}
+
+.skill-tag.c {
+    background-color: #555555;
+}
+
+/* Quote Section */
+.quote-section {
+    background-color: #f0f0f0;
+    padding: 25px 30px; /* More padding for breathing room */
+    width: 100%;
+    max-width: 600px;
+    margin: 2.5rem 0 0 0;
+    border-radius: 8px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.quote-section blockquote {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-style: italic;
+    position: relative;
+    padding: 0.5rem 2rem;
+    text-align: center;
+}
+
+.quote-section blockquote::before {
+    content: '"';
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    font-size: 3rem;
+    color: #00BFA5;
+    font-family: Georgia, serif;
+    opacity: 0.5;
+    line-height: 1;
+}
+
+.quote-section blockquote::after {
+    content: '"';
+    position: absolute;
+    right: 0;
+    bottom: -0.8rem;
+    font-size: 3rem;
+    color: #00BFA5;
+    font-family: Georgia, serif;
+    opacity: 0.5;
+    line-height: 1;
+}
+
+.quote-section cite {
+    display: block;
+    margin-top: 12px;
+    text-align: right;
+    font-style: normal;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Footer Styles */
+footer {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333333;
+    height: 70px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 2rem;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.social-links {
+    justify-self: start;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.social-links a {
+    color: #333333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #00BFA5;
+}
+
+footer p {
+    font-size: 0.8rem;
+    margin: 0;
+    text-align: center;
+}
+
+#dark-mode-toggle {
+    justify-self: end;
+    background: rgba(0, 0, 0, 0.05); /* Light grey background in light mode */
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+#dark-mode-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: #333333;
+    transition: all 0.3s ease;
+}
+
+#dark-mode-toggle:hover {
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+body.dark-mode #dark-mode-toggle {
+    background: rgba(255, 255, 255, 0.1); /* Lighter grey background in dark mode */
+}
+
+body.dark-mode #dark-mode-toggle:hover {
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+}
+
+body.dark-mode::before {
+    background: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M18 17v-2h-1v2h-2v1h2v2h1v-2h2v-1h-2zm0-15V0h-1v2h-2v1h2v2h1V3h2V2h-2zM3 17v-2H2v2H0v1h2v2h1v-2h2v-1H3zM3 2V0H2v2H0v1h2v2h1V3h2V2H3z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+body.dark-mode header {
+    background-color: rgba(34, 34, 34, 0.95);
+}
+
+body.dark-mode nav ul li a {
+    color: #f5f5f5;
+}
+
+body.dark-mode nav ul li a:hover {
+    color: #00BFA5;
+    background-color: rgba(0, 191, 165, 0.1);
+}
+
+body.dark-mode .about-container {
+    background: rgba(34, 34, 34, 0.95);
+}
+
+body.dark-mode .about-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .about-content h1,
+body.dark-mode .skills-section h2 {
+    color: #f5f5f5;
+}
+
+body.dark-mode .about-text p {
+    color: #ddd;
+}
+
+body.dark-mode .quote-section {
+    background-color: #2a2a2a;
+}
+
+
+body.dark-mode .quote-section blockquote,
+body.dark-mode .quote-section cite {
+    color: #f5f5f5;
+}
+
+body.dark-mode .quote-section blockquote::before {
+    opacity: 0.7;
+}
+
+body.dark-mode footer {
+    background-color: rgba(34, 34, 34, 0.95);
+    color: #f5f5f5;
+}
+
+body.dark-mode .social-links a {
+    color: #f5f5f5;
+}
+
+body.dark-mode .social-links a:hover {
+    color: #00BFA5;
+}
+
+body.dark-mode #dark-mode-toggle svg {
+    fill: #f5f5f5;
+}
+
+body.dark-mode #dark-mode-toggle {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    main {
+        position: absolute;
+        top: 70px;
+        bottom: calc(185px + env(safe-area-inset-bottom, 0px));
+        left: 0;
+        right: 0;
+        padding: 15px;
+        overflow-y: auto;
+        height: auto;
+        margin: 0;
+    }
+
+    img {
+        display: none;
+    }
+
+    .about-container {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        min-width: 320px;
+        background: rgba(34, 34, 34, 0.95);
+        overflow-y: auto;
+        z-index: 1;
+    }
+
+    .about-content {
+        width: 100%;
+        padding-bottom: 30px;
+    }
+
+    .about-content h1 {
+        font-size: 2rem;
+        margin-top: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .about-text p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .skills-section {
+        margin: 2rem 0;
+    }
+
+    .skills-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .skills-container {
+        gap: 8px;
+    }
+
+    .skill-tag {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    .quote-section {
+        padding: 15px;
+        margin-bottom: 5px;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        z-index: 1000;
+    }
+
+    nav ul {
+        display: none;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+    }
+
+    nav ul.show {
+        display: flex;
+    }
+
+    nav ul li a {
+        font-size: 16px;
+        padding: 12px 16px;
+        display: block;
+        width: 100%;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 10px;
+        cursor: pointer;
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .mobile-menu-btn svg {
+        stroke: #333333;
+    }
+
+    body.dark-mode .mobile-menu-btn svg {
+        stroke: #f5f5f5;
+    }
+
+    body.dark-mode nav ul {
+        background: rgba(34, 34, 34, 0.95);
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        min-height: calc(70px + env(safe-area-inset-bottom, 0px));
+        padding: 0 0.5rem;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.95);
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+    }
+
+    footer p {
+        justify-self: center;
+        text-align: center;
+        font-size: 0.7rem;
+    }
+
+    .social-links {
+        justify-self: center;
+        display: flex;
+        padding-top: 5px;
+        gap: 20px;
+        align-items: center;
+    }
+
+    #dark-mode-toggle {
+        justify-self: center;
+    }
+}
+
+/* Base styles for light mode */
+.about-container {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333333;
+}
+
+.about-content h1,
+.skills-section h2 {
+    color: #333333;
+}
+
+.about-text p {
+    color: #444444;
+}
+
+/* Base scrollbar styles */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border: 3px solid rgba(255, 255, 255, 0.95);
+}
+
+/* Dark mode styles */
+body.dark-mode .about-container {
+    background: rgba(34, 34, 34, 0.95);
+    color: #f5f5f5;
+}
+
+body.dark-mode .about-content h1,
+body.dark-mode .skills-section h2 {
+    color: #f5f5f5;
+}
+
+body.dark-mode .about-text p {
+    color: #ddd;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid #1a1a1a;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* High zoom level styles */
+@media screen and (min-resolution: 192dpi), screen and (-webkit-min-device-pixel-ratio: 2), screen and (min-zoom: 2) {
+    main {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        bottom: 70px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .about-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        overflow-y: visible;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Ensure scrollbar styles are explicitly applied for high zoom */
+    main::-webkit-scrollbar,
+    .about-container::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        width: 12px !important;
+        display: block !important;
+    }
+
+    /* Light mode scrollbar at high zoom */
+    main::-webkit-scrollbar-track,
+    .about-container::-webkit-scrollbar-track,
+    body::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05) !important;
+    }
+
+    main::-webkit-scrollbar-thumb,
+    .about-container::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2) !important;
+        border-radius: 6px !important;
+        border: 3px solid rgba(255, 255, 255, 0.95) !important;
+        min-height: 40px;
+    }
+
+    /* Dark mode high zoom scrollbar styles */
+    body.dark-mode main::-webkit-scrollbar-thumb,
+    body.dark-mode .about-container::-webkit-scrollbar-thumb,
+    body.dark-mode::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 3px solid #1a1a1a !important;
+    }
+
+    body.dark-mode main::-webkit-scrollbar-track,
+    body.dark-mode .about-container::-webkit-scrollbar-track,
+    body.dark-mode::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    /* Explicit light/dark mode styles for high zoom */
+    @media screen and (min-resolution: 192dpi), screen and (-webkit-min-device-pixel-ratio: 2), screen and (min-zoom: 2) {
+        /* Light mode specific styles at high zoom */
+        .about-container {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        .about-content h1,
+        .skills-section h2 {
+            color: #333333 !important;
+        }
+
+        .about-text p {
+            color: #444444 !important;
+        }
+
+        /* Dark mode specific styles at high zoom */
+        body.dark-mode .about-container {
+            background: rgba(34, 34, 34, 0.95) !important;
+        }
+
+        body.dark-mode .about-content h1,
+        body.dark-mode .skills-section h2 {
+            color: #f5f5f5 !important;
+        }
+
+        body.dark-mode .about-text p {
+            color: #ddd !important;
+        }
+    }
+}
+
+/* Fallback for browsers that don't support device-pixel-ratio */
+@supports (zoom: 2.5) {
+    @media screen and (min-zoom: 2.5) {
+        /* Same styles as above */
+        main {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 70px;
+            overflow-y: auto;
+            height: calc(100vh - 140px);
+            padding: 0;
+        }
+
+        .about-container {
+            position: relative;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            min-height: auto;
+            height: auto;
+            overflow: visible;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-side {
+            flex: 0 0 auto;
+            height: auto;
+            padding: 2rem;
+        }
+
+        .content-side {
+            flex: 1;
+            width: 100%;
+            max-width: none;
+            padding: 2rem;
+            overflow-y: visible;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .image-side img {
+            max-width: 200px;
+            transform: scale(1);
+        }
+    }
+}
+
+/* Add these new media queries after your existing high-zoom styles */
+@media screen and (-webkit-min-device-pixel-ratio: 2.5) {
+    main::-webkit-scrollbar-thumb,
+    .about-container::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+        min-height: 80px !important;
+    }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 3) {
+    main::-webkit-scrollbar-thumb,
+    .about-container::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+        min-height: 60px !important;
+    }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 4) {
+    main::-webkit-scrollbar-thumb,
+    .about-container::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+        min-height: 40px !important;
+    }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 5) {
+    main::-webkit-scrollbar-thumb,
+    .about-container::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb {
+        min-height: 20px !important;
+    }
+}
