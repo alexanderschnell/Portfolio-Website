@@ -1,0 +1,5 @@
+# Dont want it son
+.idea/
+vendor/
+.env
+*.log
