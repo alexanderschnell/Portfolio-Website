@@ -1,6 +1,6 @@
 # Portfolio Website
 
-This project is a personal portfolio website designed with simplicity and elegance in mind. It showcases my work, skills, and professional experience through a clean and intuitive interface.
+This project is a personal portfolio website designed with simplicity and elegance in mind. It showcases my work and skills through a clean and intuitive interface.
 
 # Technology Stack
 
