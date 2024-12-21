@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexander Schnell - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="portfolio.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+    <link rel="icon" type="image/png" href="assets/images/bullbasaur.png">
     <style>
         </style>
 </head>
@@ -54,8 +55,8 @@
                         </svg>
                     </button>
     </footer>
-    <script src="dark-mode.js"></script>
-    <script src="github-repos.js"></script>
+    <script src="js/dark-mode.js"></script>
+    <script src="js/github-repos.js"></script>
     <script>
     document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
         document.querySelector('nav ul').classList.toggle('show');

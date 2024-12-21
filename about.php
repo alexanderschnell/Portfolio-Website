@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexander Schnell - About</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="icon" type="image/png" href="assets/images/squirtle.png">
     <style>
     </style>
 </head>
@@ -27,7 +28,7 @@
     </header>
 
    <main>
-       <img src="chief.png" width="300" height="300">
+       <img src="assets/images/headshot.png" width="300" height="300">
        <div class="about-container">
            <div class="about-wrapper">
                <div class="about-content">
@@ -83,8 +84,8 @@
                         </svg>
                     </button>
     </footer>
-    <script src="greeting.js"></script>
-    <script src="dark-mode.js"></script>
+    <script src="js/greeting.js"></script>
+    <script src="js/dark-mode.js"></script>
     <script>
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             document.querySelector('nav ul').classList.toggle('show');

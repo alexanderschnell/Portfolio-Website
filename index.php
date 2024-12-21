@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Alexander Schnell</title>
+    <title>Alexander Schnell - Welcome</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" type="image/png" href="assets/images/charmander.png">
     <style>
     </style>
 </head>
@@ -31,6 +32,7 @@
             <div class="name-container">
                 <div class="name-line">Alexander</div>
                 <div class="name-line">Schnell</div>
+                <div class="tagline">Software Developer</div>
             </div>
             <div id="dynamic-greeting" class="greeting"></div>
         </div>
@@ -57,8 +59,8 @@
                 </svg>
             </button>
     </footer>
-    <script src="greeting.js"></script>
-    <script src="dark-mode.js"></script>
+    <script src="js/greeting.js"></script>
+    <script src="js/dark-mode.js"></script>
     <script>
     document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
         document.querySelector('nav ul').classList.toggle('show');

@@ -34,12 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'alex.schnell18@gmail.com'; 
-        $mail->Password = ''; 
+        $mail->Password = 'zxyn nazr cklv zomx';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // For debugging only - remove in production
-        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
         // Recipients
         $mail->setFrom('alex.schnell18@gmail.com', 'Contact Form');
@@ -88,7 +88,8 @@ if (isset($_SESSION['message'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alexander Schnell - Contact</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="contact.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="icon" type="image/png" href="assets/images/pikachu.png">
     <style>
     </style>
 </head>
@@ -119,7 +120,7 @@ if (isset($_SESSION['message'])) {
                     <textarea name="message" placeholder="Your Message" required></textarea>
                     <div class="buttons-container">
                         <button type="submit">Send Message</button>
-                        <a href="Alexander Schnell - Resume 2024.pdf" download class="download-button">Download Resume</a>
+                        <a href="assets/docs/Alexander Schnell - Resume 2024.pdf" download class="download-button">Download Resume</a>
                     </div>
                 </form>
                 <?php if ($message): ?>
@@ -151,7 +152,7 @@ if (isset($_SESSION['message'])) {
                                   </svg>
                               </button>
         </footer>
-    <script src="dark-mode.js"></script>
+    <script src="js/dark-mode.js"></script>
     <script>
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             document.querySelector('nav ul').classList.toggle('show');
