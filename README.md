@@ -6,9 +6,9 @@ This project is a personal portfolio website designed with simplicity and elegan
 
 ## Frontend
 
-HTML5\
-CSS3\
-JavaScript\
+HTML 5\
+CSS 3\
+JavaScript
 
 ## Backend
 
