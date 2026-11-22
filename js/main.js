@@ -218,7 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
         bar?.addEventListener('pointerup', stopMove);
         bar?.addEventListener('pointercancel', stopMove);
 
-        if (location.hash === '#contact') openContact();
+        // Only a click opens the window. Drop a leftover "#contact" from the URL
+        // so a refresh always starts on the plain desktop.
+        if (location.hash === '#contact') history.replaceState(null, '', location.pathname + location.search);
     }
 
     /* ---------- Movable desktop icons ---------- */
