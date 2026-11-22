@@ -1,201 +1,276 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light" data-skin="luna">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Alexander Schnell — Systems Developer</title>
     <meta name="description" content="Portfolio of Alexander Schnell, systems developer.">
     <script>
-        // Apply the saved theme before first paint (dark is the default).
-        try {
-            if (localStorage.getItem('darkMode') === 'false') {
-                document.documentElement.dataset.theme = 'light';
-            }
-        } catch (e) { /* storage unavailable: stay dark */ }
+        // Apply the saved skin before first paint (Luna Blue is the default).
+        // Each skin belongs to a family: "dark" (beveled) or "light" (glossy).
+        (function () {
+            var families = { olive: 'dark', noir: 'dark', cyber: 'dark', luna: 'light', silver: 'light', aero: 'light' };
+            var skin = 'luna';
+            try {
+                var saved = localStorage.getItem('skin');
+                if (families[saved]) skin = saved;
+            } catch (e) { /* storage unavailable: use the default */ }
+            document.documentElement.dataset.skin = skin;
+            document.documentElement.dataset.theme = families[skin];
+        })();
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 </head>
 <body>
-    <header class="site-header">
-        <nav class="nav container" aria-label="Main">
-            <a href="#home" class="brand" aria-label="Back to top">AS<span>.</span></a>
-
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-
-            <div class="nav-actions">
-                <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode">
-                    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
-                    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
-                </button>
-                <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-                </button>
-            </div>
-        </nav>
-        <div class="scroll-progress" id="scroll-progress"></div>
-    </header>
-
-    <main>
-        <!-- Hero -->
+    <main class="desktop">
+        <!-- Desktop: shortcut icons + welcome window -->
         <section id="home" class="hero">
-            <div class="container hero-inner">
-                <p class="greeting" id="greeting">Hello.</p>
-                <h1 class="hero-name">Alexander<br>Schnell</h1>
-                <p class="hero-tagline">Systems Developer</p>
-                <p class="hero-lede">I build dependable software that handles real data: careful validation, clear logic and code that's easy to maintain.</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn btn-primary">View my work</a>
-                    <a href="#contact" class="btn btn-ghost">Get in touch</a>
+            <nav class="desktop-icons" aria-label="Shortcuts">
+                <a class="desk-icon" href="#about">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <rect x="7" y="6" width="34" height="38" rx="2" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2"/>
+                        <circle cx="24" cy="19" r="6" fill="#4f86d9"/>
+                        <path d="M13 36c1.5-7 6-10 11-10s9.5 3 11 10z" fill="#4f86d9"/>
+                    </svg>
+                    <span>About Me</span>
+                </a>
+                <a class="desk-icon" href="#projects">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <path d="M4 12a2 2 0 0 1 2-2h12l4 4h20a2 2 0 0 1 2 2v22a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" fill="#e8b33a" stroke="#a87a12" stroke-width="2"/>
+                        <path d="M4 20h40v18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" fill="#f7cf5c"/>
+                    </svg>
+                    <span>My Projects</span>
+                </a>
+                <a class="desk-icon" href="#contact">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <rect x="5" y="11" width="38" height="26" rx="2" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2"/>
+                        <path d="M6 13l18 13 18-13" fill="none" stroke="#c0392b" stroke-width="2.5"/>
+                    </svg>
+                    <span>Contact</span>
+                </a>
+                <a class="desk-icon" href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <rect x="4" y="4" width="40" height="40" rx="8" fill="#24292f"/>
+                        <path transform="translate(12 12)" fill="#fff" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.230.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+                <a class="desk-icon" href="https://www.linkedin.com/in/alex-schnell-8064262b1" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <rect x="4" y="4" width="40" height="40" rx="8" fill="#0a66c2"/>
+                        <path transform="translate(12 12)" fill="#fff" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.750-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                    <span>LinkedIn</span>
+                </a>
+            </nav>
+
+            <article class="window window-welcome reveal" aria-labelledby="welcome-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="welcome-title">Welcome</h2>
+                    <div class="titlebar-buttons" aria-hidden="true">
+                        <span class="tb-btn tb-min"></span><span class="tb-btn tb-max"></span><span class="tb-btn tb-close"></span>
+                    </div>
+                </header>
+                <div class="window-body hero-body">
+                    <p class="greeting" id="greeting">Hello.</p>
+                    <h1 class="hero-name">Alexander Schnell</h1>
+                    <p class="hero-tagline">Systems Developer</p>
+                    <p class="hero-lede">I build dependable software that handles real data: careful validation, clear logic and code that's easy to maintain.</p>
+                    <div class="hero-cta">
+                        <a href="#projects" class="btn btn-primary">View my work</a>
+                        <a href="#contact" class="btn">Get in touch</a>
+                    </div>
                 </div>
-            </div>
-            <a href="#about" class="scroll-cue" aria-label="Scroll to About">
-                <span></span>
-            </a>
+                <footer class="statusbar">
+                    <span>Ready</span>
+                    <span>Ontario, Canada</span>
+                </footer>
+            </article>
         </section>
 
         <!-- About -->
         <section id="about" class="section">
-            <div class="container about-grid">
-                <div class="about-head reveal">
-                    <p class="eyebrow">01 — About</p>
-                    <h2 class="section-title">About Me</h2>
-                </div>
-                <div class="about-body reveal">
+            <article class="window reveal" aria-labelledby="about-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="about-title">About Me</h2>
+                    <div class="titlebar-buttons" aria-hidden="true">
+                        <span class="tb-btn tb-min"></span><span class="tb-btn tb-max"></span><span class="tb-btn tb-close"></span>
+                    </div>
+                </header>
+                <div class="window-body about-body">
                     <p class="about-lead">I'm Alex, a systems developer who cares about software that does its job reliably, every time.</p>
                     <p>I like the parts of a system most people never see: parsing and validating data, keeping records consistent, getting the calculations right, and storing it all safely. I work across COBOL, Java, C and C++, use LLMs in my day-to-day development workflow, and am drawn to the business-critical systems that quietly keep things running.</p>
                     <p>Before software I worked in audio engineering and welding/fabrication, trades where precision and process matter and mistakes are expensive. I bring the same habits to code: measure twice, test thoroughly, and leave it clear enough for the next person to pick up.</p>
                 </div>
-            </div>
+            </article>
         </section>
 
         <!-- Projects -->
-        <section id="projects" class="section section-alt">
-            <div class="container">
-                <div class="section-head reveal">
-                    <p class="eyebrow">02 — Projects</p>
-                    <h2 class="section-title">Selected Projects</h2>
+        <section id="projects" class="section">
+            <article class="window reveal" aria-labelledby="projects-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-folder" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="projects-title">My Projects</h2>
+                    <div class="titlebar-buttons" aria-hidden="true">
+                        <span class="tb-btn tb-min"></span><span class="tb-btn tb-max"></span><span class="tb-btn tb-close"></span>
+                    </div>
+                </header>
+                <div class="toolbar" aria-hidden="true">
+                    <span>File</span><span>Edit</span><span>View</span><span>Help</span>
+                </div>
+                <div class="window-body">
                     <p class="section-lede">A few things I've built and what went into them.</p>
+                    <div class="project-grid">
+                        <section class="project-card project-featured">
+                            <div class="project-top">
+                                <h3>MyFinancePal</h3>
+                                <span class="project-badge">In daily use</span>
+                            </div>
+                            <p>A desktop app I built to track my debts and pay them off. It compares avalanche and snowball payoff strategies, separates interest from principal on every payment, and projects a debt-free date.</p>
+                            <ul class="project-points">
+                                <li>All data stored locally in SQLite: no cloud, no bank logins</li>
+                                <li>Payoff calculations covered by JUnit tests and CI builds</li>
+                            </ul>
+                            <ul class="tags">
+                                <li>Java 21</li><li>JavaFX</li><li>SQLite</li><li>JUnit</li><li>Maven</li>
+                            </ul>
+                            <a class="btn btn-small" href="https://github.com/alexanderschnell/PersonalFinanceTracker" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
+                        </section>
+
+                        <section class="project-card">
+                            <div class="project-top">
+                                <h3>AmazonSystem</h3>
+                                <span class="project-badge muted">Coursework</span>
+                            </div>
+                            <p>A console store that loads a real product catalogue from CSV, with a parser that handles quoted fields, embedded commas and currency symbols. Customers, credit, carts and purchases are fully validated, with errors reported through custom exceptions.</p>
+                            <ul class="tags">
+                                <li>Java</li><li>OOP</li><li>CSV parsing</li><li>JUnit 5</li>
+                            </ul>
+                            <a class="btn btn-small" href="https://github.com/alexanderschnell/AmazonSystem" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
+                        </section>
+
+                        <section class="project-card">
+                            <div class="project-top">
+                                <h3>Portfolio Website</h3>
+                                <span class="project-badge muted">This site</span>
+                            </div>
+                            <p>Rebuilt from a multi-page PHP site into a single static page styled as an early-2000s desktop, with draggable icons, a Start menu and six switchable skins. No backend and no dependencies.</p>
+                            <ul class="tags">
+                                <li>HTML</li><li>CSS</li><li>JavaScript</li>
+                            </ul>
+                            <a class="btn btn-small" href="https://github.com/alexanderschnell/Portfolio-Website" target="_blank" rel="noopener noreferrer">Open on GitHub</a>
+                        </section>
+                    </div>
                 </div>
-
-                <div class="project-grid">
-                    <article class="project-card project-featured reveal">
-                        <div class="project-top">
-                            <span class="project-badge">In daily use</span>
-                            <a class="project-link" href="https://github.com/alexanderschnell/PersonalFinanceTracker" target="_blank" rel="noopener noreferrer" aria-label="MyFinancePal on GitHub">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
-                            </a>
-                        </div>
-                        <h3>MyFinancePal</h3>
-                        <p>A desktop app I built to track my debts and pay them off. It compares avalanche and snowball payoff strategies, separates interest from principal on every payment, and projects a debt-free date.</p>
-                        <ul class="project-points">
-                            <li>All data stored locally in SQLite: no cloud, no bank logins</li>
-                            <li>Payoff calculations covered by JUnit tests and CI builds</li>
-                        </ul>
-                        <ul class="tags">
-                            <li>Java 21</li><li>JavaFX</li><li>SQLite</li><li>JUnit</li><li>Maven</li>
-                        </ul>
-                    </article>
-
-                    <article class="project-card reveal">
-                        <div class="project-top">
-                            <span class="project-badge muted">Coursework</span>
-                            <a class="project-link" href="https://github.com/alexanderschnell/AmazonSystem" target="_blank" rel="noopener noreferrer" aria-label="AmazonSystem on GitHub">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
-                            </a>
-                        </div>
-                        <h3>AmazonSystem</h3>
-                        <p>A console store that loads a real product catalogue from CSV, with a parser that handles quoted fields, embedded commas and currency symbols. Customers, credit, carts and purchases are fully validated, with errors reported through custom exceptions.</p>
-                        <ul class="tags">
-                            <li>Java</li><li>OOP</li><li>CSV parsing</li><li>JUnit 5</li>
-                        </ul>
-                    </article>
-
-                    <article class="project-card reveal">
-                        <div class="project-top">
-                            <span class="project-badge muted">This site</span>
-                            <a class="project-link" href="https://github.com/alexanderschnell/Portfolio-Website" target="_blank" rel="noopener noreferrer" aria-label="Portfolio-Website on GitHub">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
-                            </a>
-                        </div>
-                        <h3>Portfolio Website</h3>
-                        <p>Rebuilt from a multi-page PHP site into a single static page with no backend and no dependencies. It's responsive, accessible and dark by default.</p>
-                        <ul class="tags">
-                            <li>HTML</li><li>CSS</li><li>JavaScript</li>
-                        </ul>
-                    </article>
-                </div>
-
-                <a class="more-link reveal" href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">More on GitHub →</a>
-            </div>
+                <footer class="statusbar">
+                    <span>3 object(s)</span>
+                    <a href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">More on GitHub →</a>
+                </footer>
+            </article>
         </section>
 
         <!-- Contact -->
         <section id="contact" class="section">
-            <div class="container contact-grid">
-                <div class="contact-intro reveal">
-                    <p class="eyebrow">03 — Contact</p>
-                    <h2 class="section-title">Get in Touch</h2>
-                    <p>Have a project in mind, an opportunity, or just want to say hi? Send me a message and I'll get back to you.</p>
-                    <!-- Resume download removed for now. To bring it back, add the PDF to assets/docs/ and restore:
-                    <a href="assets/docs/YOUR-RESUME.pdf" download class="btn btn-ghost">Download Resume</a> -->
-                    <a href="https://www.linkedin.com/in/alex-schnell-8064262b1" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
-                        Connect on LinkedIn
-                    </a>
+            <article class="window reveal" aria-labelledby="contact-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-mail" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="contact-title">New Message</h2>
+                    <div class="titlebar-buttons" aria-hidden="true">
+                        <span class="tb-btn tb-min"></span><span class="tb-btn tb-max"></span><span class="tb-btn tb-close"></span>
+                    </div>
+                </header>
+                <div class="window-body">
+                    <p class="section-lede">Have a project in mind, an opportunity, or just want to say hi? Send me a message and I'll get back to you.</p>
+                    <!-- Resume download removed for now. To bring it back, add the PDF to assets/docs/ and add:
+                    <a href="assets/docs/YOUR-RESUME.pdf" download class="btn">Download Resume</a> -->
+                    <form id="contact-form" class="contact-form" method="POST">
+                        <div class="field field-static">
+                            <span>To:</span>
+                            <div class="static-value">Alexander Schnell</div>
+                        </div>
+                        <label class="field">
+                            <span>From:</span>
+                            <input type="text" name="name" autocomplete="name" maxlength="100" placeholder="Your name" required>
+                        </label>
+                        <label class="field">
+                            <span>Email:</span>
+                            <input type="email" name="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
+                        </label>
+                        <label class="field">
+                            <span>Subject:</span>
+                            <input type="text" name="subject" maxlength="150" required>
+                        </label>
+                        <label class="field field-message">
+                            <span class="visually-hidden">Message</span>
+                            <textarea name="message" rows="8" maxlength="5000" required></textarea>
+                        </label>
+                        <!-- Spam trap: hidden from people, bots fill it in and Formspree discards the submission -->
+                        <div class="hp-field" aria-hidden="true">
+                            <label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                            <a href="https://www.linkedin.com/in/alex-schnell-8064262b1" target="_blank" rel="noopener noreferrer" class="btn">Connect on LinkedIn</a>
+                        </div>
+                        <div class="form-status" id="form-status" role="status" hidden><p></p></div>
+                    </form>
                 </div>
-
-                <form id="contact-form" class="contact-form reveal" method="POST">
-                    <div class="field-row">
-                        <label class="field">
-                            <span>Name</span>
-                            <input type="text" name="name" autocomplete="name" maxlength="100" required>
-                        </label>
-                        <label class="field">
-                            <span>Email</span>
-                            <input type="email" name="email" autocomplete="email" maxlength="254" required>
-                        </label>
-                    </div>
-                    <label class="field">
-                        <span>Subject</span>
-                        <input type="text" name="subject" maxlength="150" required>
-                    </label>
-                    <label class="field">
-                        <span>Message</span>
-                        <textarea name="message" rows="6" maxlength="5000" required></textarea>
-                    </label>
-                    <!-- Spam trap: hidden from people, bots fill it in and Formspree discards the submission -->
-                    <div class="hp-field" aria-hidden="true">
-                        <label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                    <div class="form-status" id="form-status" role="status" hidden><p></p></div>
-                </form>
-            </div>
+            </article>
         </section>
+
+        <p class="copyright">&copy; <span id="year"></span> Alexander Schnell</p>
     </main>
 
-    <footer class="site-footer">
-        <div class="container footer-inner">
-            <p>&copy; <span id="year"></span> Alexander Schnell</p>
-            <div class="social-links">
-                <a href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                </a>
-                <a href="https://www.linkedin.com/in/alex-schnell-8064262b1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                </a>
+    <!-- Taskbar -->
+    <nav class="taskbar" aria-label="Main">
+        <div class="start-wrap">
+            <button class="start-btn" id="start-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="start-menu">
+                <span class="start-logo" aria-hidden="true"></span>start
+            </button>
+            <div class="start-menu" id="start-menu" hidden>
+                <div class="start-head">
+                    <span class="start-avatar" aria-hidden="true">AS</span>
+                    <span>Alexander Schnell</span>
+                </div>
+                <ul class="start-list">
+                    <li><a href="#home">Welcome</a></li>
+                    <li><a href="#about">About Me</a></li>
+                    <li><a href="#projects">My Projects</a></li>
+                    <li><a href="#contact">New Message</a></li>
+                    <li class="sep" role="separator"></li>
+                    <li><a href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                    <li><a href="https://www.linkedin.com/in/alex-schnell-8064262b1" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                </ul>
             </div>
-            <a href="#home" class="back-to-top">Back to top ↑</a>
         </div>
-    </footer>
+
+        <ul class="task-buttons" id="task-buttons">
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#projects">My Projects</a></li>
+            <li><a href="#contact">New Message</a></li>
+        </ul>
+
+        <div class="tray">
+            <div class="tray-wrap">
+                <button class="tray-btn" id="skin-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="skin-menu" aria-label="Change theme" title="Display Properties">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="2" y="3" width="20" height="14" rx="1.5" fill="currentColor" opacity="0.25"/>
+                        <rect x="2" y="3" width="20" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="8" cy="10" r="2.2" fill="#ff6ad5"/><circle cx="12" cy="10" r="2.2" fill="#a6ff4d"/><circle cx="16" cy="10" r="2.2" fill="#3d95ff"/>
+                        <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="skin-menu" id="skin-menu" hidden>
+                    <div class="skin-head">Display Properties</div>
+                    <ul class="skin-list" id="skin-list"></ul>
+                </div>
+            </div>
+            <time class="clock" id="clock"></time>
+        </div>
+    </nav>
 
     <script src="js/main.js"></script>
     <script src="js/contact.js"></script>
