@@ -8,7 +8,7 @@
     <script>
         // Apply the saved skin before first paint (Olive Drab is the default).
         // Each skin belongs to a family: "dark" (beveled) or "light" (glossy).
-        document.documentElement.classList.add('js'); // set early so the boot screen covers the first paint
+        document.documentElement.classList.add('js'); // set early so Welcome stays hidden until it launches
         (function () {
             var families = { olive: 'dark', noir: 'dark', cyber: 'dark', luna: 'light', silver: 'light', aero: 'light' };
             var skin = 'olive';
@@ -24,17 +24,6 @@
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 </head>
 <body>
-    <!-- Boot screen: shown only with JS, removed by main.js. Click or press a key to skip. -->
-    <div class="boot" id="boot" aria-hidden="true">
-        <div class="boot-center">
-            <div class="boot-mark">AS</div>
-            <p class="boot-name">Alexander Schnell</p>
-            <p class="boot-edition">Systems Developer Edition</p>
-            <div class="boot-bar"><span></span><span></span><span></span></div>
-        </div>
-        <p class="boot-foot">&copy; Alexander Schnell</p>
-    </div>
-
     <main class="desktop">
         <!-- Desktop: shortcut icons + welcome window -->
         <section id="home" class="hero">
@@ -71,7 +60,7 @@
                 </a>
             </nav>
 
-            <article class="window window-welcome" id="welcome" aria-labelledby="welcome-title">
+            <article class="window window-welcome pending" id="welcome" aria-labelledby="welcome-title">
                 <header class="titlebar">
                     <span class="titlebar-icon" aria-hidden="true"></span>
                     <h2 class="titlebar-text" id="welcome-title">Welcome</h2>
@@ -94,6 +83,18 @@
                     <span>Ontario, Canada</span>
                 </footer>
             </article>
+
+            <!-- Shown by main.js while Welcome "starts up" on page load -->
+            <div class="welcome-loading" id="welcome-loading" role="status" hidden>
+                <svg class="hourglass" viewBox="0 0 32 40" aria-hidden="true">
+                    <rect x="4" y="1" width="24" height="4" rx="1" fill="currentColor"/>
+                    <rect x="4" y="35" width="24" height="4" rx="1" fill="currentColor"/>
+                    <path d="M7 5h18c0 8-6 11-7.5 15C19 24 25 27 25 35H7c0-8 6-11 7.5-15C13 16 7 13 7 5z" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path class="sand-top" d="M10 9h12c-1 4-4.5 6-6 9-1.5-3-5-5-6-9z"/>
+                    <path class="sand-bottom" d="M10 33c1-4 4.5-6 6-8 1.5 2 5 4 6 8z"/>
+                </svg>
+                <span>Starting welcome.exe…</span>
+            </div>
         </section>
 
         <!-- Pops up when a "#contact" link is clicked (see main.js). Without JS it shows inline. -->

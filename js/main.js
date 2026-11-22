@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeWin = document.getElementById('welcome');
     if (welcomeWin) {
         windows['#welcome'] = makeWindow({ win: welcomeWin, task: document.getElementById('task-welcome') });
-        welcomeWin.hidden = true; // the boot sequence launches it
+        welcomeWin.hidden = true; // launched on load, after the loading indicator
     }
 
     const contactSection = document.getElementById('contact');
@@ -199,6 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const link = e.target.closest('a[href^="#"]');
         const w = link && windows[link.getAttribute('href')];
         if (!w || e.defaultPrevented) return;
+        if (w === windows['#welcome']) { // opened by hand before it finished starting
+            document.getElementById('welcome-loading')?.remove();
+            root.classList.remove('busy');
+        }
         e.preventDefault();
         if (link === w.taskLink && w.isOpen()) w.minimize();
         else w.open();
@@ -210,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Only clicks open windows. Drop a leftover "#welcome"/"#contact" from the
-    // URL so a refresh always starts with a fresh boot.
+    // URL so a refresh always starts with with Welcome launching.
     if (windows[location.hash]) history.replaceState(null, '', location.pathname + location.search);
 
     // Drag the New Message window around by its title bar (mouse or pen).
@@ -242,41 +246,27 @@ document.addEventListener('DOMContentLoaded', () => {
     bar?.addEventListener('pointerup', stopMove);
     bar?.addEventListener('pointercancel', stopMove);
 
-    /* ---------- Boot screen, then launch Welcome like a startup program ---------- */
-    const boot = document.getElementById('boot');
+    /* ---------- Launch Welcome on load, with a loading indicator ---------- */
+    // The desktop shows straight away; an hourglass sits where the Welcome
+    // window will appear, then the window opens like a starting program.
+    const welcomeLoading = document.getElementById('welcome-loading');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const BOOT_MS = 2800;
+    const LAUNCH_MS = 1300;
 
-    function launchWelcome() {
-        if (reduceMotion) {
-            windows['#welcome']?.open();
-            return;
-        }
-        // A beat of "busy" cursor on the fresh desktop, then the program opens.
+    welcomeWin?.classList.remove('pending'); // JS has taken over showing/hiding it
+
+    if (welcomeLoading && !reduceMotion) {
+        welcomeLoading.hidden = false;
         root.classList.add('busy');
         setTimeout(() => {
+            if (!welcomeLoading.isConnected) return; // already opened by a click
+            welcomeLoading.remove();
             root.classList.remove('busy');
             windows['#welcome']?.open();
-        }, 700);
-    }
-
-    if (boot && !reduceMotion) {
-        let finished = false;
-        const finishBoot = () => {
-            if (finished) return;
-            finished = true;
-            boot.classList.add('boot-done');
-            setTimeout(() => {
-                boot.remove();
-                launchWelcome();
-            }, 450);
-        };
-        setTimeout(finishBoot, BOOT_MS);
-        boot.addEventListener('click', finishBoot);
-        document.addEventListener('keydown', finishBoot, { once: true });
+        }, LAUNCH_MS);
     } else {
-        boot?.remove();
-        launchWelcome();
+        welcomeLoading?.remove();
+        windows['#welcome']?.open();
     }
 
     /* ---------- Movable desktop icons ---------- */
