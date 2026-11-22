@@ -1517,3 +1517,30 @@ button.tb-btn {
     cursor: pointer;
     font: inherit;
 }
+
+/* One-screen layout: the desktop fills exactly the space above the taskbar,
+   so there's nothing to scroll. Small screens can still scroll if the
+   content genuinely doesn't fit. */
+.desktop {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--taskbar-h));
+    min-height: calc(100dvh - var(--taskbar-h));
+    padding-bottom: 12px;
+}
+
+.hero {
+    flex: 1;
+    min-height: 0;
+    padding-bottom: 0;
+}
+
+@media (max-width: 520px) {
+    .desktop {
+        padding-bottom: 12px;
+    }
+}
+
+body {
+    min-height: 100dvh;
+}
