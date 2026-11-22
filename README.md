@@ -25,12 +25,10 @@ npx serve .
 
 Then open http://localhost:8000. It can be hosted as-is on GitHub Pages, Netlify or Vercel.
 
-## Contact Form Setup
+## Contact Form
 
-1. Create a free form at https://formspree.io.
-2. Paste its endpoint into `FORM_ENDPOINT` in `js/contact.js`.
+Messages go through [Formspree](https://formspree.io) and are delivered to the email address on my Formspree account, which never appears in this code. The endpoint is set in `FORM_ENDPOINT` in `js/contact.js`. A hidden honeypot field (`_gotcha`) filters out spam bots.
 
-Until that's set, the form shows a message pointing visitors to LinkedIn.
 
 ## Project Structure
 

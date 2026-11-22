@@ -883,3 +883,12 @@ h1, h2, h3 {
         transform: none;
     }
 }
+
+/* Contact form spam trap: kept out of view and out of the tab order */
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
