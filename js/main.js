@@ -207,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'projects' },
         { id: 'readme' },
         { id: 'myfinancepal' },
+        { id: 'visualizer' },
         { id: 'goalstat' },
     ];
     popups.forEach(({ id, focusFirst = false }) => {

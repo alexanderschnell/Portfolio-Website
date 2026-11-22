@@ -194,6 +194,16 @@
                                 <span>myfinancepal.exe</span>
                             </a>
                         </li>
+                        <li>
+                            <a class="folder-item" href="#visualizer" data-info="visualizer.exe: audio visualizer that reacts to your microphone or a music file">
+                                <svg viewBox="0 0 48 48" aria-hidden="true">
+                                    <rect x="5" y="7" width="38" height="34" rx="4" fill="#1d2025" stroke="#0b0c0e" stroke-width="2"/>
+                                    <path d="M11 34V26M16 34V18M21 34V22M26 34V14M31 34V20M36 34V27" stroke="#a6ff4d" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M10 13h28" stroke="#4de1ff" stroke-width="1.5" stroke-dasharray="2 2"/>
+                                </svg>
+                                <span>visualizer.exe</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <footer class="statusbar">
@@ -270,6 +280,45 @@
                 <footer class="statusbar">
                     <span id="mfp-status">Ready</span>
                     <span>Sample data</span>
+                </footer>
+            </article>
+        </section>
+
+        <!-- visualizer.exe: reacts to the visitor's microphone or an audio file.
+             Audio is analysed live in the browser; nothing is recorded or uploaded. -->
+        <section id="visualizer" class="section" hidden>
+            <article class="window window-visualizer" role="dialog" aria-labelledby="viz-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-viz" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="viz-title">visualizer.exe</h2>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><button type="button" class="tb-btn tb-max" data-win="maximize" aria-label="Maximize"></button><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
+                    </div>
+                </header>
+                <div class="window-body viz-body">
+                    <div class="viz-screen">
+                        <canvas id="viz-canvas" aria-label="Audio visualization"></canvas>
+                        <p class="viz-idle" id="viz-idle">No input. Press <strong>Listen</strong> or open a music file.</p>
+                    </div>
+                    <div class="viz-controls">
+                        <button type="button" class="btn btn-primary" id="viz-mic">Listen (microphone)</button>
+                        <label class="btn viz-file">Open music file…
+                            <input type="file" id="viz-file" accept="audio/*">
+                        </label>
+                        <button type="button" class="btn" id="viz-stop" disabled>Stop</button>
+                        <label class="viz-mode">Display
+                            <select id="viz-mode">
+                                <option value="both">Spectrum + scope</option>
+                                <option value="bars">Spectrum</option>
+                                <option value="scope">Oscilloscope</option>
+                            </select>
+                        </label>
+                    </div>
+                    <p class="viz-note">Your audio is analysed live on your device. Nothing is recorded or sent anywhere.</p>
+                </div>
+                <footer class="statusbar">
+                    <span id="viz-status">Ready</span>
+                    <span id="viz-source">Input: none</span>
                 </footer>
             </article>
         </section>
@@ -353,10 +402,18 @@
             <li id="task-projects" hidden><a href="#projects">Projects</a></li>
             <li id="task-readme" hidden><a href="#readme">readme.txt</a></li>
             <li id="task-myfinancepal" hidden><a href="#myfinancepal">myfinancepal.exe</a></li>
+            <li id="task-visualizer" hidden><a href="#visualizer">visualizer.exe</a></li>
             <li id="task-goalstat" hidden><a href="#goalstat">goalstat.exe</a></li>
         </ul>
 
         <div class="tray">
+            <button class="tray-btn sound-btn" id="sound-btn" type="button" aria-pressed="true" aria-label="System sounds on" title="System sounds: on">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/>
+                    <path class="sound-waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path class="sound-x" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
             <div class="tray-wrap">
                 <button class="tray-btn" id="skin-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="skin-menu" aria-label="Change theme" title="Display Properties">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -375,9 +432,12 @@
         </div>
     </nav>
 
+    <script src="js/sound.js"></script>
     <script src="js/main.js"></script>
     <script src="js/contact.js"></script>
     <script src="js/goalstat.js"></script>
     <script src="js/myfinancepal.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/droid.js"></script>
 </body>
 </html>
