@@ -1,6 +1,6 @@
 # Portfolio Website
 
-**Live site:** https://alexanderschnell.github.io/Portfolio-Website/
+**Live site:** https://alexanderschnell.github.io/portfolio-website/
 
 My personal portfolio, styled as an early-2000s desktop: each section is a window, the navigation is a taskbar, and there's a Start menu. It's a single page built with plain HTML, CSS and JavaScript. No frameworks, no build step, no backend.
 
