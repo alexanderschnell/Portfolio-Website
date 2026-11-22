@@ -8,6 +8,7 @@
     <script>
         // Apply the saved skin before first paint (Olive Drab is the default).
         // Each skin belongs to a family: "dark" (beveled) or "light" (glossy).
+        document.documentElement.classList.add('js'); // set early so the boot screen covers the first paint
         (function () {
             var families = { olive: 'dark', noir: 'dark', cyber: 'dark', luna: 'light', silver: 'light', aero: 'light' };
             var skin = 'olive';
@@ -23,10 +24,30 @@
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 </head>
 <body>
+    <!-- Boot screen: shown only with JS, removed by main.js. Click or press a key to skip. -->
+    <div class="boot" id="boot" aria-hidden="true">
+        <div class="boot-center">
+            <div class="boot-mark">AS</div>
+            <p class="boot-name">Alexander Schnell</p>
+            <p class="boot-edition">Systems Developer Edition</p>
+            <div class="boot-bar"><span></span><span></span><span></span></div>
+        </div>
+        <p class="boot-foot">&copy; Alexander Schnell</p>
+    </div>
+
     <main class="desktop">
         <!-- Desktop: shortcut icons + welcome window -->
         <section id="home" class="hero">
             <nav class="desktop-icons" aria-label="Shortcuts">
+                <a class="desk-icon" href="#welcome">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <rect x="5" y="8" width="38" height="32" rx="2" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2"/>
+                        <rect x="6" y="9" width="36" height="7" fill="#4f86d9"/>
+                        <rect x="35" y="10.5" width="5" height="4" rx="1" fill="#e8805e"/>
+                        <path d="M12 23h16M12 29h22M12 35h12" stroke="#9aa6b2" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>welcome.exe</span>
+                </a>
                 <a class="desk-icon" href="#contact">
                     <svg viewBox="0 0 48 48" aria-hidden="true">
                         <rect x="5" y="11" width="38" height="26" rx="2" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2"/>
@@ -50,12 +71,12 @@
                 </a>
             </nav>
 
-            <article class="window window-welcome reveal" aria-labelledby="welcome-title">
+            <article class="window window-welcome" id="welcome" aria-labelledby="welcome-title">
                 <header class="titlebar">
                     <span class="titlebar-icon" aria-hidden="true"></span>
                     <h2 class="titlebar-text" id="welcome-title">Welcome</h2>
-                    <div class="titlebar-buttons" aria-hidden="true">
-                        <span class="tb-btn tb-min"></span><span class="tb-btn tb-max"></span><span class="tb-btn tb-close"></span>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><span class="tb-btn tb-max" aria-hidden="true"></span><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
                     </div>
                 </header>
                 <div class="window-body hero-body">
@@ -139,7 +160,7 @@
                     <span>Alexander Schnell</span>
                 </div>
                 <ul class="start-list">
-                    <li><a href="#home">Welcome</a></li>
+                    <li><a href="#welcome">Welcome</a></li>
                     <li><a href="#contact">New Message</a></li>
                     <li class="sep" role="separator"></li>
                     <li><a href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -149,6 +170,7 @@
         </div>
 
         <ul class="task-buttons" id="task-buttons">
+            <li id="task-welcome" hidden><a href="#welcome">Welcome</a></li>
             <li id="task-contact" hidden><a href="#contact" data-task="contact">New Message</a></li>
         </ul>
 

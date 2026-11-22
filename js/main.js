@@ -133,94 +133,150 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ---------- Contact pop-up window ---------- */
-    // Every "#contact" link opens the New Message window over the desktop.
-    // Close hides it and its taskbar button; Minimize hides only the window,
-    // and the taskbar button brings it back (or minimizes it when it's open).
+    /* ---------- Windows: open / minimize / close ---------- */
+    // Links to "#welcome" or "#contact" (desktop icons, buttons, Start menu)
+    // open that window. Close hides it and its taskbar button; Minimize hides
+    // only the window, and the taskbar button brings it back (or minimizes it).
+    function makeWindow({ win, hideEl = win, task, focusFirst = false }) {
+        const taskLink = task?.querySelector('a');
+        const isOpen = () => !hideEl.hidden;
+
+        function open() {
+            const wasOpen = isOpen();
+            hideEl.hidden = false;
+            if (task) task.hidden = false;
+            taskLink?.classList.add('active');
+            if (!wasOpen) {
+                win.classList.remove('opening');
+                void win.offsetWidth; // restart the open animation
+                win.classList.add('opening');
+            }
+            if (focusFirst) {
+                win.querySelector('input:not([type="hidden"]):not([tabindex="-1"])')?.focus({ preventScroll: true });
+            }
+        }
+
+        function minimize() {
+            hideEl.hidden = true;
+            taskLink?.classList.remove('active');
+        }
+
+        function close() {
+            minimize();
+            if (task) task.hidden = true;
+            win.style.transform = ''; // reopen in its starting spot
+            win.dataset.x = win.dataset.y = '0';
+        }
+
+        win.querySelector('[data-win="close"]')?.addEventListener('click', close);
+        win.querySelector('[data-win="minimize"]')?.addEventListener('click', minimize);
+
+        return { win, taskLink, isOpen, open, minimize, close };
+    }
+
+    const windows = {};
+
+    const welcomeWin = document.getElementById('welcome');
+    if (welcomeWin) {
+        windows['#welcome'] = makeWindow({ win: welcomeWin, task: document.getElementById('task-welcome') });
+        welcomeWin.hidden = true; // the boot sequence launches it
+    }
+
     const contactSection = document.getElementById('contact');
     const contactWin = contactSection?.querySelector('.window-contact');
-    const contactTask = document.getElementById('task-contact');
-    const contactTaskLink = contactTask?.querySelector('a');
-
     if (contactSection && contactWin) {
         contactSection.classList.add('popup');
         contactSection.hidden = true;
+        windows['#contact'] = makeWindow({
+            win: contactWin,
+            hideEl: contactSection,
+            task: document.getElementById('task-contact'),
+            focusFirst: true,
+        });
+    }
 
-        const isOpen = () => !contactSection.hidden;
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href^="#"]');
+        const w = link && windows[link.getAttribute('href')];
+        if (!w || e.defaultPrevented) return;
+        e.preventDefault();
+        if (link === w.taskLink && w.isOpen()) w.minimize();
+        else w.open();
+    });
 
-        function openContact() {
-            const wasOpen = isOpen();
-            contactSection.hidden = false;
-            if (contactTask) contactTask.hidden = false;
-            contactTaskLink?.classList.add('active');
-            if (!wasOpen) {
-                contactWin.classList.remove('opening');
-                void contactWin.offsetWidth; // restart the open animation
-                contactWin.classList.add('opening');
-            }
-            const first = contactWin.querySelector('input:not([type="hidden"]):not([tabindex="-1"])');
-            first?.focus({ preventScroll: true });
+    document.addEventListener('keydown', (e) => {
+        const c = windows['#contact'];
+        if (e.key === 'Escape' && c?.isOpen() && c.win.contains(document.activeElement)) c.close();
+    });
+
+    // Only clicks open windows. Drop a leftover "#welcome"/"#contact" from the
+    // URL so a refresh always starts with a fresh boot.
+    if (windows[location.hash]) history.replaceState(null, '', location.pathname + location.search);
+
+    // Drag the New Message window around by its title bar (mouse or pen).
+    const bar = contactWin?.querySelector('.titlebar');
+    let move = null;
+    bar?.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button')) return;
+        e.preventDefault();
+        bar.setPointerCapture(e.pointerId);
+        move = {
+            startX: e.clientX,
+            startY: e.clientY,
+            baseX: Number(contactWin.dataset.x || 0),
+            baseY: Number(contactWin.dataset.y || 0),
+            rect: contactWin.getBoundingClientRect(),
+        };
+    });
+    bar?.addEventListener('pointermove', (e) => {
+        if (!move) return;
+        const r = move.rect;
+        // Keep at least the title bar reachable on screen.
+        const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
+        const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
+        contactWin.dataset.x = move.baseX + dx;
+        contactWin.dataset.y = move.baseY + dy;
+        contactWin.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
+    });
+    const stopMove = () => { move = null; };
+    bar?.addEventListener('pointerup', stopMove);
+    bar?.addEventListener('pointercancel', stopMove);
+
+    /* ---------- Boot screen, then launch Welcome like a startup program ---------- */
+    const boot = document.getElementById('boot');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const BOOT_MS = 2800;
+
+    function launchWelcome() {
+        if (reduceMotion) {
+            windows['#welcome']?.open();
+            return;
         }
+        // A beat of "busy" cursor on the fresh desktop, then the program opens.
+        root.classList.add('busy');
+        setTimeout(() => {
+            root.classList.remove('busy');
+            windows['#welcome']?.open();
+        }, 700);
+    }
 
-        function minimizeContact() {
-            contactSection.hidden = true;
-            contactTaskLink?.classList.remove('active');
-        }
-
-        function closeContact() {
-            minimizeContact();
-            if (contactTask) contactTask.hidden = true;
-            contactWin.style.transform = ''; // reopen in the middle of the screen
-            contactWin.dataset.x = contactWin.dataset.y = '0';
-        }
-
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href="#contact"]');
-            if (!link || e.defaultPrevented) return;
-            e.preventDefault();
-            if (link === contactTaskLink && isOpen()) minimizeContact();
-            else openContact();
-        });
-
-        contactWin.querySelector('[data-win="close"]')?.addEventListener('click', closeContact);
-        contactWin.querySelector('[data-win="minimize"]')?.addEventListener('click', minimizeContact);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isOpen() && contactWin.contains(document.activeElement)) closeContact();
-        });
-
-        // Drag the window around by its title bar (mouse or pen).
-        const bar = contactWin.querySelector('.titlebar');
-        let move = null;
-        bar?.addEventListener('pointerdown', (e) => {
-            if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button')) return;
-            e.preventDefault();
-            bar.setPointerCapture(e.pointerId);
-            move = {
-                startX: e.clientX,
-                startY: e.clientY,
-                baseX: Number(contactWin.dataset.x || 0),
-                baseY: Number(contactWin.dataset.y || 0),
-                rect: contactWin.getBoundingClientRect(),
-            };
-        });
-        bar?.addEventListener('pointermove', (e) => {
-            if (!move) return;
-            const r = move.rect;
-            // Keep at least the title bar reachable on screen.
-            const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
-            const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
-            contactWin.dataset.x = move.baseX + dx;
-            contactWin.dataset.y = move.baseY + dy;
-            contactWin.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
-        });
-        const stopMove = () => { move = null; };
-        bar?.addEventListener('pointerup', stopMove);
-        bar?.addEventListener('pointercancel', stopMove);
-
-        // Only a click opens the window. Drop a leftover "#contact" from the URL
-        // so a refresh always starts on the plain desktop.
-        if (location.hash === '#contact') history.replaceState(null, '', location.pathname + location.search);
+    if (boot && !reduceMotion) {
+        let finished = false;
+        const finishBoot = () => {
+            if (finished) return;
+            finished = true;
+            boot.classList.add('boot-done');
+            setTimeout(() => {
+                boot.remove();
+                launchWelcome();
+            }, 450);
+        };
+        setTimeout(finishBoot, BOOT_MS);
+        boot.addEventListener('click', finishBoot);
+        document.addEventListener('keydown', finishBoot, { once: true });
+    } else {
+        boot?.remove();
+        launchWelcome();
     }
 
     /* ---------- Movable desktop icons ---------- */
@@ -317,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         hungBar.addEventListener('pointerdown', (e) => {
-            if (e.button !== 0) return;
+            if (e.button !== 0 || e.target.closest('button')) return; // let Minimize/Close click normally
             e.preventDefault();
             hungBar.setPointerCapture(e.pointerId);
 
