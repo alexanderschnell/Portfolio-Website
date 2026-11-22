@@ -2,18 +2,23 @@
 
 **Live site:** https://alexanderschnell.github.io/Portfolio-Website/
 
-My personal portfolio: a single, scrolling page built with plain HTML, CSS and JavaScript. No frameworks, no build step, no backend.
+My personal portfolio, styled as an early-2000s desktop: each section is a window, the navigation is a taskbar, and there's a Start menu. It's a single page built with plain HTML, CSS and JavaScript. No frameworks, no build step, no backend.
 
 ![Home](./assets/images/screenshot-home.png)
 
 ## Features
 
-- **Single-page layout:** Home, About, Projects and Contact sections with smooth scrolling and a sticky nav that highlights the current section
-- **Dark mode by default:** a light-mode toggle that remembers your choice
+- **Desktop layout:** Welcome, About Me, My Projects and New Message windows, with a taskbar that highlights the window you're viewing
+- **Start menu and clock:** the Start button opens a menu with every section and link, and the tray shows the time
+- **Six skins:** Display Properties (the monitor icon in the tray) switches between Luna Blue (the default), Silver Metal, Aero Glass, Olive Drab, Night LCD and Y2K Cyber. The site remembers your choice.
+- **Movable icons:** drag the desktop shortcuts anywhere with a mouse. A quick click still opens them.
+- **"Not Responding" effect:** drag the Welcome window by its title bar and it leaves a frozen trail across the screen; let go and it repaints and snaps back
 - **Selected projects:** hand-picked project cards, written straight into the page
 - **Contact form:** sends messages through Formspree, so no email address or password lives in the code
-- **Responsive:** works on phones, tablets and desktops, with a collapsible mobile menu
-- **Subtle motion:** scroll-reveal animations and a scroll-progress bar, both switched off when the visitor has asked for reduced motion
+- **Responsive:** works on phones, tablets and desktops; on small screens the icons line up across the top and the Start menu handles navigation
+- **Accessible motion:** window animations switch off when the visitor has asked for reduced motion
+
+All artwork is original. The look is an homage to the era and doesn't use any real operating-system or game logos.
 
 ## Running Locally
 
@@ -27,6 +32,10 @@ npx serve .
 
 Then open http://localhost:8000. The live site is hosted on GitHub Pages and redeploys automatically on every push to `main`.
 
+## Adding a Skin
+
+Each skin is a block of colour variables in `css/style.css` (for example `[data-skin="aero"] { ... }`) plus one entry in the `SKINS` list in `js/main.js`. Skins belong to one of two families that set the shapes: `light` (glossy, rounded chrome) or `dark` (flat, beveled panels).
+
 ## Contact Form
 
 Messages go through [Formspree](https://formspree.io) and are delivered to the email address on my Formspree account, which never appears in this code. The endpoint is set in `FORM_ENDPOINT` in `js/contact.js`. A hidden honeypot field (`_gotcha`) filters out spam bots.
@@ -37,9 +46,9 @@ Messages go through [Formspree](https://formspree.io) and are delivered to the e
 ├── assets/
 │   └── images/            favicon, screenshots
 ├── css/
-│   └── style.css          all styles (light and dark theme tokens)
+│   └── style.css          all styles and skin colour variables
 ├── js/
-│   ├── main.js            theme, nav, greeting, scroll effects
+│   ├── main.js            skins, Start menu, clock, dragging, window effects
 │   └── contact.js         contact form submission
 ├── index.html
 └── README.md
