@@ -83,6 +83,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /* ---------- Layering ---------- */
+    // Bit lives in the same front-to-back order as the windows: standing on a
+    // window it takes that window's layer (it comes later in the page, so it
+    // draws just above its own window and behind any window in front). On the
+    // taskbar it sits just under all windows; while carried it's on top.
+    const GROUND_Z = 49;
+    const CARRIED_Z = 1000;
+    let z = GROUND_Z;
+
+    function layerZ(win) {
+        const layer = window.desktopLayers?.layerOf(win) || win;
+        return Number(getComputedStyle(layer).zIndex) || GROUND_Z + 1;
+    }
+
+    // The window actually visible at a point (so Bit never lands on a part of
+    // a title bar that another window is covering).
+    function topWindowAt(px, py) {
+        for (const node of document.elementsFromPoint(px, py)) {
+            if (el.contains(node)) continue;
+            const w = node.closest('.window');
+            if (w && !w.classList.contains('trail')) return w;
+            if (node.closest('.taskbar')) return null;
+        }
+        return null;
+    }
+
     function say(text, ms = 1600) {
         bubble.textContent = text;
         bubble.classList.add('show');
@@ -104,9 +130,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const w = wins[Math.floor(Math.random() * wins.length)];
             if (w !== surface) {
                 const rect = w.getBoundingClientRect();
-                const tx = rect.left + 20 + Math.random() * Math.max(10, rect.width - W - 40);
-                startHop(tx, rect.top - H + 3, w, rect);
-                return;
+                // Pick a spot on the title bar that isn't hidden behind another window.
+                for (let tries = 0; tries < 6; tries++) {
+                    const tx = rect.left + 20 + Math.random() * Math.max(10, rect.width - W - 40);
+                    if (topWindowAt(tx + W / 2, rect.top + 4) === w) {
+                        startHop(tx, rect.top - H + 3, w, rect);
+                        return;
+                    }
+                }
             }
         }
         if (r < 0.55) {
@@ -149,7 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function landingFor(prevBottom, newBottom, cx) {
         for (const w of visibleWindows()) {
             const r = w.getBoundingClientRect();
-            if (cx > r.left + 6 && cx < r.right - 6 && prevBottom <= r.top + 3 && newBottom >= r.top + 3) {
+            if (cx > r.left + 6 && cx < r.right - 6 && prevBottom <= r.top + 3 && newBottom >= r.top + 3
+                && topWindowAt(cx, r.top + 4) === w) {
                 return { win: w, y: r.top - H + 3 };
             }
         }
@@ -264,6 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         el.style.transform = `translate(${x}px, ${y - lift}px)`;
         svg.style.transform = `scaleX(${facing})`;
+        // Layer: follow the window it's on (or heading to); keep the current
+        // layer while falling, so it doesn't jump in front of windows mid-air.
+        if (mode === 'carried') z = CARRIED_Z;
+        else if (mode === 'hop') z = hop?.to ? layerZ(hop.to) : GROUND_Z;
+        else if (mode !== 'fall') z = surface ? layerZ(surface) : GROUND_Z;
+        else if (z === CARRIED_Z) z = GROUND_Z; // just dropped: fall at desktop level
+        el.style.zIndex = String(z);
+
         el.dataset.state = mode; // handy for styling and debugging
         el.dataset.on = surface ? (surface.closest('section')?.id || 'window') : 'taskbar';
     }
@@ -341,6 +381,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     ['mousemove', 'keydown', 'pointerdown', 'wheel', 'touchstart'].forEach((t) => document.addEventListener(t, activity, { passive: true }));
 
+    // When someone shakes Welcome until it stops responding, Bit notices.
+    document.addEventListener('welcomepanic', () => {
+        el.classList.remove('asleep');
+        if (mode === 'sleep') lookAround(800);
+        say('uh oh…', 1800);
+        window.systemSound?.beep(420, 4);
+    });
+
     window.addEventListener('resize', () => {
         if (!surface && mode !== 'carried') y = ground();
     });
@@ -354,7 +402,11 @@ document.addEventListener('DOMContentLoaded', () => {
         until = Infinity; // wait for the roll-in below
         mode = 'look';
         x = -W;
-        setTimeout(() => { targetX = 110 + Math.random() * 80; mode = 'enter'; }, 1500);
+        // Wait for the visitor to log on (if there's a log-on screen), then roll in.
+        const rollIn = () => setTimeout(() => { targetX = 110 + Math.random() * 80; mode = 'enter'; }, 1500);
+        const logon = document.getElementById('logon');
+        if (logon && !logon.hidden) document.addEventListener('logon', rollIn, { once: true });
+        else rollIn();
     }
     requestAnimationFrame(step);
 });

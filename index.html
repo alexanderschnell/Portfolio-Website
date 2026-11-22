@@ -24,6 +24,32 @@
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 </head>
 <body>
+    <!-- Log-on screen: shown on every visit (with JS). Clicking the user tile
+         boots the desktop, and that click also lets the startup chime play,
+         since browsers only allow sound after an interaction. -->
+    <div class="logon" id="logon" role="dialog" aria-modal="true" aria-label="Log on">
+        <div class="logon-bar logon-top"></div>
+        <div class="logon-main">
+            <!-- Animated ASCII cyber forest behind the card (drawn by main.js) -->
+            <div class="logon-forest" aria-hidden="true">
+                <pre class="lf-scene"></pre>
+                <pre class="lf-scene lf-glow"></pre>
+            </div>
+            <div class="logon-card">
+                <span class="logon-glyph" aria-hidden="true">
+                    <pre class="logon-wolf" id="logon-wolf"></pre>
+                </span>
+                <p class="logon-name">Alexander Schnell</p>
+                <p class="logon-role">Systems Developer</p>
+                <button type="button" class="logon-btn" id="logon-user" aria-label="Log on as Alexander Schnell">
+                    Log on
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="logon-bar logon-bottom"></div>
+        <span class="visually-hidden" id="logon-status" aria-live="polite"></span>
+    </div>
     <main class="desktop">
         <!-- Desktop: shortcut icons + welcome window -->
         <section id="home" class="hero">
