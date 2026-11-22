@@ -10,7 +10,7 @@ My personal portfolio, styled as an early-2000s desktop: each section is a windo
 
 - **Desktop layout:** Welcome and New Message windows, with a taskbar that highlights the window you're viewing
 - **Startup launch:** on load, and whenever welcome.exe starts it, an hourglass shows where Welcome will appear, then the window opens like a program starting up
-- **Real window buttons:** Minimize and Close work on every window; the welcome.exe desktop icon or the taskbar brings Welcome back
+- **Real window buttons:** Minimize, Maximize/Restore (or double-click the title bar) and Close work on every window; the welcome.exe desktop icon or the taskbar brings Welcome back
 - **Start menu and clock:** the Start button opens a menu with every section and link, and the tray shows the time
 - **Six skins:** Display Properties (the monitor icon in the tray) switches between Olive Drab (the default), Luna Blue, Silver Metal, Aero Glass, Night LCD and Y2K Cyber. The site remembers your choice.
 - **Movable icons:** drag the desktop shortcuts anywhere with a mouse. A quick click still opens them.
