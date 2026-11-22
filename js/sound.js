@@ -1,4 +1,4 @@
-// System sounds: an original startup chime when Welcome boots, plus small
+// System sounds: an original startup chime when the visitor logs on, plus small
 // beeps other scripts can use (the desktop droid). Everything is synthesized
 // with the Web Audio API; there are no sound files.
 //
@@ -143,15 +143,14 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Chime whenever Welcome boots: on page load and when welcome.exe relaunches it.
-        const welcome = document.getElementById('welcome');
-        welcome?.addEventListener('winopen', () => {
-            // Only a fresh boot, not restoring it from a minimized state.
-            if (welcome.dataset.booted === '1') return;
-            welcome.dataset.booted = '1';
-            chime();
-        });
-        welcome?.addEventListener('winclose', () => { delete welcome.dataset.booted; });
+        // Chime once per visit, when the visitor logs on. Relaunching
+        // welcome.exe later stays quiet. (Without a log-on screen, chime the
+        // first time Welcome opens instead.)
+        if (document.getElementById('logon')) {
+            document.addEventListener('logon', chime, { once: true });
+        } else {
+            document.getElementById('welcome')?.addEventListener('winopen', chime, { once: true });
+        }
 
         // Tray speaker toggle
         const btn = document.getElementById('sound-btn');
