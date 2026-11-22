@@ -1411,3 +1411,61 @@ h1, h2, h3 {
         transform: none;
     }
 }
+
+/* =========================================================
+   Desktop interactions
+   ========================================================= */
+/* Movable icons */
+.desk-icon {
+    position: relative;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: auto;
+}
+
+.desk-icon.dragging {
+    opacity: 0.75;
+    cursor: grabbing;
+}
+
+.desk-icon.dragging span {
+    background: var(--icon-select);
+    outline: 1px dotted var(--icon-text);
+}
+
+/* "Not Responding" drag on the Welcome window */
+.window-welcome {
+    position: relative;
+    z-index: 2;
+}
+
+.window-welcome .titlebar {
+    cursor: move;
+    touch-action: none;
+}
+
+.window-welcome.hung {
+    z-index: 60;
+}
+
+/* A hung window's title bar loses its colour, like an app that stopped responding */
+.window.hung .titlebar {
+    filter: saturate(0.35) brightness(1.08);
+}
+
+.trail-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.trail-layer .trail {
+    position: fixed;
+    margin: 0;
+    max-width: none;
+    transform: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+}

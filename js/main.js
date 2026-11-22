@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ---------- Skins (Display Properties) ---------- */
     // family: "dark" = flat beveled panels, "light" = glossy rounded chrome.
     // swatch: desktop, window, accent - shown in the picker.
+    // The first entry is the default (keep in sync with the inline script in index.html).
     const SKINS = [
-        { id: 'olive',  name: 'Olive Drab',   family: 'dark',  swatch: ['#2c3326', '#4c5844', '#c4b550'] },
-        { id: 'noir',   name: 'Night LCD',    family: 'dark',  swatch: ['#0d0f12', '#1d2025', '#a6ff4d'] },
-        { id: 'cyber',  name: 'Y2K Cyber',    family: 'dark',  swatch: ['#1b1236', '#3a2a72', '#ff6ad5'] },
         { id: 'luna',   name: 'Luna Blue',    family: 'light', swatch: ['#3a6fd8', '#ece9d8', '#45a845'] },
         { id: 'silver', name: 'Silver Metal', family: 'light', swatch: ['#9aa3b5', '#eceef3', '#3a5fb5'] },
         { id: 'aero',   name: 'Aero Glass',   family: 'light', swatch: ['#5cc3f5', '#f2fbff', '#9be35a'] },
+        { id: 'olive',  name: 'Olive Drab',   family: 'dark',  swatch: ['#2c3326', '#4c5844', '#c4b550'] },
+        { id: 'noir',   name: 'Night LCD',    family: 'dark',  swatch: ['#0d0f12', '#1d2025', '#a6ff4d'] },
+        { id: 'cyber',  name: 'Y2K Cyber',    family: 'dark',  swatch: ['#1b1236', '#3a2a72', '#ff6ad5'] },
     ];
 
     const skinBtn = document.getElementById('skin-btn');
@@ -147,6 +148,142 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { rootMargin: '-45% 0px -50% 0px' });
     watched.forEach((section) => sectionObserver.observe(section));
+
+    /* ---------- Movable desktop icons ---------- */
+    // Drag with a mouse or pen. A short click still opens the link; a drag
+    // (more than a few pixels) moves the icon and swallows the click.
+    // Touch is left alone so phones can still scroll past the icons.
+    const TASKBAR_H = 42;
+    let iconLayer = 3;
+
+    document.querySelectorAll('.desk-icon').forEach((icon) => {
+        let drag = null;
+
+        icon.addEventListener('dragstart', (e) => e.preventDefault()); // no native link-drag ghost
+
+        icon.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0 || e.pointerType === 'touch') return;
+            drag = {
+                startX: e.clientX,
+                startY: e.clientY,
+                baseX: Number(icon.dataset.x || 0),
+                baseY: Number(icon.dataset.y || 0),
+                rect: icon.getBoundingClientRect(),
+                moved: false,
+            };
+            icon.setPointerCapture(e.pointerId);
+        });
+
+        icon.addEventListener('pointermove', (e) => {
+            if (!drag) return;
+            let dx = e.clientX - drag.startX;
+            let dy = e.clientY - drag.startY;
+            if (!drag.moved) {
+                if (Math.hypot(dx, dy) < 5) return;
+                drag.moved = true;
+                icon.classList.add('dragging');
+                icon.style.zIndex = String(++iconLayer); // last-moved icon sits on top
+            }
+            // Keep the icon on screen and above the taskbar.
+            const r = drag.rect;
+            dx = Math.min(Math.max(dx, -r.left), window.innerWidth - r.right);
+            dy = Math.min(Math.max(dy, -r.top), window.innerHeight - TASKBAR_H - r.bottom);
+            const x = drag.baseX + dx;
+            const y = drag.baseY + dy;
+            icon.dataset.x = x;
+            icon.dataset.y = y;
+            icon.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        const endDrag = () => {
+            if (!drag) return;
+            if (drag.moved) icon.dataset.justDragged = '1';
+            icon.classList.remove('dragging');
+            drag = null;
+        };
+        icon.addEventListener('pointerup', endDrag);
+        icon.addEventListener('pointercancel', endDrag);
+
+        icon.addEventListener('click', (e) => {
+            if (icon.dataset.justDragged) {
+                e.preventDefault();
+                delete icon.dataset.justDragged;
+            }
+        });
+    });
+
+    /* ---------- "Not Responding" window drag ---------- */
+    // Dragging the Welcome window stamps frozen copies of it behind the
+    // pointer, like an old PC that stopped repainting. On release the
+    // screen "repaints": the trail clears and the window snaps back.
+    const hungWindow = document.querySelector('.window-welcome');
+    const hungBar = hungWindow?.querySelector('.titlebar');
+    const hungTitle = hungWindow?.querySelector('.titlebar-text');
+
+    if (hungWindow && hungBar && hungTitle) {
+        const baseTitle = hungTitle.textContent;
+        const MAX_TRAIL = 140;
+        let drag = null;
+
+        function stamp() {
+            const r = hungWindow.getBoundingClientRect();
+            const ghost = hungWindow.cloneNode(true);
+            ghost.removeAttribute('id');
+            ghost.removeAttribute('aria-labelledby');
+            ghost.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+            ghost.classList.add('trail');
+            Object.assign(ghost.style, {
+                left: `${r.left}px`,
+                top: `${r.top}px`,
+                width: `${r.width}px`,
+                height: `${r.height}px`,
+            });
+            drag.layer.append(ghost);
+            if (drag.layer.childElementCount > MAX_TRAIL) drag.layer.firstElementChild.remove();
+        }
+
+        hungBar.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0) return;
+            e.preventDefault();
+            hungBar.setPointerCapture(e.pointerId);
+
+            const layer = document.createElement('div');
+            layer.className = 'trail-layer';
+            layer.setAttribute('aria-hidden', 'true');
+            document.body.append(layer);
+
+            drag = { startX: e.clientX, startY: e.clientY, lastX: null, lastY: null, layer };
+            hungWindow.style.transition = 'none';
+            hungWindow.classList.add('hung');
+            hungTitle.textContent = `${baseTitle} (Not Responding)`;
+        });
+
+        hungBar.addEventListener('pointermove', (e) => {
+            if (!drag) return;
+            const dx = e.clientX - drag.startX;
+            const dy = e.clientY - drag.startY;
+            hungWindow.style.transform = `translate(${dx}px, ${dy}px)`;
+            // Leave a frozen copy every few pixels of travel.
+            if (drag.lastX === null || Math.hypot(dx - drag.lastX, dy - drag.lastY) >= 6) {
+                stamp();
+                drag.lastX = dx;
+                drag.lastY = dy;
+            }
+        });
+
+        const release = () => {
+            if (!drag) return;
+            drag.layer.remove();
+            drag = null;
+            hungTitle.textContent = baseTitle;
+            hungWindow.classList.remove('hung');
+            hungWindow.style.transition = 'transform 0.25s ease-out';
+            hungWindow.style.transform = '';
+        };
+        hungBar.addEventListener('pointerup', release);
+        hungBar.addEventListener('pointercancel', release);
+        hungBar.addEventListener('lostpointercapture', release);
+    }
 
     /* ---------- Window "open" animation ---------- */
     const revealObserver = new IntersectionObserver((entries, observer) => {

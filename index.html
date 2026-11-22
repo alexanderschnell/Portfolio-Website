@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light" data-skin="luna">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Alexander Schnell — Systems Developer</title>
     <meta name="description" content="Portfolio of Alexander Schnell, systems developer.">
     <script>
-        // Apply the saved skin before first paint (Olive Drab is the default).
+        // Apply the saved skin before first paint (Luna Blue is the default).
         // Each skin belongs to a family: "dark" (beveled) or "light" (glossy).
         (function () {
             var families = { olive: 'dark', noir: 'dark', cyber: 'dark', luna: 'light', silver: 'light', aero: 'light' };
-            var skin = 'olive';
+            var skin = 'luna';
             try {
                 var saved = localStorage.getItem('skin');
                 if (families[saved]) skin = saved;
-                else if (localStorage.getItem('darkMode') === 'false') skin = 'luna';
             } catch (e) { /* storage unavailable: use the default */ }
             document.documentElement.dataset.skin = skin;
             document.documentElement.dataset.theme = families[skin];
