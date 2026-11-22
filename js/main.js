@@ -133,21 +133,93 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ---------- Active taskbar button ---------- */
-    const taskLinks = [...document.querySelectorAll('.task-buttons a')];
-    const watched = ['home', ...taskLinks.map((a) => a.getAttribute('href').slice(1))]
-        .map((id) => document.getElementById(id))
-        .filter(Boolean);
+    /* ---------- Contact pop-up window ---------- */
+    // Every "#contact" link opens the New Message window over the desktop.
+    // Close hides it and its taskbar button; Minimize hides only the window,
+    // and the taskbar button brings it back (or minimizes it when it's open).
+    const contactSection = document.getElementById('contact');
+    const contactWin = contactSection?.querySelector('.window-contact');
+    const contactTask = document.getElementById('task-contact');
+    const contactTaskLink = contactTask?.querySelector('a');
 
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            taskLinks.forEach((link) => {
-                link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
-            });
+    if (contactSection && contactWin) {
+        contactSection.classList.add('popup');
+        contactSection.hidden = true;
+
+        const isOpen = () => !contactSection.hidden;
+
+        function openContact() {
+            const wasOpen = isOpen();
+            contactSection.hidden = false;
+            if (contactTask) contactTask.hidden = false;
+            contactTaskLink?.classList.add('active');
+            if (!wasOpen) {
+                contactWin.classList.remove('opening');
+                void contactWin.offsetWidth; // restart the open animation
+                contactWin.classList.add('opening');
+            }
+            const first = contactWin.querySelector('input:not([type="hidden"]):not([tabindex="-1"])');
+            first?.focus({ preventScroll: true });
+        }
+
+        function minimizeContact() {
+            contactSection.hidden = true;
+            contactTaskLink?.classList.remove('active');
+        }
+
+        function closeContact() {
+            minimizeContact();
+            if (contactTask) contactTask.hidden = true;
+            contactWin.style.transform = ''; // reopen in the middle of the screen
+            contactWin.dataset.x = contactWin.dataset.y = '0';
+        }
+
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href="#contact"]');
+            if (!link || e.defaultPrevented) return;
+            e.preventDefault();
+            if (link === contactTaskLink && isOpen()) minimizeContact();
+            else openContact();
         });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    watched.forEach((section) => sectionObserver.observe(section));
+
+        contactWin.querySelector('[data-win="close"]')?.addEventListener('click', closeContact);
+        contactWin.querySelector('[data-win="minimize"]')?.addEventListener('click', minimizeContact);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isOpen() && contactWin.contains(document.activeElement)) closeContact();
+        });
+
+        // Drag the window around by its title bar (mouse or pen).
+        const bar = contactWin.querySelector('.titlebar');
+        let move = null;
+        bar?.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button')) return;
+            e.preventDefault();
+            bar.setPointerCapture(e.pointerId);
+            move = {
+                startX: e.clientX,
+                startY: e.clientY,
+                baseX: Number(contactWin.dataset.x || 0),
+                baseY: Number(contactWin.dataset.y || 0),
+                rect: contactWin.getBoundingClientRect(),
+            };
+        });
+        bar?.addEventListener('pointermove', (e) => {
+            if (!move) return;
+            const r = move.rect;
+            // Keep at least the title bar reachable on screen.
+            const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
+            const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
+            contactWin.dataset.x = move.baseX + dx;
+            contactWin.dataset.y = move.baseY + dy;
+            contactWin.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
+        });
+        const stopMove = () => { move = null; };
+        bar?.addEventListener('pointerup', stopMove);
+        bar?.addEventListener('pointercancel', stopMove);
+
+        if (location.hash === '#contact') openContact();
+    }
 
     /* ---------- Movable desktop icons ---------- */
     // Drag with a mouse or pen. A short click still opens the link; a drag

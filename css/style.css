@@ -1469,3 +1469,51 @@ h1, h2, h3 {
     transition: none !important;
     opacity: 1 !important;
 }
+
+/* Contact pop-up window (main.js adds .popup; without JS it stays inline) */
+.section.popup {
+    position: fixed;
+    inset: 0 0 var(--taskbar-h) 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    pointer-events: none; /* clicks pass through to the desktop around the window */
+}
+
+.section.popup[hidden] {
+    display: none;
+}
+
+.popup .window-contact {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    width: min(640px, 100%);
+    max-height: 100%;
+}
+
+.popup .window-contact .titlebar {
+    flex-shrink: 0;
+    cursor: move;
+}
+
+.popup .window-contact .window-body {
+    overflow-y: auto;
+}
+
+.window-contact.opening {
+    animation: win-open 0.2s ease-out;
+}
+
+@keyframes win-open {
+    from { opacity: 0; scale: 0.94; }
+    to   { opacity: 1; scale: 1; }
+}
+
+button.tb-btn {
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+}

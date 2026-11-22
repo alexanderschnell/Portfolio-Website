@@ -75,13 +75,14 @@
             </article>
         </section>
 
+        <!-- Pops up when a "#contact" link is clicked (see main.js). Without JS it shows inline. -->
         <section id="contact" class="section">
-            <article class="window reveal" aria-labelledby="contact-title">
+            <article class="window window-contact" role="dialog" aria-labelledby="contact-title">
                 <header class="titlebar">
                     <span class="titlebar-icon icon-mail" aria-hidden="true"></span>
                     <h2 class="titlebar-text" id="contact-title">New Message</h2>
-                    <div class="titlebar-buttons" aria-hidden="true">
-                        <span class="tb-btn tb-min"></span><span class="tb-btn tb-max"></span><span class="tb-btn tb-close"></span>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><span class="tb-btn tb-max" aria-hidden="true"></span><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
                     </div>
                 </header>
                 <div class="window-body">
@@ -148,7 +149,7 @@
         </div>
 
         <ul class="task-buttons" id="task-buttons">
-            <li><a href="#contact">New Message</a></li>
+            <li id="task-contact" hidden><a href="#contact" data-task="contact">New Message</a></li>
         </ul>
 
         <div class="tray">
