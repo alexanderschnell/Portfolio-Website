@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-skin="olive">
+<html lang="en" data-theme="dark" data-skin="noir">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Alexander Schnell — Systems Developer</title>
     <meta name="description" content="Portfolio of Alexander Schnell, systems developer.">
     <script>
-        // Apply the saved skin before first paint (Olive Drab is the default).
+        // Apply the saved skin before first paint (Night LCD is the default).
         // Each skin belongs to a family: "dark" (beveled) or "light" (glossy).
         document.documentElement.classList.add('js'); // set early so Welcome stays hidden until it launches
         (function () {
             var families = { olive: 'dark', noir: 'dark', cyber: 'dark', luna: 'light', silver: 'light', aero: 'light' };
-            var skin = 'olive';
+            var skin = 'noir';
             try {
                 var saved = localStorage.getItem('skin');
                 if (families[saved]) skin = saved;
@@ -44,6 +44,22 @@
                     </svg>
                     <span>Contact</span>
                 </a>
+                <a class="desk-icon" href="#projects">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <path d="M4 12a2 2 0 0 1 2-2h12l4 4h20a2 2 0 0 1 2 2v4H4z" fill="#e0a92e" stroke="#9a6d10" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M4 18h40v20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" fill="#f6c94c" stroke="#9a6d10" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M6 20.5h36" stroke="#fde59a" stroke-width="2"/>
+                    </svg>
+                    <span>Projects</span>
+                </a>
+                <a class="desk-icon" href="#readme">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <path d="M10 4h20l8 8v32H10z" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M30 4v8h8" fill="#e3e7ec" stroke="#6b7b8c" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M15 19h18M15 24h18M15 29h18M15 34h12" stroke="#7d8a99" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>readme.txt</span>
+                </a>
                 <a class="desk-icon" href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 48 48" aria-hidden="true">
                         <rect x="4" y="4" width="40" height="40" rx="8" fill="#24292f"/>
@@ -73,9 +89,10 @@
                     <p class="greeting" id="greeting">Hello.</p>
                     <h1 class="hero-name">Alexander Schnell</h1>
                     <p class="hero-tagline">Systems Developer</p>
-                    <p class="hero-lede">I build dependable software that handles real data: careful validation, clear logic and code that's easy to maintain.</p>
+                    <p class="hero-lede">Let's build something special.</p>
                     <div class="hero-cta">
                         <a href="#contact" class="btn btn-primary">Get in touch</a>
+                        <a href="#projects" class="btn">Open Projects</a>
                         <a href="https://github.com/alexanderschnell" class="btn" target="_blank" rel="noopener noreferrer">View my GitHub</a>
                     </div>
                 </div>
@@ -84,18 +101,6 @@
                     <span>Ontario, Canada</span>
                 </footer>
             </article>
-
-            <!-- Shown by main.js while Welcome "starts up" on page load -->
-            <div class="welcome-loading" id="welcome-loading" role="status" hidden>
-                <svg class="hourglass" viewBox="0 0 32 40" aria-hidden="true">
-                    <rect x="4" y="1" width="24" height="4" rx="1" fill="currentColor"/>
-                    <rect x="4" y="35" width="24" height="4" rx="1" fill="currentColor"/>
-                    <path d="M7 5h18c0 8-6 11-7.5 15C19 24 25 27 25 35H7c0-8 6-11 7.5-15C13 16 7 13 7 5z" fill="none" stroke="currentColor" stroke-width="2"/>
-                    <path class="sand-top" d="M10 9h12c-1 4-4.5 6-6 9-1.5-3-5-5-6-9z"/>
-                    <path class="sand-bottom" d="M10 33c1-4 4.5-6 6-8 1.5 2 5 4 6 8z"/>
-                </svg>
-                <span>Starting welcome.exe…</span>
-            </div>
         </section>
 
         <!-- Pops up when a "#contact" link is clicked (see main.js). Without JS it shows inline. -->
@@ -147,6 +152,175 @@
             </article>
         </section>
 
+        <!-- Projects folder: each project is a program that opens its own window.
+             To add one, copy a .folder-item and point it at the new window's #id. -->
+        <section id="projects" class="section" hidden>
+            <article class="window window-folder" role="dialog" aria-labelledby="projects-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-folder" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="projects-title">Projects</h2>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><button type="button" class="tb-btn tb-max" data-win="maximize" aria-label="Maximize"></button><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
+                    </div>
+                </header>
+                <div class="address-bar">
+                    <span class="address-label">Address</span>
+                    <span class="address-path">C:\Projects</span>
+                </div>
+                <div class="window-body folder-body">
+                    <ul class="folder-items">
+                        <li>
+                            <a class="folder-item" href="#goalstat" data-info="goalstat.exe: COBOL batch report on every Arsenal Premier League goal of 2025-26">
+                                <svg viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M14 6h20v12H14z" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2"/>
+                                    <rect x="4" y="16" width="40" height="18" rx="3" fill="#cfc7b4" stroke="#5e5748" stroke-width="2"/>
+                                    <rect x="9" y="21" width="30" height="3" rx="1.5" fill="#3b372f"/>
+                                    <circle cx="38" cy="29" r="1.8" fill="#5bd35b"/>
+                                    <path d="M12 30h24v13H12z" fill="#fdfdfd" stroke="#6b7b8c" stroke-width="2"/>
+                                    <path d="M12 34h24v3H12z" fill="#bfe3bf"/>
+                                    <path d="M16 40h12" stroke="#9aa6b2" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span>goalstat.exe</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="folder-item" href="#myfinancepal" data-info="myfinancepal.exe: Java desktop app for tracking and paying off debt">
+                                <svg viewBox="0 0 48 48" aria-hidden="true">
+                                    <rect x="6" y="6" width="36" height="36" rx="5" fill="#2f8f5b" stroke="#1d5e3b" stroke-width="2"/>
+                                    <path d="M12 14l8 8 6-4 10 14" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M36 25v7h-7" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 36h24" stroke="#bfe8cf" stroke-width="2.5" stroke-linecap="round"/>
+                                </svg>
+                                <span>myfinancepal.exe</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <footer class="statusbar">
+                    <span id="folder-info">1 object</span>
+                    <span>My Computer</span>
+                </footer>
+            </article>
+        </section>
+
+        <!-- readme.txt: About me, as a text file left on the desktop -->
+        <section id="readme" class="section" hidden>
+            <article class="window window-notepad" role="dialog" aria-labelledby="readme-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-text" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="readme-title">readme.txt: Text Editor</h2>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><button type="button" class="tb-btn tb-max" data-win="maximize" aria-label="Maximize"></button><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
+                    </div>
+                </header>
+                <div class="menu-bar" aria-hidden="true">
+                    <span><u>F</u>ile</span><span><u>E</u>dit</span><span>F<u>o</u>rmat</span><span><u>V</u>iew</span><span><u>H</u>elp</span>
+                </div>
+                <div class="window-body notepad-body">
+<pre class="notepad-text" tabindex="0"></pre>
+                </div>
+                <footer class="statusbar">
+                    <span>Ln 1, Col 1</span>
+                    <span>UTF-8</span>
+                </footer>
+            </article>
+        </section>
+
+        <!-- myfinancepal.exe: a working mini version of the app's payoff planner,
+             using made-up sample debts (the real app: github.com/alexanderschnell/personal-finance-tracker) -->
+        <section id="myfinancepal" class="section" hidden>
+            <article class="window window-finance" role="dialog" aria-labelledby="mfp-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-finance" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="mfp-title">myfinancepal.exe: Payoff Planner</h2>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><button type="button" class="tb-btn tb-max" data-win="maximize" aria-label="Maximize"></button><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
+                    </div>
+                </header>
+                <div class="window-body finance-body">
+                    <p class="finance-intro">MyFinancePal is my Java desktop app for paying off debt. This is a working mini version of its payoff planner. Slide the monthly budget and compare the two classic strategies. <strong>The debts below are made-up sample data.</strong></p>
+
+                    <div class="finance-grid">
+                        <fieldset class="finance-panel">
+                            <legend>Sample debts</legend>
+                            <table class="debt-table">
+                                <thead>
+                                    <tr><th scope="col">Debt</th><th scope="col">Balance</th><th scope="col">Rate</th><th scope="col">Min.</th></tr>
+                                </thead>
+                                <tbody id="mfp-debts"></tbody>
+                            </table>
+                            <label class="budget">
+                                <span>Monthly budget for debt: <strong id="mfp-budget-out"></strong></span>
+                                <input type="range" id="mfp-budget" min="375" max="1500" step="25" value="600">
+                            </label>
+                        </fieldset>
+
+                        <fieldset class="finance-panel">
+                            <legend>Payoff plan</legend>
+                            <div class="strategy-cards" id="mfp-results"></div>
+                            <p class="finance-tip" id="mfp-tip"></p>
+                        </fieldset>
+                    </div>
+
+                    <div class="finance-footer">
+                        <p class="finance-tech">The real app: debt tracking, payment logging with an interest and principal split, payoff charts and cash flow. Java 21, JavaFX, SQLite, JUnit. Data stays on your own computer.</p>
+                        <a class="btn btn-small" href="https://github.com/alexanderschnell/personal-finance-tracker" target="_blank" rel="noopener noreferrer">View Java source</a>
+                    </div>
+                </div>
+                <footer class="statusbar">
+                    <span id="mfp-status">Ready</span>
+                    <span>Sample data</span>
+                </footer>
+            </article>
+        </section>
+
+        <!-- goalstat.exe: replays real output of the GOALSTAT COBOL batch program
+             (github.com/alexanderschnell/arsenal-goals-cobol) on a dot-matrix printer.
+             The reports in assets/goalstat/ were produced by the program itself. -->
+        <section id="goalstat" class="section" hidden>
+            <article class="window window-printer" role="dialog" aria-labelledby="goalstat-title">
+                <header class="titlebar">
+                    <span class="titlebar-icon icon-printer" aria-hidden="true"></span>
+                    <h2 class="titlebar-text" id="goalstat-title">goalstat.exe: Line Printer</h2>
+                    <div class="titlebar-buttons">
+                        <button type="button" class="tb-btn tb-min" data-win="minimize" aria-label="Minimize"></button><button type="button" class="tb-btn tb-max" data-win="maximize" aria-label="Maximize"></button><button type="button" class="tb-btn tb-close" data-win="close" aria-label="Close"></button>
+                    </div>
+                </header>
+                <div class="window-body printer-body">
+                    <div class="printer-job">
+                        <div class="card-deck" id="gs-deck" role="img" aria-label="Control cards for this job"></div>
+                        <div class="printer-side">
+                            <p class="printer-note">A real COBOL batch program reporting every Arsenal Premier League goal of 2025-26. Pick a job's control cards and send it to the printer.</p>
+                            <div class="printer-controls">
+                                <label class="gs-job-label">Job
+                                    <select id="gs-job"></select>
+                                </label>
+                                <button type="button" class="btn btn-primary" id="gs-run">Run job</button>
+                                <button type="button" class="btn" id="gs-skip" disabled title="Print the rest at once">Form feed</button>
+                            </div>
+                            <div class="printer-controls">
+                                <label class="gs-sound"><input type="checkbox" id="gs-sound"> Printer sound</label>
+                                <a class="btn btn-small" href="https://github.com/alexanderschnell/arsenal-goals-cobol" target="_blank" rel="noopener noreferrer">View COBOL source</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="printer">
+                        <div class="paper-window" id="gs-paper-window" tabindex="0" aria-label="Printed report">
+                            <pre class="paper" id="gs-paper"></pre>
+                        </div>
+                        <div class="printer-housing" aria-hidden="true">
+                            <span class="print-head" id="gs-head"></span>
+                            <span class="printer-led" id="gs-led"></span>
+                        </div>
+                    </div>
+                </div>
+                <footer class="statusbar">
+                    <span id="gs-status">Ready</span>
+                    <span id="gs-rc">LPT1: online</span>
+                </footer>
+            </article>
+        </section>
+
         <p class="copyright">&copy; <span id="year"></span> Alexander Schnell</p>
     </main>
 
@@ -164,6 +338,8 @@
                 <ul class="start-list">
                     <li><a href="#welcome">Welcome</a></li>
                     <li><a href="#contact">New Message</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#readme">readme.txt</a></li>
                     <li class="sep" role="separator"></li>
                     <li><a href="https://github.com/alexanderschnell" target="_blank" rel="noopener noreferrer">GitHub</a></li>
                     <li><a href="https://www.linkedin.com/in/alex-schnell-8064262b1" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
@@ -174,6 +350,10 @@
         <ul class="task-buttons" id="task-buttons">
             <li id="task-welcome" hidden><a href="#welcome">Welcome</a></li>
             <li id="task-contact" hidden><a href="#contact" data-task="contact">New Message</a></li>
+            <li id="task-projects" hidden><a href="#projects">Projects</a></li>
+            <li id="task-readme" hidden><a href="#readme">readme.txt</a></li>
+            <li id="task-myfinancepal" hidden><a href="#myfinancepal">myfinancepal.exe</a></li>
+            <li id="task-goalstat" hidden><a href="#goalstat">goalstat.exe</a></li>
         </ul>
 
         <div class="tray">
@@ -197,5 +377,7 @@
 
     <script src="js/main.js"></script>
     <script src="js/contact.js"></script>
+    <script src="js/goalstat.js"></script>
+    <script src="js/myfinancepal.js"></script>
 </body>
 </html>

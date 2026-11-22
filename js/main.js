@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // swatch: desktop, window, accent - shown in the picker.
     // The first entry is the default (keep in sync with the inline script in index.html).
     const SKINS = [
+        { id: 'noir',   name: 'Night LCD',    family: 'dark',  swatch: ['#0d0f12', '#1d2025', '#a6ff4d'] },
         { id: 'olive',  name: 'Olive Drab',   family: 'dark',  swatch: ['#2c3326', '#4c5844', '#c4b550'] },
         { id: 'luna',   name: 'Luna Blue',    family: 'light', swatch: ['#3a6fd8', '#ece9d8', '#45a845'] },
         { id: 'silver', name: 'Silver Metal', family: 'light', swatch: ['#9aa3b5', '#eceef3', '#3a5fb5'] },
         { id: 'aero',   name: 'Aero Glass',   family: 'light', swatch: ['#5cc3f5', '#f2fbff', '#9be35a'] },
-        { id: 'noir',   name: 'Night LCD',    family: 'dark',  swatch: ['#0d0f12', '#1d2025', '#a6ff4d'] },
         { id: 'cyber',  name: 'Y2K Cyber',    family: 'dark',  swatch: ['#1b1236', '#3a2a72', '#ff6ad5'] },
     ];
 
@@ -151,9 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 void win.offsetWidth; // restart the open animation
                 win.classList.add('opening');
             }
+            if (hideEl !== win) hideEl.style.zIndex = String(++popupLayer); // bring to front
             if (focusFirst) {
                 win.querySelector('input:not([type="hidden"]):not([tabindex="-1"])')?.focus({ preventScroll: true });
             }
+            win.dispatchEvent(new CustomEvent('winopen')); // other scripts (goalstat.js) can react
         }
 
         function minimize() {
@@ -167,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             win.style.transform = ''; // reopen in its starting spot
             win.dataset.x = win.dataset.y = '0';
             setMaximized(false); // reopen at normal size
+            win.dispatchEvent(new CustomEvent('winclose'));
         }
 
         // Maximize fills the desktop above the taskbar; press again (or
@@ -190,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const windows = {};
+    let popupLayer = 50; // pop-ups stack above each other; the last one opened or clicked is on top
 
     const welcomeWin = document.getElementById('welcome');
     if (welcomeWin) {
@@ -197,18 +201,24 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeWin.hidden = true; // launched on load, after the loading indicator
     }
 
-    const contactSection = document.getElementById('contact');
-    const contactWin = contactSection?.querySelector('.window-contact');
-    if (contactSection && contactWin) {
-        contactSection.classList.add('popup');
-        contactSection.hidden = true;
-        windows['#contact'] = makeWindow({
-            win: contactWin,
-            hideEl: contactSection,
-            task: document.getElementById('task-contact'),
-            focusFirst: true,
-        });
-    }
+    // Pop-up windows: each lives in its own full-screen <section> layer.
+    const popups = [
+        { id: 'contact', focusFirst: true },
+        { id: 'projects' },
+        { id: 'readme' },
+        { id: 'myfinancepal' },
+        { id: 'goalstat' },
+    ];
+    popups.forEach(({ id, focusFirst = false }) => {
+        const section = document.getElementById(id);
+        const win = section?.querySelector('.window');
+        if (!section || !win) return;
+        section.classList.add('popup');
+        section.hidden = true;
+        windows[`#${id}`] = makeWindow({ win, hideEl: section, task: document.getElementById(`task-${id}`), focusFirst });
+        win.addEventListener('pointerdown', () => { section.style.zIndex = String(++popupLayer); });
+        makeDraggable(win);
+    });
 
     document.addEventListener('click', (e) => {
         const link = e.target.closest('a[href^="#"]');
@@ -216,76 +226,96 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!w || e.defaultPrevented) return;
         e.preventDefault();
         if (link === w.taskLink && w.isOpen()) w.minimize();
-        else if (w === windows['#welcome'] && w.taskLink?.parentElement.hidden) launchWelcome(); // not running: start it
+        else if (w === windows['#welcome'] && w.taskLink?.parentElement.hidden) openWelcome(); // not running: start it
         else w.open(); // running (open or minimized): just bring it up
     });
 
+    // Projects folder: pointing at (or tabbing to) a program describes it in the status bar.
+    const folderInfo = document.getElementById('folder-info');
+    const folderItems = document.querySelectorAll('.folder-item');
+    if (folderInfo) {
+        const idle = `${folderItems.length} object${folderItems.length === 1 ? '' : 's'}`;
+        folderInfo.textContent = idle;
+        folderItems.forEach((item) => {
+            const show = () => { folderInfo.textContent = item.dataset.info || idle; };
+            const reset = () => { folderInfo.textContent = idle; };
+            item.addEventListener('pointerenter', show);
+            item.addEventListener('focus', show);
+            item.addEventListener('pointerleave', reset);
+            item.addEventListener('blur', reset);
+        });
+    }
+
+    // Escape closes the pop-up that has keyboard focus.
     document.addEventListener('keydown', (e) => {
-        const c = windows['#contact'];
-        if (e.key === 'Escape' && c?.isOpen() && c.win.contains(document.activeElement)) c.close();
+        if (e.key !== 'Escape') return;
+        popups.forEach(({ id }) => {
+            const w = windows[`#${id}`];
+            if (w?.isOpen() && w.win.contains(document.activeElement)) w.close();
+        });
     });
 
     // Only clicks open windows. Drop a leftover "#welcome"/"#contact" from the
     // URL so a refresh always always starts with Welcome launching.
     if (windows[location.hash]) history.replaceState(null, '', location.pathname + location.search);
 
-    // Drag the New Message window around by its title bar (mouse or pen).
-    const bar = contactWin?.querySelector('.titlebar');
-    let move = null;
-    bar?.addEventListener('pointerdown', (e) => {
-        if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button') || contactWin.classList.contains('maximized')) return;
-        e.preventDefault();
-        bar.setPointerCapture(e.pointerId);
-        move = {
-            startX: e.clientX,
-            startY: e.clientY,
-            baseX: Number(contactWin.dataset.x || 0),
-            baseY: Number(contactWin.dataset.y || 0),
-            rect: contactWin.getBoundingClientRect(),
-        };
-    });
-    bar?.addEventListener('pointermove', (e) => {
-        if (!move) return;
-        const r = move.rect;
-        // Keep at least the title bar reachable on screen.
-        const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
-        const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
-        contactWin.dataset.x = move.baseX + dx;
-        contactWin.dataset.y = move.baseY + dy;
-        contactWin.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
-    });
-    const stopMove = () => { move = null; };
-    bar?.addEventListener('pointerup', stopMove);
-    bar?.addEventListener('pointercancel', stopMove);
-
-    /* ---------- Launch Welcome with a loading indicator ---------- */
-    // Used on page load and whenever welcome.exe (or Start > Welcome) starts
-    // it from closed: an hourglass sits where the window will appear, then the
-    // window opens like a starting program.
-    const welcomeLoading = document.getElementById('welcome-loading');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const LAUNCH_MS = 1300;
-    let launching = false;
-
-    function launchWelcome() {
-        if (launching) return; // already starting: ignore extra clicks
-        if (!welcomeLoading || reduceMotion) {
-            windows['#welcome']?.open();
-            return;
-        }
-        launching = true;
-        welcomeLoading.hidden = false;
-        root.classList.add('busy');
-        setTimeout(() => {
-            launching = false;
-            welcomeLoading.hidden = true;
-            root.classList.remove('busy');
-            windows['#welcome']?.open();
-        }, LAUNCH_MS);
+    // Drag a pop-up window around by its title bar (mouse or pen).
+    function makeDraggable(win) {
+        const bar = win.querySelector('.titlebar');
+        let move = null;
+        bar?.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button') || win.classList.contains('maximized')) return;
+            e.preventDefault();
+            bar.setPointerCapture(e.pointerId);
+            move = {
+                startX: e.clientX,
+                startY: e.clientY,
+                baseX: Number(win.dataset.x || 0),
+                baseY: Number(win.dataset.y || 0),
+                rect: win.getBoundingClientRect(),
+            };
+        });
+        bar?.addEventListener('pointermove', (e) => {
+            if (!move) return;
+            const r = move.rect;
+            // Keep at least the title bar reachable on screen.
+            const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
+            const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
+            win.dataset.x = move.baseX + dx;
+            win.dataset.y = move.baseY + dy;
+            win.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
+        });
+        const stopMove = () => { move = null; };
+        bar?.addEventListener('pointerup', stopMove);
+        bar?.addEventListener('pointercancel', stopMove);
     }
 
+    /* ---------- Launch Welcome ---------- */
+    // On page load, and whenever welcome.exe (or Start > Welcome) starts it
+    // from closed, Welcome opens straight away, zooming out of its icon.
+    const welcomeIcon = document.querySelector('.desk-icon[href="#welcome"]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function openWelcome() {
+        const w = windows['#welcome'];
+        if (!w) return;
+        w.open();
+        if (reduceMotion || !welcomeIcon) return;
+        // Start the zoom from the icon's centre, measured from the window's centre.
+        const from = welcomeIcon.getBoundingClientRect();
+        const to = welcomeWin.getBoundingClientRect();
+        welcomeWin.style.setProperty('--zoom-x', `${from.left + from.width / 2 - (to.left + to.width / 2)}px`);
+        welcomeWin.style.setProperty('--zoom-y', `${from.top + from.height / 2 - (to.top + to.height / 2)}px`);
+        welcomeWin.classList.remove('opening', 'zooming');
+        void welcomeWin.offsetWidth; // restart the animation
+        welcomeWin.classList.add('zooming');
+    }
+    welcomeWin?.addEventListener('animationend', (e) => {
+        if (e.animationName === 'win-zoom') welcomeWin.classList.remove('zooming');
+    });
+
     welcomeWin?.classList.remove('pending'); // JS has taken over showing/hiding it
-    launchWelcome();
+    openWelcome(); // no loading wait on page load
 
     /* ---------- Welcome window: animated ASCII aura ---------- */
     // A demoscene-style plasma drawn in characters: overlapping sine waves,
@@ -307,11 +337,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const probe = document.createElement('span');
             probe.textContent = 'M'.repeat(50);
             aura.append(probe);
-            charW = probe.getBoundingClientRect().width / 50 || 7;
+            // Layout sizes (offsetWidth/Height), not on-screen ones: the window
+            // may be mid-zoom (scaled down) when this runs.
+            charW = probe.offsetWidth / 50 || 7;
             probe.remove();
-            const box = aura.getBoundingClientRect();
-            cols = Math.ceil(box.width / charW);
-            rows = Math.ceil(box.height / 12);
+            cols = Math.ceil(aura.offsetWidth / charW);
+            rows = Math.ceil(aura.offsetHeight / 12);
         }
 
         function frame(t) {

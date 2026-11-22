@@ -404,9 +404,9 @@ h1, h2, h3 {
 
 .desktop {
     width: 100%;
-    max-width: 1060px;
     margin: 0 auto;
-    padding: 28px 20px 40px;
+    /* left padding keeps windows clear of the icon column */
+    padding: 28px 24px 40px calc(75px + 22px);
 }
 
 /* =========================================================
@@ -674,28 +674,49 @@ h1, h2, h3 {
 /* =========================================================
    Desktop / hero
    ========================================================= */
+/* The desktop icons sit outside the layout (see below), so the hero just
+   centres the Welcome window in the space to the right of them. */
 .hero {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 36px;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    align-items: center;
     min-height: calc(100vh - var(--taskbar-h) - 28px);
     padding-bottom: 40px;
 }
 
+/* Desktop icons: pinned to the left edge on a fixed 75px grid (the classic
+   desktop icon spacing). They fill a column from the top, then wrap into the
+   next column when the screen is too short, at any window size. */
 .desktop-icons {
+    --cell: 75px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: var(--taskbar-h);
+    z-index: 1;
     display: grid;
-    gap: 14px;
-    width: 92px;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(auto-fill, var(--cell));
+    grid-auto-columns: var(--cell);
+    align-content: start;
+    padding: 4px 0 0 2px;
+    pointer-events: none; /* only the icons themselves take clicks */
 }
 
 .desk-icon {
     display: grid;
+    grid-template-rows: auto auto;
     justify-items: center;
-    gap: 4px;
-    padding: 6px 4px;
+    align-content: start;
+    gap: 3px;
+    width: var(--cell);
+    height: var(--cell);
+    padding: 5px 1px 0;
+    pointer-events: auto;
     color: var(--icon-text);
-    font-size: 13px;
+    font-size: 11px;
+    line-height: 1.25;
     text-align: center;
     text-decoration: none;
     text-shadow: var(--icon-shadow);
@@ -703,9 +724,13 @@ h1, h2, h3 {
 }
 
 .desk-icon svg {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
+}
+
+.desk-icon span {
+    padding: 0 2px;
 }
 
 .desk-icon:hover span,
@@ -716,11 +741,11 @@ h1, h2, h3 {
 
 .window-welcome {
     align-self: center;
-    max-width: 680px;
+    width: min(max(960px, 58vw), 100%); /* grows on big screens */
 }
 
 .hero-body {
-    padding: 34px 36px 30px;
+    padding: clamp(28px, 7vh, 72px) clamp(20px, 5vw, 64px) clamp(26px, 6vh, 60px);
 }
 
 .greeting {
@@ -730,7 +755,7 @@ h1, h2, h3 {
 }
 
 .hero-name {
-    font: bold italic clamp(2.4rem, 7vw, 4rem) / 1 var(--font-title);
+    font: bold italic clamp(2.4rem, 6.6vw, 5.75rem) / 1 var(--font-title);
     letter-spacing: -0.01em;
 }
 
@@ -740,15 +765,40 @@ h1, h2, h3 {
     letter-spacing: 0;
 }
 
+/* Make the name stand out, quietly: a soft gradient fill in the skin's
+   colours and a thin shadow edge. Colours come from each skin's variables. */
+.hero-name {
+    --name-top: var(--title-b);
+    --name-bottom: var(--title-c);
+    --name-edge: color-mix(in srgb, var(--title-c) 40%, transparent);
+    width: fit-content;
+    max-width: 100%;
+    padding: 0 0.06em 0.06em 0; /* room for the edge */
+    color: var(--title-a); /* fallback */
+    background: linear-gradient(180deg, var(--name-top) 20%, var(--name-bottom) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 2px 0 var(--name-edge));
+}
+
+[data-theme="dark"] .hero-name {
+    --name-top: #ffffff;
+    --name-bottom: color-mix(in srgb, var(--accent) 40%, #ffffff);
+    --name-edge: color-mix(in srgb, #000 45%, transparent);
+}
+
 .hero-tagline {
-    margin: 10px 0 0;
-    font-size: 1.25rem;
+    margin: 14px 0 0;
+    font-size: clamp(1.25rem, 2.4vw, 1.8rem);
     color: var(--accent);
 }
 
 .hero-lede {
-    max-width: 520px;
-    margin: 14px 0 0;
+    max-width: 660px;
+    margin: 18px 0 0;
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    line-height: 1.6;
     color: var(--muted);
 }
 
@@ -756,7 +806,7 @@ h1, h2, h3 {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 26px;
+    margin-top: 32px;
 }
 
 /* =========================================================
@@ -933,6 +983,37 @@ h1, h2, h3 {
 .field textarea {
     resize: vertical;
     min-height: 160px;
+}
+
+/* The New Message form fills its window at any size: the message box takes
+   up whatever height is left (all of it when maximized), and shrinks on short
+   screens so the Send button stays in view. */
+.window-contact > .window-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.window-contact .contact-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.window-contact .field-message {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.window-contact .field-message textarea {
+    flex: 1;
+    min-height: clamp(90px, 24vh, 160px);
+}
+
+.window-contact.maximized .field-message textarea {
+    resize: none; /* it already fills the window */
 }
 
 .field input:focus,
@@ -1331,21 +1412,6 @@ h1, h2, h3 {
         min-height: 0;
     }
 
-    .desktop-icons {
-        width: auto;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 4px;
-    }
-
-    .desk-icon {
-        font-size: 11px;
-    }
-
-    .desk-icon svg {
-        width: 36px;
-        height: 36px;
-    }
-
     .project-grid {
         grid-template-columns: 1fr;
     }
@@ -1361,7 +1427,7 @@ h1, h2, h3 {
 
 @media (max-width: 520px) {
     .desktop {
-        padding: 16px 10px 32px;
+        padding: 16px 10px 32px calc(75px + 8px);
     }
 
     .window-body,
@@ -1487,7 +1553,13 @@ h1, h2, h3 {
     display: none;
 }
 
-.popup .window-contact {
+/* With JS, keep New Message hidden from the very first paint (no flash on
+   refresh) until main.js turns it into a pop-up. Without JS it shows inline. */
+.js #contact:not(.popup) {
+    display: none;
+}
+
+.popup > .window {
     pointer-events: auto;
     display: flex;
     flex-direction: column;
@@ -1495,16 +1567,16 @@ h1, h2, h3 {
     max-height: 100%;
 }
 
-.popup .window-contact .titlebar {
+.popup > .window .titlebar {
     flex-shrink: 0;
     cursor: move;
 }
 
-.popup .window-contact .window-body {
+.popup > .window .window-body {
     overflow-y: auto;
 }
 
-.window-contact.opening {
+.popup > .window.opening {
     animation: win-open 0.2s ease-out;
 }
 
@@ -1546,12 +1618,6 @@ body {
     min-height: 100dvh;
 }
 
-/* "Busy" cursor while the startup program launches */
-.busy,
-.busy * {
-    cursor: progress !important;
-}
-
 .window[hidden] {
     display: none;
 }
@@ -1560,64 +1626,28 @@ body {
     animation: win-open 0.25s ease-out;
 }
 
-/* Welcome starts hidden (with JS) and launches after a short loading beat */
+/* Launching: the window zooms out of its desktop icon (main.js sets the offsets) */
+.window-welcome.zooming {
+    animation: win-zoom 0.5s cubic-bezier(0.35, 0.55, 0.3, 1);
+}
+
+@keyframes win-zoom {
+    from {
+        opacity: 0.2;
+        transform: translate(var(--zoom-x, 0), var(--zoom-y, 0)) scale(0.08);
+    }
+    60% {
+        opacity: 1;
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Welcome starts hidden (with JS) until main.js opens it */
 .js .window-welcome.pending {
     display: none;
-}
-
-.welcome-loading {
-    align-self: center;
-    justify-self: start;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 680px;
-    color: var(--icon-text);
-    text-shadow: var(--icon-shadow);
-    font-size: 13px;
-}
-
-.welcome-loading[hidden] {
-    display: none;
-}
-
-.hourglass {
-    width: 34px;
-    height: 42px;
-    filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
-    animation: hourglass-flip 1.3s ease-in-out infinite;
-}
-
-.hourglass .sand-top,
-.hourglass .sand-bottom {
-    fill: var(--accent);
-}
-
-.hourglass .sand-top {
-    animation: sand-drain 1.3s linear infinite;
-    transform-origin: 16px 18px;
-}
-
-.hourglass .sand-bottom {
-    animation: sand-fill 1.3s linear infinite;
-    transform-origin: 16px 33px;
-}
-
-@keyframes hourglass-flip {
-    0%, 70% { transform: rotate(0deg); }
-    100%    { transform: rotate(180deg); }
-}
-
-@keyframes sand-drain {
-    0%   { transform: scaleY(1); }
-    70%, 100% { transform: scaleY(0.1); }
-}
-
-@keyframes sand-fill {
-    0%   { transform: scaleY(0.1); }
-    70%, 100% { transform: scaleY(1); }
 }
 
 /* =========================================================
@@ -1739,4 +1769,675 @@ body {
     inset: 3px 3px 6px 6px;
     background: transparent;
     border-color: var(--win-text);
+}
+
+/* =========================================================
+   goalstat.exe: dot-matrix line printer
+   ========================================================= */
+.titlebar-icon.icon-printer {
+    background: linear-gradient(180deg, #ffffff 0 35%, #cfc7b4 35% 75%, #ffffff 75%);
+}
+
+.popup > .window.window-printer {
+    width: min(940px, 100%);
+    height: min(720px, 100%);
+}
+
+/* Maximized: fill the desktop like the other windows (beats the size above) */
+.popup > .window.window-printer.maximized {
+    width: auto;
+    height: auto;
+}
+
+.window-printer .window-body.printer-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 18px;
+    overflow: hidden;
+}
+
+.printer-job {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    flex-shrink: 0;
+}
+
+.printer-side {
+    flex: 1 1 300px;
+    display: grid;
+    gap: 10px;
+}
+
+.printer-note {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.printer-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    font-size: 13px;
+}
+
+.gs-job-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gs-job-label select {
+    font: 13px var(--font-ui);
+    padding: 4px 6px;
+    color: var(--win-text);
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    max-width: 62vw;
+}
+
+.gs-sound {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: auto;
+    cursor: pointer;
+}
+
+/* Punched control cards, fanned out like a small deck */
+.card-deck {
+    position: relative;
+    flex: 0 0 auto;
+    width: 300px;
+    height: calc(131px + (var(--cards, 1) - 1) * 9px);
+    max-width: 100%;
+}
+
+.punch-card {
+    position: absolute;
+    left: calc(var(--depth) * 9px);
+    bottom: calc(var(--depth) * 9px);
+    width: calc(100% - (var(--cards, 1) - 1) * 9px);
+    height: auto;
+    filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.35));
+}
+
+.card-face {
+    fill: #f1e4c3;
+    stroke: #c9b78a;
+    stroke-width: 2;
+}
+
+.card-print {
+    font: bold 17px 'Courier New', Consolas, monospace;
+    fill: #3a2f1c;
+}
+
+.card-digits {
+    font: 11px 'Courier New', Consolas, monospace;
+    fill: #b39a63;
+}
+
+.card-hole {
+    fill: #2b2a27;
+}
+
+/* The printer: paper feeding up out of the housing */
+.printer {
+    flex: 1;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    background: #2b2a27;
+    border: 1px solid #1a1917;
+    border-radius: 4px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.paper-window {
+    position: relative; /* offsetLeft of the paper is measured from here */
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    scrollbar-color: #6b675d #2b2a27;
+    scrollbar-width: thin;
+}
+
+.paper-window:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+.paper {
+    --margin: 34px;
+    --band: 48px; /* three 16px lines per stripe */
+    box-sizing: content-box;
+    width: 100ch;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 0 calc(var(--margin) + 10px) 6px;
+    font: bold 12px/16px 'Courier New', Consolas, monospace;
+    color: #23262f;
+    white-space: pre;
+    background:
+        /* tractor-feed holes down both edges */
+        radial-gradient(circle at 50% 50%, #2b2a27 0 5px, transparent 5.5px) left top / var(--margin) 24px repeat-y,
+        radial-gradient(circle at 50% 50%, #2b2a27 0 5px, transparent 5.5px) right top / var(--margin) 24px repeat-y,
+        /* perforations where the strips tear off */
+        repeating-linear-gradient(180deg, #b9b5aa 0 3px, transparent 3px 6px) var(--margin) 0 / 1px 100% no-repeat,
+        repeating-linear-gradient(180deg, #b9b5aa 0 3px, transparent 3px 6px) calc(100% - var(--margin)) 0 / 1px 100% no-repeat,
+        /* green-bar stripes, scrolling with the paper */
+        repeating-linear-gradient(180deg, #fbfbf6 0 var(--band), #dcebd6 var(--band) calc(var(--band) * 2));
+    background-attachment: local;
+}
+
+/* Pins strike as dots: soften the glyphs into a dot grid */
+.paper .line {
+    -webkit-mask: radial-gradient(circle, #000 0.75px, rgba(0, 0, 0, 0.35) 1.05px) 0 0 / 1.5px 1.5px;
+    mask: radial-gradient(circle, #000 0.75px, rgba(0, 0, 0, 0.35) 1.05px) 0 0 / 1.5px 1.5px;
+}
+
+.paper.tearing {
+    animation: paper-tear 0.38s ease-in forwards;
+}
+
+@keyframes paper-tear {
+    to { transform: translateY(-40%) rotate(-1.5deg); opacity: 0; }
+}
+
+.printer-housing {
+    position: relative;
+    flex-shrink: 0;
+    height: 30px;
+    background: linear-gradient(180deg, #57534a 0%, #3f3c35 40%, #2f2c27 100%);
+    border-top: 2px solid #77726a;
+}
+
+/* the rail the head runs along */
+.printer-housing::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 9px;
+    height: 3px;
+    border-radius: 2px;
+    background: #8d887e;
+}
+
+.print-head {
+    position: absolute;
+    left: 0;
+    top: -6px;
+    width: 18px;
+    height: 24px;
+    margin-left: -9px;
+    background: linear-gradient(180deg, #8a857a, #4b4841);
+    border: 1px solid #1f1d1a;
+    border-radius: 3px 3px 2px 2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+    transform: translateX(44px);
+    will-change: transform;
+}
+
+.print-head::after { /* the ribbon */
+    content: '';
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: -3px;
+    height: 3px;
+    background: #15151a;
+}
+
+.print-head.printing {
+    animation: head-jitter 0.06s steps(2) infinite;
+}
+
+@keyframes head-jitter {
+    50% { top: -5px; }
+}
+
+.printer-led {
+    position: absolute;
+    right: 12px;
+    bottom: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3bbf3b;
+    box-shadow: 0 0 5px #3bbf3b;
+}
+
+.printer-led.busy {
+    animation: led-blink 0.5s steps(2) infinite;
+}
+
+@keyframes led-blink {
+    50% { background: #f0b429; box-shadow: 0 0 6px #f0b429; }
+}
+
+#gs-rc.rc-ok   { color: var(--ok-text); font-weight: bold; }
+#gs-rc.rc-warn { color: #a86400; font-weight: bold; }
+#gs-rc.rc-bad  { color: var(--err-text); font-weight: bold; }
+
+[data-theme="dark"] #gs-rc.rc-ok  { color: #8fe08f; }
+[data-theme="dark"] #gs-rc.rc-bad { color: #ff8f80; }
+
+@media (max-width: 520px) {
+    .window-printer .window-body.printer-body {
+        padding: 12px;
+        overflow-y: auto;
+    }
+
+    .card-deck {
+        width: 240px;
+        height: calc(105px + (var(--cards, 1) - 1) * 9px);
+    }
+
+    .paper {
+        font-size: 11px;
+    }
+
+    .printer {
+        min-height: 260px;
+    }
+}
+
+/* =========================================================
+   Projects folder
+   ========================================================= */
+.popup > .window.window-folder {
+    width: min(560px, 100%);
+    height: min(380px, 100%);
+}
+
+.popup > .window.window-folder.maximized {
+    width: auto;
+    height: auto;
+}
+
+.address-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 4px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--bevel-lo);
+    box-shadow: 0 1px 0 var(--bevel-hi);
+}
+
+.address-label {
+    color: var(--muted);
+}
+
+.address-path {
+    flex: 1;
+    padding: 2px 8px;
+    background: var(--panel);
+    color: var(--win-text);
+    border: 1px solid var(--panel-border);
+    font-family: var(--font-ui);
+}
+
+[data-theme="dark"] .address-path {
+    box-shadow: inset 1px 1px 0 var(--bevel-lo);
+}
+
+.window-folder .window-body.folder-body {
+    flex: 1;
+    min-height: 0;
+    padding: 14px;
+    background: var(--panel);
+    overflow-y: auto;
+}
+
+.folder-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 112px);
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.folder-item {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    padding: 6px 4px;
+    color: var(--win-text);
+    font-size: 13px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px dotted transparent;
+}
+
+.folder-item svg {
+    width: 44px;
+    height: 44px;
+    filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.25));
+}
+
+.folder-item span {
+    padding: 0 3px;
+}
+
+.folder-item:hover span,
+.folder-item:focus-visible span {
+    background: var(--select);
+    color: var(--select-text);
+}
+
+.folder-item:focus-visible {
+    outline: none;
+    border-color: var(--win-text);
+}
+
+/* =========================================================
+   readme.txt: text editor window
+   ========================================================= */
+.titlebar-icon.icon-text {
+    background: linear-gradient(180deg, #ffffff 0 20%, #9fb4cc 20% 30%, #ffffff 30% 50%, #9fb4cc 50% 60%, #ffffff 60%);
+}
+
+.titlebar-icon.icon-finance {
+    background: linear-gradient(135deg, #3fae70, #1d5e3b);
+}
+
+.popup > .window.window-notepad {
+    width: min(620px, 100%);
+    height: min(560px, 100%);
+}
+
+.popup > .window.window-finance {
+    width: min(860px, 100%);
+}
+
+.popup > .window.window-notepad.maximized,
+.popup > .window.window-finance.maximized {
+    width: auto;
+    height: auto;
+}
+
+.menu-bar {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+    padding: 2px 6px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--bevel-lo);
+    user-select: none;
+}
+
+.menu-bar span {
+    padding: 1px 7px;
+}
+
+.window-notepad .window-body.notepad-body {
+    flex: 1;
+    min-height: 0;
+    padding: 0;
+    display: flex;
+}
+
+.notepad-text {
+    flex: 1;
+    margin: 0;
+    padding: 10px 14px;
+    overflow: auto;
+    background: var(--panel);
+    color: var(--win-text);
+    border: 1px solid var(--panel-border);
+    font: 14px/1.45 Consolas, 'Lucida Console', 'Courier New', monospace;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+[data-theme="dark"] .notepad-text {
+    box-shadow: inset 1px 1px 0 var(--bevel-lo);
+}
+
+.notepad-text:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: -1px;
+}
+
+/* =========================================================
+   myfinancepal.exe: payoff planner
+   ========================================================= */
+.window-finance .window-body.finance-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 18px;
+    font-size: 14px;
+}
+
+.finance-intro,
+.finance-tech,
+.finance-tip {
+    margin: 0;
+}
+
+.finance-intro,
+.finance-tech {
+    color: var(--muted);
+}
+
+.finance-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 14px;
+    align-items: start;
+}
+
+.finance-panel {
+    margin: 0;
+    min-width: 0;
+    padding: 10px 12px 12px;
+    border: 1px solid var(--bevel-lo);
+    box-shadow: inset 1px 1px 0 var(--bevel-hi);
+}
+
+.finance-panel legend {
+    padding: 0 4px;
+    font-weight: bold;
+}
+
+.debt-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    color: var(--win-text);
+    border: 1px solid var(--panel-border);
+    font-size: 13px;
+}
+
+.debt-table th,
+.debt-table td {
+    padding: 5px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--bevel-mid);
+    white-space: nowrap;
+}
+
+.debt-table th:first-child {
+    text-align: left;
+}
+
+.debt-table thead th {
+    background: var(--btn-b);
+    color: var(--btn-text);
+    font-weight: normal;
+}
+
+[data-theme="dark"] .debt-table th,
+[data-theme="dark"] .debt-table td {
+    border-bottom-color: var(--bevel-lo);
+}
+
+.budget {
+    display: grid;
+    gap: 6px;
+    margin-top: 14px;
+}
+
+.budget input {
+    width: 100%;
+    accent-color: var(--accent);
+}
+
+.strategy-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.strategy-card {
+    padding: 10px;
+    background: var(--panel);
+    color: var(--win-text);
+    border: 1px solid var(--panel-border);
+}
+
+.strategy-card.best {
+    border: 2px solid var(--primary-b);
+    padding: 9px;
+}
+
+.strategy-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 8px;
+}
+
+.strategy-badge {
+    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    background: var(--primary-b);
+    color: var(--primary-text);
+}
+
+.strategy-rule {
+    margin: 2px 0 8px;
+    font-size: 12px;
+    opacity: 0.75;
+}
+
+.strategy-stats {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 8px;
+    margin: 0 0 8px;
+    font-size: 13px;
+}
+
+.strategy-stats dt {
+    opacity: 0.75;
+}
+
+.strategy-stats dd {
+    margin: 0;
+    font-weight: bold;
+}
+
+.payoff-order {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+}
+
+.payoff-order li {
+    display: grid;
+    gap: 2px;
+}
+
+.payoff-bar {
+    display: block;
+    height: 6px;
+    background: var(--primary-b);
+    opacity: 0.8;
+}
+
+.finance-tip {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.finance-footer {
+    display: flex;
+    margin-top: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+    flex-shrink: 0;
+}
+
+.finance-tech {
+    flex: 1 1 320px;
+    font-size: 13px;
+}
+
+@media (max-width: 760px) {
+    .window-finance .window-body.finance-body {
+        overflow-y: auto;
+    }
+
+    .finance-grid {
+        grid-template-columns: 1fr;
+        flex: none;
+    }
+}
+
+@media (max-width: 420px) {
+    .strategy-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Short screens (small laptops, landscape phones): keep the larger Welcome
+   window on one screen without scrolling. */
+@media (max-height: 640px) {
+    .hero-body {
+        padding: 22px clamp(20px, 4vw, 48px);
+    }
+
+    .hero-name {
+        font-size: clamp(2rem, 9vh, 3.6rem);
+    }
+
+    .hero-tagline {
+        margin-top: 8px;
+        font-size: 1.2rem;
+    }
+
+    .hero-lede {
+        margin-top: 10px;
+    }
+
+    .hero-cta {
+        margin-top: 18px;
+    }
+
+    .desktop {
+        padding-top: 12px;
+    }
 }

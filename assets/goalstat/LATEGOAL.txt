@@ -1,0 +1,72 @@
+----------------------------------------------------------------------------------------------------
+ GOALSTAT   ARSENAL FC  -  PREMIER LEAGUE 2025-26 GOAL REPORT        RUN DATE 2026-11-22
+----------------------------------------------------------------------------------------------------
+
+ CONTROL CARDS (SYSIN)
+----------------------------------------------------------------------------------------------------
+  STOPPAGE=Y
+
+ SEASON RECORD (MATCHES FILE)
+----------------------------------------------------------------------------------------------------
+              P    W    D    L   GF   GA    GD   PTS
+  OVERALL    38   26    7    5   71   27   +44    85
+  HOME       19   15    2    2   41   11   +30    47
+  AWAY       19   11    5    3   30   16   +14    38
+
+ SELECTED GOALS
+----------------------------------------------------------------------------------------------------
+  RND  DATE        OPPONENT                  H/A   SCORER                MIN    TYPE
+   2   2025-08-23  LEEDS UNITED               H    SAKA                  45+1
+   2   2025-08-23  LEEDS UNITED               H    GYOKERES              90+5   PENALTY
+   5   2025-09-21  MANCHESTER CITY            H    MARTINELLI            90+3
+   6   2025-09-28  NEWCASTLE UNITED           A    GABRIEL               90+6
+  14   2025-12-03  BRENTFORD                  H    SAKA                  90+1
+  16   2025-12-13  WOLVERHAMPTON WANDERERS    H    OWN GOAL              90+4   OWN GOAL BY MOSQUERA
+  25   2026-02-07  SUNDERLAND                 H    GYOKERES              90+3
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    GYOKERES              90+4
+  30   2026-03-14  EVERTON                    H    DOWMAN                90+7
+  35   2026-05-02  FULHAM                     H    GYOKERES              45+4
+
+  TOTAL GOALS SELECTED .......     10
+
+ SCORERS (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+    1  GYOKERES              4  ####
+    2  SAKA                  2  ##
+    3  DOWMAN                1  #
+    4  GABRIEL               1  #
+    5  MARTINELLI            1  #
+    6  OWN GOAL              1  #
+
+ GOAL TIMING (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+  01-15     0
+  16-30     0
+  31-45     0
+  45+       2  ##
+  46-60     0
+  61-75     0
+  76-90     0
+  90+       8  ########
+
+ VENUE AND GOAL TYPE (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+  HOME ......................       8
+  AWAY ......................       2
+  NON-PENALTY ...............       8
+  PENALTY ...................       1
+  OWN GOAL (BY OPPONENT) ....       1
+  IN STOPPAGE TIME ..........      10
+
+ CONTROL TOTALS
+----------------------------------------------------------------------------------------------------
+  MATCH RECORDS READ ........      38
+  MATCH RECORDS REJECTED ....       0
+  GOAL RECORDS READ .........      71
+  GOAL RECORDS REJECTED .....       0
+  GOALS FOR PER MATCHES FILE       71
+  VALID GOAL RECORDS ........      71
+  RECONCILIATION ............ AGREE
+
+ END OF REPORT - RETURN CODE 0
+----------------------------------------------------------------------------------------------------

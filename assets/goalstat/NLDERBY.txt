@@ -1,0 +1,67 @@
+----------------------------------------------------------------------------------------------------
+ GOALSTAT   ARSENAL FC  -  PREMIER LEAGUE 2025-26 GOAL REPORT        RUN DATE 2026-11-22
+----------------------------------------------------------------------------------------------------
+
+ CONTROL CARDS (SYSIN)
+----------------------------------------------------------------------------------------------------
+  OPPONENT=TOTTENHAM
+
+ SEASON RECORD (MATCHES FILE)
+----------------------------------------------------------------------------------------------------
+              P    W    D    L   GF   GA    GD   PTS
+  OVERALL    38   26    7    5   71   27   +44    85
+  HOME       19   15    2    2   41   11   +30    47
+  AWAY       19   11    5    3   30   16   +14    38
+
+ SELECTED GOALS
+----------------------------------------------------------------------------------------------------
+  RND  DATE        OPPONENT                  H/A   SCORER                MIN    TYPE
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    TROSSARD              36
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    EZE                   41
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    EZE                   46
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    EZE                   76
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    EZE                   32
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    GYOKERES              47
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    EZE                   61
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    GYOKERES              90+4
+
+  TOTAL GOALS SELECTED .......      8
+
+ SCORERS (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+    1  EZE                   5  #####
+    2  GYOKERES              2  ##
+    3  TROSSARD              1  #
+
+ GOAL TIMING (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+  01-15     0
+  16-30     0
+  31-45     3  ###
+  45+       0
+  46-60     2  ##
+  61-75     1  #
+  76-90     1  #
+  90+       1  #
+
+ VENUE AND GOAL TYPE (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+  HOME ......................       4
+  AWAY ......................       4
+  NON-PENALTY ...............       8
+  PENALTY ...................       0
+  OWN GOAL (BY OPPONENT) ....       0
+  IN STOPPAGE TIME ..........       1
+
+ CONTROL TOTALS
+----------------------------------------------------------------------------------------------------
+  MATCH RECORDS READ ........      38
+  MATCH RECORDS REJECTED ....       0
+  GOAL RECORDS READ .........      71
+  GOAL RECORDS REJECTED .....       0
+  GOALS FOR PER MATCHES FILE       71
+  VALID GOAL RECORDS ........      71
+  RECONCILIATION ............ AGREE
+
+ END OF REPORT - RETURN CODE 0
+----------------------------------------------------------------------------------------------------

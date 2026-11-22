@@ -1,0 +1,146 @@
+----------------------------------------------------------------------------------------------------
+ GOALSTAT   ARSENAL FC  -  PREMIER LEAGUE 2025-26 GOAL REPORT        RUN DATE 2026-11-22
+----------------------------------------------------------------------------------------------------
+
+ CONTROL CARDS (SYSIN)
+----------------------------------------------------------------------------------------------------
+  NONE - ALL GOALS SELECTED
+
+ SEASON RECORD (MATCHES FILE)
+----------------------------------------------------------------------------------------------------
+              P    W    D    L   GF   GA    GD   PTS
+  OVERALL    38   26    7    5   71   27   +44    85
+  HOME       19   15    2    2   41   11   +30    47
+  AWAY       19   11    5    3   30   16   +14    38
+
+ SELECTED GOALS
+----------------------------------------------------------------------------------------------------
+  RND  DATE        OPPONENT                  H/A   SCORER                MIN    TYPE
+   1   2025-08-17  MANCHESTER UNITED          A    CALAFIORI             13
+   2   2025-08-23  LEEDS UNITED               H    TIMBER                34
+   2   2025-08-23  LEEDS UNITED               H    SAKA                  45+1
+   2   2025-08-23  LEEDS UNITED               H    GYOKERES              48
+   2   2025-08-23  LEEDS UNITED               H    TIMBER                56
+   2   2025-08-23  LEEDS UNITED               H    GYOKERES              90+5   PENALTY
+   4   2025-09-13  NOTTINGHAM FOREST          H    ZUBIMENDI             32
+   4   2025-09-13  NOTTINGHAM FOREST          H    GYOKERES              46
+   4   2025-09-13  NOTTINGHAM FOREST          H    ZUBIMENDI             79
+   5   2025-09-21  MANCHESTER CITY            H    MARTINELLI            90+3
+   6   2025-09-28  NEWCASTLE UNITED           A    MERINO                84
+   6   2025-09-28  NEWCASTLE UNITED           A    GABRIEL               90+6
+   7   2025-10-04  WEST HAM UNITED            H    RICE                  38
+   7   2025-10-04  WEST HAM UNITED            H    SAKA                  67     PENALTY
+   8   2025-10-18  FULHAM                     A    TROSSARD              58
+   9   2025-10-26  CRYSTAL PALACE             H    EZE                   39
+  10   2025-11-01  BURNLEY                    A    GYOKERES              14
+  10   2025-11-01  BURNLEY                    A    RICE                  35
+  11   2025-11-08  SUNDERLAND                 A    SAKA                  54
+  11   2025-11-08  SUNDERLAND                 A    TROSSARD              74
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    TROSSARD              36
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    EZE                   41
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    EZE                   46
+  12   2025-11-23  TOTTENHAM HOTSPUR          H    EZE                   76
+  13   2025-11-30  CHELSEA                    A    MERINO                59
+  14   2025-12-03  BRENTFORD                  H    MERINO                11
+  14   2025-12-03  BRENTFORD                  H    SAKA                  90+1
+  15   2025-12-06  ASTON VILLA                A    TROSSARD              52
+  16   2025-12-13  WOLVERHAMPTON WANDERERS    H    OWN GOAL              70     OWN GOAL BY JOHNSTONE
+  16   2025-12-13  WOLVERHAMPTON WANDERERS    H    OWN GOAL              90+4   OWN GOAL BY MOSQUERA
+  17   2025-12-20  EVERTON                    A    GYOKERES              27     PENALTY
+  18   2025-12-27  BRIGHTON & HOVE ALBION     H    ODEGAARD              14
+  18   2025-12-27  BRIGHTON & HOVE ALBION     H    OWN GOAL              52     OWN GOAL BY RUTTER
+  19   2025-12-30  ASTON VILLA                H    GABRIEL               48
+  19   2025-12-30  ASTON VILLA                H    ZUBIMENDI             52
+  19   2025-12-30  ASTON VILLA                H    TROSSARD              69
+  19   2025-12-30  ASTON VILLA                H    GABRIEL JESUS         78
+  20   2026-01-03  BOURNEMOUTH                A    GABRIEL               16
+  20   2026-01-03  BOURNEMOUTH                A    RICE                  54
+  20   2026-01-03  BOURNEMOUTH                A    RICE                  71
+  23   2026-01-25  MANCHESTER UNITED          H    OWN GOAL              29     OWN GOAL BY MARTINEZ
+  23   2026-01-25  MANCHESTER UNITED          H    MERINO                84
+  24   2026-01-31  LEEDS UNITED               A    ZUBIMENDI             27
+  24   2026-01-31  LEEDS UNITED               A    MADUEKE               38
+  24   2026-01-31  LEEDS UNITED               A    GYOKERES              69
+  24   2026-01-31  LEEDS UNITED               A    GABRIEL JESUS         86
+  25   2026-02-07  SUNDERLAND                 H    ZUBIMENDI             42
+  25   2026-02-07  SUNDERLAND                 H    GYOKERES              66
+  25   2026-02-07  SUNDERLAND                 H    GYOKERES              90+3
+  26   2026-02-12  BRENTFORD                  A    MADUEKE               61
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    EZE                   32
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    GYOKERES              47
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    EZE                   61
+  27   2026-02-22  TOTTENHAM HOTSPUR          A    GYOKERES              90+4
+  28   2026-03-01  CHELSEA                    H    SALIBA                21
+  28   2026-03-01  CHELSEA                    H    TIMBER                66
+  29   2026-03-04  BRIGHTON & HOVE ALBION     A    SAKA                  9
+  30   2026-03-14  EVERTON                    H    GYOKERES              89
+  30   2026-03-14  EVERTON                    H    DOWMAN                90+7
+  31   2026-02-18  WOLVERHAMPTON WANDERERS    A    SAKA                  5
+  31   2026-02-18  WOLVERHAMPTON WANDERERS    A    HINCAPIE              56
+  32   2026-04-11  BOURNEMOUTH                H    GYOKERES              35     PENALTY
+  33   2026-04-19  MANCHESTER CITY            A    HAVERTZ               18
+  34   2026-04-25  NEWCASTLE UNITED           H    EZE                   9
+  35   2026-05-02  FULHAM                     H    GYOKERES              9
+  35   2026-05-02  FULHAM                     H    SAKA                  40
+  35   2026-05-02  FULHAM                     H    GYOKERES              45+4
+  36   2026-05-10  WEST HAM UNITED            A    TROSSARD              83
+  37   2026-05-18  BURNLEY                    H    HAVERTZ               37
+  38   2026-05-24  CRYSTAL PALACE             A    GABRIEL JESUS         42
+  38   2026-05-24  CRYSTAL PALACE             A    MADUEKE               48
+
+  TOTAL GOALS SELECTED .......     71
+
+ SCORERS (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+    1  GYOKERES             14  ##############
+    2  EZE                   7  #######
+    3  SAKA                  7  #######
+    4  TROSSARD              6  ######
+    5  ZUBIMENDI             5  #####
+    6  MERINO                4  ####
+    7  OWN GOAL              4  ####
+    8  RICE                  4  ####
+    9  GABRIEL               3  ###
+   10  GABRIEL JESUS         3  ###
+   11  MADUEKE               3  ###
+   12  TIMBER                3  ###
+   13  HAVERTZ               2  ##
+   14  CALAFIORI             1  #
+   15  DOWMAN                1  #
+   16  HINCAPIE              1  #
+   17  MARTINELLI            1  #
+   18  ODEGAARD              1  #
+   19  SALIBA                1  #
+
+ GOAL TIMING (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+  01-15     8  ########
+  16-30     6  ######
+  31-45    14  ##############
+  45+       2  ##
+  46-60    15  ###############
+  61-75    10  ##########
+  76-90     8  ########
+  90+       8  ########
+
+ VENUE AND GOAL TYPE (SELECTED GOALS)
+----------------------------------------------------------------------------------------------------
+  HOME ......................      41
+  AWAY ......................      30
+  NON-PENALTY ...............      63
+  PENALTY ...................       4
+  OWN GOAL (BY OPPONENT) ....       4
+  IN STOPPAGE TIME ..........      10
+
+ CONTROL TOTALS
+----------------------------------------------------------------------------------------------------
+  MATCH RECORDS READ ........      38
+  MATCH RECORDS REJECTED ....       0
+  GOAL RECORDS READ .........      71
+  GOAL RECORDS REJECTED .....       0
+  GOALS FOR PER MATCHES FILE       71
+  VALID GOAL RECORDS ........      71
+  RECONCILIATION ............ AGREE
+
+ END OF REPORT - RETURN CODE 0
+----------------------------------------------------------------------------------------------------
