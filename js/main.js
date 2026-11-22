@@ -199,13 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const link = e.target.closest('a[href^="#"]');
         const w = link && windows[link.getAttribute('href')];
         if (!w || e.defaultPrevented) return;
-        if (w === windows['#welcome']) { // opened by hand before it finished starting
-            document.getElementById('welcome-loading')?.remove();
-            root.classList.remove('busy');
-        }
         e.preventDefault();
         if (link === w.taskLink && w.isOpen()) w.minimize();
-        else w.open();
+        else if (w === windows['#welcome'] && w.taskLink?.parentElement.hidden) launchWelcome(); // not running: start it
+        else w.open(); // running (open or minimized): just bring it up
     });
 
     document.addEventListener('keydown', (e) => {
@@ -214,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Only clicks open windows. Drop a leftover "#welcome"/"#contact" from the
-    // URL so a refresh always starts with with Welcome launching.
+    // URL so a refresh always always starts with Welcome launching.
     if (windows[location.hash]) history.replaceState(null, '', location.pathname + location.search);
 
     // Drag the New Message window around by its title bar (mouse or pen).
@@ -246,28 +243,34 @@ document.addEventListener('DOMContentLoaded', () => {
     bar?.addEventListener('pointerup', stopMove);
     bar?.addEventListener('pointercancel', stopMove);
 
-    /* ---------- Launch Welcome on load, with a loading indicator ---------- */
-    // The desktop shows straight away; an hourglass sits where the Welcome
-    // window will appear, then the window opens like a starting program.
+    /* ---------- Launch Welcome with a loading indicator ---------- */
+    // Used on page load and whenever welcome.exe (or Start > Welcome) starts
+    // it from closed: an hourglass sits where the window will appear, then the
+    // window opens like a starting program.
     const welcomeLoading = document.getElementById('welcome-loading');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const LAUNCH_MS = 1300;
+    let launching = false;
 
-    welcomeWin?.classList.remove('pending'); // JS has taken over showing/hiding it
-
-    if (welcomeLoading && !reduceMotion) {
+    function launchWelcome() {
+        if (launching) return; // already starting: ignore extra clicks
+        if (!welcomeLoading || reduceMotion) {
+            windows['#welcome']?.open();
+            return;
+        }
+        launching = true;
         welcomeLoading.hidden = false;
         root.classList.add('busy');
         setTimeout(() => {
-            if (!welcomeLoading.isConnected) return; // already opened by a click
-            welcomeLoading.remove();
+            launching = false;
+            welcomeLoading.hidden = true;
             root.classList.remove('busy');
             windows['#welcome']?.open();
         }, LAUNCH_MS);
-    } else {
-        welcomeLoading?.remove();
-        windows['#welcome']?.open();
     }
+
+    welcomeWin?.classList.remove('pending'); // JS has taken over showing/hiding it
+    launchWelcome();
 
     /* ---------- Movable desktop icons ---------- */
     // Drag with a mouse or pen. A short click still opens the link; a drag
