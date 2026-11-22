@@ -166,7 +166,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (task) task.hidden = true;
             win.style.transform = ''; // reopen in its starting spot
             win.dataset.x = win.dataset.y = '0';
+            setMaximized(false); // reopen at normal size
         }
+
+        // Maximize fills the desktop above the taskbar; press again (or
+        // double-click the title bar) to restore.
+        const maxBtn = win.querySelector('[data-win="maximize"]');
+        function setMaximized(on) {
+            win.classList.toggle('maximized', on);
+            maxBtn?.setAttribute('aria-label', on ? 'Restore' : 'Maximize');
+        }
+        maxBtn?.addEventListener('click', () => setMaximized(!win.classList.contains('maximized')));
+        win.querySelector('.titlebar')?.addEventListener('dblclick', (e) => {
+            if (!e.target.closest('button') && maxBtn && getComputedStyle(maxBtn).display !== 'none') {
+                setMaximized(!win.classList.contains('maximized'));
+            }
+        });
 
         win.querySelector('[data-win="close"]')?.addEventListener('click', close);
         win.querySelector('[data-win="minimize"]')?.addEventListener('click', minimize);
@@ -218,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bar = contactWin?.querySelector('.titlebar');
     let move = null;
     bar?.addEventListener('pointerdown', (e) => {
-        if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button')) return;
+        if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button') || contactWin.classList.contains('maximized')) return;
         e.preventDefault();
         bar.setPointerCapture(e.pointerId);
         move = {
@@ -348,7 +363,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         new MutationObserver(update).observe(welcomeWin, { attributes: true, attributeFilter: ['hidden'] });
         document.addEventListener('visibilitychange', update);
-        new ResizeObserver(() => { if (!welcomeWin.hidden) { measure(); if (reduceMotion) frame(4000); } }).observe(welcomeWin);
+        // Redraw straight away at the new size (e.g. after Maximize/Restore).
+        new ResizeObserver(() => {
+            if (welcomeWin.hidden) return;
+            measure();
+            frame(reduceMotion ? 4000 : performance.now() - t0);
+        }).observe(welcomeWin);
         update();
     }
 
@@ -446,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         hungBar.addEventListener('pointerdown', (e) => {
-            if (e.button !== 0 || e.target.closest('button')) return; // let Minimize/Close click normally
+            if (e.button !== 0 || e.target.closest('button') || hungWindow.classList.contains('maximized')) return; // buttons click normally; no dragging while maximized
             e.preventDefault();
             hungBar.setPointerCapture(e.pointerId);
 

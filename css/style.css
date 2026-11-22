@@ -1666,3 +1666,77 @@ body {
     from { background-position: 0% 0; }
     to   { background-position: 300% 0; }
 }
+
+/* =========================================================
+   Maximized windows: fill the desktop above the taskbar
+   ========================================================= */
+.window.maximized {
+    position: fixed;
+    inset: 0 0 var(--taskbar-h) 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+    transform: none !important;
+    align-self: stretch; /* override the grid centring so it fills top to bottom */
+    justify-self: stretch;
+}
+
+.window.maximized[hidden] {
+    display: none;
+}
+
+.window.maximized .titlebar {
+    flex-shrink: 0;
+    border-radius: 0;
+    cursor: default;
+}
+
+.window.maximized > .window-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.window-welcome.maximized > .hero-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: max(36px, 8vw);
+    padding-right: max(36px, 8vw);
+}
+
+.window.maximized .statusbar {
+    flex-shrink: 0;
+}
+
+/* The pop-up's layer must cover the whole desktop while its window is maximized */
+.section.popup:has(.window.maximized) {
+    padding: 0;
+}
+
+/* "Restore" glyph: two overlapping boxes */
+.maximized .tb-max::before {
+    inset: 8px 8px 4px 4px;
+}
+
+.maximized .tb-max::after {
+    inset: 4px 4px 8px 8px;
+    background: transparent;
+    border: 1px solid var(--tbbtn-glyph);
+    border-top-width: 2px;
+}
+
+[data-theme="dark"] .maximized .tb-max::before {
+    inset: 6px 6px 3px 3px;
+}
+
+[data-theme="dark"] .maximized .tb-max::after {
+    inset: 3px 3px 6px 6px;
+    background: transparent;
+    border-color: var(--win-text);
+}
