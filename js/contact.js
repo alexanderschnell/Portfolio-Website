@@ -1,11 +1,12 @@
 // Contact form handler for a static site.
 //
-// The site has no backend, so messages are sent through a hosted form service.
-// To enable it:
-//   1. Create a free form at https://formspree.io (sign up with the address that
-//      should receive messages; it is never stored in this repository).
-//   2. Paste the form's endpoint below, e.g. 'https://formspree.io/f/abcdwxyz'.
-const FORM_ENDPOINT = '';
+// Messages are sent through Formspree (https://formspree.io), which forwards
+// them to the email address on your Formspree account. That address never
+// appears in this code; the endpoint below is safe to publish.
+//
+// Setup: create a form on Formspree and paste its endpoint here,
+// e.g. 'https://formspree.io/f/abcdwxyz'.
+const FORM_ENDPOINT = 'https://formspree.io/f/maeopqoo';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contact-form');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const statusText = status.querySelector('p');
     const submitButton = form.querySelector('button[type="submit"]');
+    const buttonLabel = submitButton.textContent;
 
     function showStatus(message, type) {
         statusText.textContent = message;
@@ -29,23 +31,41 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const data = new FormData(form);
+        // Formspree uses these special fields: _subject becomes the email
+        // subject line, and _replyto lets you hit "Reply" to answer the sender.
+        data.set('_subject', `Portfolio: ${data.get('subject')}`);
+        data.set('_replyto', data.get('email'));
+
         submitButton.disabled = true;
+        submitButton.textContent = 'Sending…';
+        status.hidden = true;
+
         try {
             const response = await fetch(FORM_ENDPOINT, {
                 method: 'POST',
-                body: new FormData(form),
+                body: data,
                 headers: { Accept: 'application/json' },
             });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+
+            if (response.ok) {
+                form.reset();
+                showStatus("Thanks for your message! I'll get back to you soon.", 'success');
+                return;
             }
-            form.reset();
-            showStatus('Thank you. I will get back to you soon.', 'success');
+
+            // Formspree returns validation problems as { errors: [{ message }] }.
+            const result = await response.json().catch(() => ({}));
+            const detail = Array.isArray(result.errors)
+                ? result.errors.map((e) => e.message).join(' ')
+                : '';
+            throw new Error(detail || `HTTP ${response.status}`);
         } catch (error) {
             console.error('Contact form error:', error);
-            showStatus('Sorry, there was an error sending your message. Please try again later.', 'error');
+            showStatus('Sorry, your message could not be sent. Please try again later or reach out on LinkedIn.', 'error');
         } finally {
             submitButton.disabled = false;
+            submitButton.textContent = buttonLabel;
         }
     });
 });

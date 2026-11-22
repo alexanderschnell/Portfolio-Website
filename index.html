@@ -167,21 +167,25 @@
                     <div class="field-row">
                         <label class="field">
                             <span>Name</span>
-                            <input type="text" name="name" autocomplete="name" required>
+                            <input type="text" name="name" autocomplete="name" maxlength="100" required>
                         </label>
                         <label class="field">
                             <span>Email</span>
-                            <input type="email" name="email" autocomplete="email" required>
+                            <input type="email" name="email" autocomplete="email" maxlength="254" required>
                         </label>
                     </div>
                     <label class="field">
                         <span>Subject</span>
-                        <input type="text" name="subject" required>
+                        <input type="text" name="subject" maxlength="150" required>
                     </label>
                     <label class="field">
                         <span>Message</span>
-                        <textarea name="message" rows="6" required></textarea>
+                        <textarea name="message" rows="6" maxlength="5000" required></textarea>
                     </label>
+                    <!-- Spam trap: hidden from people, bots fill it in and Formspree discards the submission -->
+                    <div class="hp-field" aria-hidden="true">
+                        <label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+                    </div>
                     <button type="submit" class="btn btn-primary">Send Message</button>
                     <div class="form-status" id="form-status" role="status" hidden><p></p></div>
                 </form>
