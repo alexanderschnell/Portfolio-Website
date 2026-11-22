@@ -1,91 +1,53 @@
 # Portfolio Website
 
-This project is a personal portfolio website designed with simplicity and elegance in mind. It showcases my work and skills through a clean and intuitive interface.
+My personal portfolio: a single, scrolling page built with plain HTML, CSS and JavaScript. No frameworks, no build step, no backend.
 
-# Technology Stack
-
-## Frontend
-
-HTML 5\
-CSS 3\
-JavaScript
-
-## Backend
-
-PHP\
-Apache Server
-
-## Development Environment
-
-XAMPP v8.2.12\
-Control Panel v3.3.0
+![Home](./assets/images/screenshot-home.png)
 
 ## Features
 
-Welcome Page: A clean landing page that introduces visitors to the site\
-About Section: Professional background and personal information\
-Portfolio Gallery: Showcase of projects and work samples\
-Contact Form: Direct communication channel for visitors\
-Responsive Design: Optimized for all device sizes\
-Clean Navigation: Intuitive menu system for easy site exploration
+- **Single-page layout:** Home, About, Projects and Contact sections with smooth scrolling and a sticky nav that highlights the current section
+- **Dark mode by default:** a light-mode toggle that remembers your choice
+- **Selected projects:** hand-picked project cards, written straight into the page
+- **Contact form:** sends messages through Formspree, so no email address or password lives in the code
+- **Responsive:** works on phones, tablets and desktops, with a collapsible mobile menu
+- **Subtle motion:** scroll-reveal animations and a scroll-progress bar, both switched off when the visitor has asked for reduced motion
 
-# Installation and Setup
+## Running Locally
 
-## Prerequisites
+Serve the folder with any static file server, for example:
 
-Install XAMPP (version 8.2.12 or higher)\
-Ensure ports 80 and 443 are available for Apache
+```
+python -m http.server 8000
+# or
+npx serve .
+```
 
-## Installation Steps
+Then open http://localhost:8000. It can be hosted as-is on GitHub Pages, Netlify or Vercel.
 
-1. Clone this repository to your XAMPP htdocs folder
-2. Start XAMPP Control Panel
-3. Start Apache server
-4. Access the site at: http://localhost/dashboard/Portfolio/index.php
+## Contact Form Setup
+
+1. Create a free form at https://formspree.io.
+2. Paste its endpoint into `FORM_ENDPOINT` in `js/contact.js`.
+
+Until that's set, the form shows a message pointing visitors to LinkedIn.
 
 ## Project Structure
 
-Portfolio/\
-├── assets/\
-│   ├── docs/\
-│   └── images/\
-├── css/\
-│   ├── about.css\
-│   ├── contact.css\
-│   ├── index.css\
-│   └── portfolio.css\
-├── js/\
-│   ├── dark-mode.js\
-│   ├── github-repos.js\
-│   └── greeting.js\
-├── .gitignore\
-├── about.php\
-├── composer.json\
-├── composer.lock\
-├── contact.php\
-├── index.php\
-├── portfolio.php\
+```
+├── assets/
+│   └── images/            favicon, screenshots
+├── css/
+│   └── style.css          all styles (light and dark theme tokens)
+├── js/
+│   ├── main.js            theme, nav, greeting, scroll effects
+│   └── contact.js         contact form submission
+├── index.html
 └── README.md
+```
 
-# Development
+## Screenshots
 
-## Local Development
-
-Make sure XAMPP is running with Apache server active
-Development URL: http://localhost/dashboard/Portfolio/index.php
-Changes to PHP files are reflected immediately
-Clear browser cache if CSS/JS changes don't appear
-
-# Screenshots
-
-Here's the welcome page:
-![Welcome page](./assets/images/welcome.png)
-
-Here's the about page:
-![About page](./assets/images/about.png)
-
-Here's the portfolio page:
-![Portfolio page](./assets/images/portfolio.png)
-
-Here's the contact page:
-![Contact page](./assets/images/contact.png)
+| About | Projects | Contact |
+|---|---|---|
+| ![About](./assets/images/screenshot-about.png) | ![Projects](./assets/images/screenshot-projects.png) | ![Contact](./assets/images/screenshot-contact.png) |
