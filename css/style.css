@@ -979,6 +979,7 @@ h1, h2, h3 {
     font-size: 12px;
     color: var(--icon-text);
     text-shadow: var(--icon-shadow);
+    opacity: 0.55;
 }
 
 /* =========================================================
@@ -1468,4 +1469,200 @@ h1, h2, h3 {
     transform: none !important;
     transition: none !important;
     opacity: 1 !important;
+}
+
+/* Contact pop-up window (main.js adds .popup; without JS it stays inline) */
+.section.popup {
+    position: fixed;
+    inset: 0 0 var(--taskbar-h) 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    pointer-events: none; /* clicks pass through to the desktop around the window */
+}
+
+.section.popup[hidden] {
+    display: none;
+}
+
+.popup .window-contact {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    width: min(640px, 100%);
+    max-height: 100%;
+}
+
+.popup .window-contact .titlebar {
+    flex-shrink: 0;
+    cursor: move;
+}
+
+.popup .window-contact .window-body {
+    overflow-y: auto;
+}
+
+.window-contact.opening {
+    animation: win-open 0.2s ease-out;
+}
+
+@keyframes win-open {
+    from { opacity: 0; scale: 0.94; }
+    to   { opacity: 1; scale: 1; }
+}
+
+button.tb-btn {
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* One-screen layout: the desktop fills exactly the space above the taskbar,
+   so there's nothing to scroll. Small screens can still scroll if the
+   content genuinely doesn't fit. */
+.desktop {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--taskbar-h));
+    min-height: calc(100dvh - var(--taskbar-h));
+    padding-bottom: 12px;
+}
+
+.hero {
+    flex: 1;
+    min-height: 0;
+    padding-bottom: 0;
+}
+
+@media (max-width: 520px) {
+    .desktop {
+        padding-bottom: 12px;
+    }
+}
+
+body {
+    min-height: 100dvh;
+}
+
+/* "Busy" cursor while the startup program launches */
+.busy,
+.busy * {
+    cursor: progress !important;
+}
+
+.window[hidden] {
+    display: none;
+}
+
+.window-welcome.opening {
+    animation: win-open 0.25s ease-out;
+}
+
+/* Welcome starts hidden (with JS) and launches after a short loading beat */
+.js .window-welcome.pending {
+    display: none;
+}
+
+.welcome-loading {
+    align-self: center;
+    justify-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 680px;
+    color: var(--icon-text);
+    text-shadow: var(--icon-shadow);
+    font-size: 13px;
+}
+
+.welcome-loading[hidden] {
+    display: none;
+}
+
+.hourglass {
+    width: 34px;
+    height: 42px;
+    filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
+    animation: hourglass-flip 1.3s ease-in-out infinite;
+}
+
+.hourglass .sand-top,
+.hourglass .sand-bottom {
+    fill: var(--accent);
+}
+
+.hourglass .sand-top {
+    animation: sand-drain 1.3s linear infinite;
+    transform-origin: 16px 18px;
+}
+
+.hourglass .sand-bottom {
+    animation: sand-fill 1.3s linear infinite;
+    transform-origin: 16px 33px;
+}
+
+@keyframes hourglass-flip {
+    0%, 70% { transform: rotate(0deg); }
+    100%    { transform: rotate(180deg); }
+}
+
+@keyframes sand-drain {
+    0%   { transform: scaleY(1); }
+    70%, 100% { transform: scaleY(0.1); }
+}
+
+@keyframes sand-fill {
+    0%   { transform: scaleY(0.1); }
+    70%, 100% { transform: scaleY(1); }
+}
+
+/* =========================================================
+   Welcome window: animated ASCII "aura" behind the text
+   ========================================================= */
+.hero-body {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.hero-body > :not(.ascii-aura) {
+    position: relative;
+    z-index: 1;
+}
+
+.ascii-aura {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    margin: 0;
+    font: 12px/12px Consolas, 'Lucida Console', 'Courier New', monospace;
+    letter-spacing: 0;
+    white-space: pre;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    /* Shimmering two-tone colour across the characters */
+    color: transparent;
+    background: linear-gradient(110deg, var(--accent) 0%, var(--link) 35%, var(--accent) 60%, var(--title-text) 80%, var(--accent) 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    opacity: 0.3;
+    animation: aura-shimmer 9s linear infinite;
+    /* Fade the edges so it reads as a glow, not a box */
+    -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 40%, transparent 100%);
+}
+
+[data-theme="light"] .ascii-aura {
+    opacity: 0.16;
+}
+
+@keyframes aura-shimmer {
+    from { background-position: 0% 0; }
+    to   { background-position: 300% 0; }
 }

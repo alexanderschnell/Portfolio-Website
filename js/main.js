@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // swatch: desktop, window, accent - shown in the picker.
     // The first entry is the default (keep in sync with the inline script in index.html).
     const SKINS = [
+        { id: 'olive',  name: 'Olive Drab',   family: 'dark',  swatch: ['#2c3326', '#4c5844', '#c4b550'] },
         { id: 'luna',   name: 'Luna Blue',    family: 'light', swatch: ['#3a6fd8', '#ece9d8', '#45a845'] },
         { id: 'silver', name: 'Silver Metal', family: 'light', swatch: ['#9aa3b5', '#eceef3', '#3a5fb5'] },
         { id: 'aero',   name: 'Aero Glass',   family: 'light', swatch: ['#5cc3f5', '#f2fbff', '#9be35a'] },
-        { id: 'olive',  name: 'Olive Drab',   family: 'dark',  swatch: ['#2c3326', '#4c5844', '#c4b550'] },
         { id: 'noir',   name: 'Night LCD',    family: 'dark',  swatch: ['#0d0f12', '#1d2025', '#a6ff4d'] },
         { id: 'cyber',  name: 'Y2K Cyber',    family: 'dark',  swatch: ['#1b1236', '#3a2a72', '#ff6ad5'] },
     ];
@@ -133,21 +133,224 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ---------- Active taskbar button ---------- */
-    const taskLinks = [...document.querySelectorAll('.task-buttons a')];
-    const watched = ['home', ...taskLinks.map((a) => a.getAttribute('href').slice(1))]
-        .map((id) => document.getElementById(id))
-        .filter(Boolean);
+    /* ---------- Windows: open / minimize / close ---------- */
+    // Links to "#welcome" or "#contact" (desktop icons, buttons, Start menu)
+    // open that window. Close hides it and its taskbar button; Minimize hides
+    // only the window, and the taskbar button brings it back (or minimizes it).
+    function makeWindow({ win, hideEl = win, task, focusFirst = false }) {
+        const taskLink = task?.querySelector('a');
+        const isOpen = () => !hideEl.hidden;
 
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            taskLinks.forEach((link) => {
-                link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
-            });
+        function open() {
+            const wasOpen = isOpen();
+            hideEl.hidden = false;
+            if (task) task.hidden = false;
+            taskLink?.classList.add('active');
+            if (!wasOpen) {
+                win.classList.remove('opening');
+                void win.offsetWidth; // restart the open animation
+                win.classList.add('opening');
+            }
+            if (focusFirst) {
+                win.querySelector('input:not([type="hidden"]):not([tabindex="-1"])')?.focus({ preventScroll: true });
+            }
+        }
+
+        function minimize() {
+            hideEl.hidden = true;
+            taskLink?.classList.remove('active');
+        }
+
+        function close() {
+            minimize();
+            if (task) task.hidden = true;
+            win.style.transform = ''; // reopen in its starting spot
+            win.dataset.x = win.dataset.y = '0';
+        }
+
+        win.querySelector('[data-win="close"]')?.addEventListener('click', close);
+        win.querySelector('[data-win="minimize"]')?.addEventListener('click', minimize);
+
+        return { win, taskLink, isOpen, open, minimize, close };
+    }
+
+    const windows = {};
+
+    const welcomeWin = document.getElementById('welcome');
+    if (welcomeWin) {
+        windows['#welcome'] = makeWindow({ win: welcomeWin, task: document.getElementById('task-welcome') });
+        welcomeWin.hidden = true; // launched on load, after the loading indicator
+    }
+
+    const contactSection = document.getElementById('contact');
+    const contactWin = contactSection?.querySelector('.window-contact');
+    if (contactSection && contactWin) {
+        contactSection.classList.add('popup');
+        contactSection.hidden = true;
+        windows['#contact'] = makeWindow({
+            win: contactWin,
+            hideEl: contactSection,
+            task: document.getElementById('task-contact'),
+            focusFirst: true,
         });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    watched.forEach((section) => sectionObserver.observe(section));
+    }
+
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href^="#"]');
+        const w = link && windows[link.getAttribute('href')];
+        if (!w || e.defaultPrevented) return;
+        e.preventDefault();
+        if (link === w.taskLink && w.isOpen()) w.minimize();
+        else if (w === windows['#welcome'] && w.taskLink?.parentElement.hidden) launchWelcome(); // not running: start it
+        else w.open(); // running (open or minimized): just bring it up
+    });
+
+    document.addEventListener('keydown', (e) => {
+        const c = windows['#contact'];
+        if (e.key === 'Escape' && c?.isOpen() && c.win.contains(document.activeElement)) c.close();
+    });
+
+    // Only clicks open windows. Drop a leftover "#welcome"/"#contact" from the
+    // URL so a refresh always always starts with Welcome launching.
+    if (windows[location.hash]) history.replaceState(null, '', location.pathname + location.search);
+
+    // Drag the New Message window around by its title bar (mouse or pen).
+    const bar = contactWin?.querySelector('.titlebar');
+    let move = null;
+    bar?.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0 || e.pointerType === 'touch' || e.target.closest('button')) return;
+        e.preventDefault();
+        bar.setPointerCapture(e.pointerId);
+        move = {
+            startX: e.clientX,
+            startY: e.clientY,
+            baseX: Number(contactWin.dataset.x || 0),
+            baseY: Number(contactWin.dataset.y || 0),
+            rect: contactWin.getBoundingClientRect(),
+        };
+    });
+    bar?.addEventListener('pointermove', (e) => {
+        if (!move) return;
+        const r = move.rect;
+        // Keep at least the title bar reachable on screen.
+        const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
+        const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
+        contactWin.dataset.x = move.baseX + dx;
+        contactWin.dataset.y = move.baseY + dy;
+        contactWin.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
+    });
+    const stopMove = () => { move = null; };
+    bar?.addEventListener('pointerup', stopMove);
+    bar?.addEventListener('pointercancel', stopMove);
+
+    /* ---------- Launch Welcome with a loading indicator ---------- */
+    // Used on page load and whenever welcome.exe (or Start > Welcome) starts
+    // it from closed: an hourglass sits where the window will appear, then the
+    // window opens like a starting program.
+    const welcomeLoading = document.getElementById('welcome-loading');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const LAUNCH_MS = 1300;
+    let launching = false;
+
+    function launchWelcome() {
+        if (launching) return; // already starting: ignore extra clicks
+        if (!welcomeLoading || reduceMotion) {
+            windows['#welcome']?.open();
+            return;
+        }
+        launching = true;
+        welcomeLoading.hidden = false;
+        root.classList.add('busy');
+        setTimeout(() => {
+            launching = false;
+            welcomeLoading.hidden = true;
+            root.classList.remove('busy');
+            windows['#welcome']?.open();
+        }, LAUNCH_MS);
+    }
+
+    welcomeWin?.classList.remove('pending'); // JS has taken over showing/hiding it
+    launchWelcome();
+
+    /* ---------- Welcome window: animated ASCII aura ---------- */
+    // A demoscene-style plasma drawn in characters: overlapping sine waves,
+    // a glowing core that drifts around, rings pulsing out of it and a few
+    // twinkling sparkles. Runs only while Welcome is visible.
+    const aura = document.getElementById('ascii-aura');
+    if (aura && welcomeWin) {
+        const RAMP = ' .,:;-~=+*o#%@';
+        const SPARKS = '+*.\'';
+        const FPS = 18;
+        let cols = 0;
+        let rows = 0;
+        let charW = 7;
+        let rafId = 0;
+        let last = 0;
+        const t0 = performance.now();
+
+        function measure() {
+            const probe = document.createElement('span');
+            probe.textContent = 'M'.repeat(50);
+            aura.append(probe);
+            charW = probe.getBoundingClientRect().width / 50 || 7;
+            probe.remove();
+            const box = aura.getBoundingClientRect();
+            cols = Math.ceil(box.width / charW);
+            rows = Math.ceil(box.height / 12);
+        }
+
+        function frame(t) {
+            const s = t / 1000;
+            // The core wanders in a slow figure-eight.
+            const cx = cols * (0.5 + 0.28 * Math.sin(s * 0.37));
+            const cy = rows * (0.5 + 0.3 * Math.sin(s * 0.74));
+            let out = '';
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const dx = (x - cx) * 0.5; // characters are ~2x taller than wide
+                    const dy = y - cy;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    let v = Math.sin(x * 0.11 + s * 1.1)
+                        + Math.sin(y * 0.23 - s * 1.4)
+                        + Math.sin((x * 0.5 + y) * 0.09 + s * 0.6)
+                        + Math.sin(d * 0.45 - s * 2.6); // rings radiating from the core
+                    v = (v + 4) / 8; // 0..1
+                    v = v * 0.75 + Math.max(0, 1 - d / 14) * 0.6; // the glow
+                    if (Math.random() < 0.0025) {
+                        out += SPARKS[(Math.random() * SPARKS.length) | 0];
+                    } else {
+                        out += RAMP[Math.min(RAMP.length - 1, Math.max(0, (v * RAMP.length) | 0))];
+                    }
+                }
+                out += '\n';
+            }
+            aura.textContent = out;
+        }
+
+        function loop(t) {
+            rafId = requestAnimationFrame(loop);
+            if (t - last < 1000 / FPS) return;
+            last = t;
+            frame(t - t0);
+        }
+
+        function update() {
+            const visible = !welcomeWin.hidden && !document.hidden;
+            if (visible && !rafId) {
+                measure();
+                if (reduceMotion) frame(4000); // one still frame
+                else rafId = requestAnimationFrame(loop);
+            } else if (!visible && rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = 0;
+            }
+        }
+
+        new MutationObserver(update).observe(welcomeWin, { attributes: true, attributeFilter: ['hidden'] });
+        document.addEventListener('visibilitychange', update);
+        new ResizeObserver(() => { if (!welcomeWin.hidden) { measure(); if (reduceMotion) frame(4000); } }).observe(welcomeWin);
+        update();
+    }
 
     /* ---------- Movable desktop icons ---------- */
     // Drag with a mouse or pen. A short click still opens the link; a drag
@@ -243,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         hungBar.addEventListener('pointerdown', (e) => {
-            if (e.button !== 0) return;
+            if (e.button !== 0 || e.target.closest('button')) return; // let Minimize/Close click normally
             e.preventDefault();
             hungBar.setPointerCapture(e.pointerId);
 

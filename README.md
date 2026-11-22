@@ -8,12 +8,13 @@ My personal portfolio, styled as an early-2000s desktop: each section is a windo
 
 ## Features
 
-- **Desktop layout:** Welcome, About Me, My Projects and New Message windows, with a taskbar that highlights the window you're viewing
+- **Desktop layout:** Welcome and New Message windows, with a taskbar that highlights the window you're viewing
+- **Startup launch:** on load, and whenever welcome.exe starts it, an hourglass shows where Welcome will appear, then the window opens like a program starting up
+- **Real window buttons:** Minimize and Close work on every window; the welcome.exe desktop icon or the taskbar brings Welcome back
 - **Start menu and clock:** the Start button opens a menu with every section and link, and the tray shows the time
-- **Six skins:** Display Properties (the monitor icon in the tray) switches between Luna Blue (the default), Silver Metal, Aero Glass, Olive Drab, Night LCD and Y2K Cyber. The site remembers your choice.
+- **Six skins:** Display Properties (the monitor icon in the tray) switches between Olive Drab (the default), Luna Blue, Silver Metal, Aero Glass, Night LCD and Y2K Cyber. The site remembers your choice.
 - **Movable icons:** drag the desktop shortcuts anywhere with a mouse. A quick click still opens them.
 - **"Not Responding" effect:** drag the Welcome window by its title bar and it leaves a frozen trail across the screen; let go and it repaints and snaps back
-- **Selected projects:** hand-picked project cards, written straight into the page
 - **Contact form:** sends messages through Formspree, so no email address or password lives in the code
 - **Responsive:** works on phones, tablets and desktops; on small screens the icons line up across the top and the Start menu handles navigation
 - **Accessible motion:** window animations switch off when the visitor has asked for reduced motion
@@ -56,6 +57,6 @@ Messages go through [Formspree](https://formspree.io) and are delivered to the e
 
 ## Screenshots
 
-| About | Projects | Contact |
-|---|---|---|
-| ![About](./assets/images/screenshot-about.png) | ![Projects](./assets/images/screenshot-projects.png) | ![Contact](./assets/images/screenshot-contact.png) |
+| Contact |
+|---|
+| ![Contact](./assets/images/screenshot-contact.png) |
