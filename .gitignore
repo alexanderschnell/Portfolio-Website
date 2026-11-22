@@ -1,5 +1,5 @@
-# Dont want it son
 .idea/
-vendor/
+.vscode/
+node_modules/
 .env
 *.log
