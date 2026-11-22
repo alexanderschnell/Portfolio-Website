@@ -1619,3 +1619,50 @@ body {
     0%   { transform: scaleY(0.1); }
     70%, 100% { transform: scaleY(1); }
 }
+
+/* =========================================================
+   Welcome window: animated ASCII "aura" behind the text
+   ========================================================= */
+.hero-body {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.hero-body > :not(.ascii-aura) {
+    position: relative;
+    z-index: 1;
+}
+
+.ascii-aura {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    margin: 0;
+    font: 12px/12px Consolas, 'Lucida Console', 'Courier New', monospace;
+    letter-spacing: 0;
+    white-space: pre;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    /* Shimmering two-tone colour across the characters */
+    color: transparent;
+    background: linear-gradient(110deg, var(--accent) 0%, var(--link) 35%, var(--accent) 60%, var(--title-text) 80%, var(--accent) 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    opacity: 0.3;
+    animation: aura-shimmer 9s linear infinite;
+    /* Fade the edges so it reads as a glow, not a box */
+    -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 40%, transparent 100%);
+}
+
+[data-theme="light"] .ascii-aura {
+    opacity: 0.16;
+}
+
+@keyframes aura-shimmer {
+    from { background-position: 0% 0; }
+    to   { background-position: 300% 0; }
+}

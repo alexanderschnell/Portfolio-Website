@@ -272,6 +272,86 @@ document.addEventListener('DOMContentLoaded', () => {
     welcomeWin?.classList.remove('pending'); // JS has taken over showing/hiding it
     launchWelcome();
 
+    /* ---------- Welcome window: animated ASCII aura ---------- */
+    // A demoscene-style plasma drawn in characters: overlapping sine waves,
+    // a glowing core that drifts around, rings pulsing out of it and a few
+    // twinkling sparkles. Runs only while Welcome is visible.
+    const aura = document.getElementById('ascii-aura');
+    if (aura && welcomeWin) {
+        const RAMP = ' .,:;-~=+*o#%@';
+        const SPARKS = '+*.\'';
+        const FPS = 18;
+        let cols = 0;
+        let rows = 0;
+        let charW = 7;
+        let rafId = 0;
+        let last = 0;
+        const t0 = performance.now();
+
+        function measure() {
+            const probe = document.createElement('span');
+            probe.textContent = 'M'.repeat(50);
+            aura.append(probe);
+            charW = probe.getBoundingClientRect().width / 50 || 7;
+            probe.remove();
+            const box = aura.getBoundingClientRect();
+            cols = Math.ceil(box.width / charW);
+            rows = Math.ceil(box.height / 12);
+        }
+
+        function frame(t) {
+            const s = t / 1000;
+            // The core wanders in a slow figure-eight.
+            const cx = cols * (0.5 + 0.28 * Math.sin(s * 0.37));
+            const cy = rows * (0.5 + 0.3 * Math.sin(s * 0.74));
+            let out = '';
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const dx = (x - cx) * 0.5; // characters are ~2x taller than wide
+                    const dy = y - cy;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    let v = Math.sin(x * 0.11 + s * 1.1)
+                        + Math.sin(y * 0.23 - s * 1.4)
+                        + Math.sin((x * 0.5 + y) * 0.09 + s * 0.6)
+                        + Math.sin(d * 0.45 - s * 2.6); // rings radiating from the core
+                    v = (v + 4) / 8; // 0..1
+                    v = v * 0.75 + Math.max(0, 1 - d / 14) * 0.6; // the glow
+                    if (Math.random() < 0.0025) {
+                        out += SPARKS[(Math.random() * SPARKS.length) | 0];
+                    } else {
+                        out += RAMP[Math.min(RAMP.length - 1, Math.max(0, (v * RAMP.length) | 0))];
+                    }
+                }
+                out += '\n';
+            }
+            aura.textContent = out;
+        }
+
+        function loop(t) {
+            rafId = requestAnimationFrame(loop);
+            if (t - last < 1000 / FPS) return;
+            last = t;
+            frame(t - t0);
+        }
+
+        function update() {
+            const visible = !welcomeWin.hidden && !document.hidden;
+            if (visible && !rafId) {
+                measure();
+                if (reduceMotion) frame(4000); // one still frame
+                else rafId = requestAnimationFrame(loop);
+            } else if (!visible && rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = 0;
+            }
+        }
+
+        new MutationObserver(update).observe(welcomeWin, { attributes: true, attributeFilter: ['hidden'] });
+        document.addEventListener('visibilitychange', update);
+        new ResizeObserver(() => { if (!welcomeWin.hidden) { measure(); if (reduceMotion) frame(4000); } }).observe(welcomeWin);
+        update();
+    }
+
     /* ---------- Movable desktop icons ---------- */
     // Drag with a mouse or pen. A short click still opens the link; a drag
     // (more than a few pixels) moves the icon and swallows the click.
