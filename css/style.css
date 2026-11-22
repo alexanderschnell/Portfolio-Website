@@ -979,6 +979,7 @@ h1, h2, h3 {
     font-size: 12px;
     color: var(--icon-text);
     text-shadow: var(--icon-shadow);
+    opacity: 0.55;
 }
 
 /* =========================================================
