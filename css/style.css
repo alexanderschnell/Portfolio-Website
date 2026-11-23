@@ -3307,3 +3307,40 @@ body {
         scrollbar-color: var(--btn-a) var(--panel);
     }
 }
+
+/* =========================================================
+   Older browsers without color-mix() (before iOS 16.2 / Chrome 111).
+   Variables holding color-mix() would otherwise break whatever uses
+   them; in dark skins the Welcome name would turn invisible.
+   ========================================================= */
+@supports not (color: color-mix(in srgb, red, blue)) {
+    .hero-name {
+        --name-edge: rgba(0, 0, 0, 0.2);
+    }
+
+    [data-theme="dark"] .hero-name {
+        --name-bottom: var(--accent);
+        --name-edge: rgba(0, 0, 0, 0.45);
+    }
+
+    .droid {
+        --droid-line: var(--muted);
+    }
+
+    /* Log-on: ready-mixed colours from main.js (--lg-deep, --lg-glow, --lg-scan) */
+    .js .logon:not([hidden]) {
+        background: radial-gradient(ellipse at 50% 50%, var(--lg-b), var(--lg-deep, #000) 100%);
+    }
+
+    .logon-main::after {
+        background: radial-gradient(ellipse 45% 40% at 50% 47%, var(--lg-glow, transparent), transparent 100%);
+    }
+
+    .logon-glyph::after {
+        background: linear-gradient(180deg, transparent, var(--lg-scan, transparent) 90%, var(--lg-a));
+    }
+
+    .logon-wolf {
+        text-shadow: 0 0 2px var(--lg-a);
+    }
+}
