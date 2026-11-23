@@ -66,8 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ready-mixed versions for browsers without CSS color-mix().
         const rgba = (h, a) => `rgba(${hexRgb(h).join(', ')}, ${a})`;
         root.style.setProperty('--lg-deep', mix(lgBg, '#000000', 0.45));
-        root.style.setProperty('--lg-glow', rgba(wolf, 0.16));
-        root.style.setProperty('--lg-scan', rgba(wolf, 0.3));
+        root.style.setProperty('--lg-glow', rgba(wolf, 0.22));
         if (!faviconLink) return;
         const paint = (svg) => {
             const out = svg.replace(/#14171c/g, tile).replace(/#a6ff4d/g, wolf).replace(/#efffd9/g, eyes);
