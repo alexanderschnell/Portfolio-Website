@@ -8,7 +8,7 @@ My personal portfolio, styled as an early-2000s desktop: each section is a windo
 
 ## Features
 
-- **Log-on screen:** a clean card with an original animated ASCII wolf. Logging on plays a short synthesized startup chime, once per visit.
+- **Log-on screen:** a dark, minimal entry screen in the current skin's colours: an original animated ASCII wolf, a name that decrypts into place and a slowly pulsing backlight. Pressing Enter plays a short synthesized startup chime, once per visit.
 - **Desktop layout:** Welcome and New Message windows, a Projects folder and readme.txt, with a taskbar that highlights the window you're viewing
 - **Projects folder:** goalstat.exe replays real reports from my COBOL project on a dot-matrix printer, myfinancepal.exe is a live debt payoff calculator on sample data, and visualizer.exe reacts to your microphone or a music file
 - **Real window buttons:** Minimize, Maximize/Restore (or double-click the title bar) and Close work on every window; the welcome.exe desktop icon or the taskbar brings Welcome back

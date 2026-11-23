@@ -31,14 +31,17 @@
     <div class="logon" id="logon" role="dialog" aria-modal="true" aria-label="Log on">
         <div class="logon-main">
             <div class="logon-card">
-                <span class="logon-glyph" aria-hidden="true">
-                    <pre class="logon-wolf" id="logon-wolf"></pre>
-                </span>
-                <p class="logon-name">Alexander Schnell</p>
-                <p class="logon-role">Systems Developer</p>
-                <button type="button" class="logon-btn" id="logon-user" aria-label="Log on as Alexander Schnell">
-                    Log on
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="lg-id">
+                    <span class="logon-glyph" aria-hidden="true">
+                        <pre class="logon-wolf" id="logon-wolf"></pre>
+                    </span>
+                    <div>
+                        <p class="logon-name"><span class="visually-hidden">Alexander Schnell</span><span id="logon-name" aria-hidden="true">Alexander Schnell</span></p>
+                        <p class="logon-role">Portfolio</p>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary logon-btn" id="logon-user" aria-label="Enter as Alexander Schnell">
+                    <span id="logon-btn-text">Enter</span>
                 </button>
             </div>
         </div>
