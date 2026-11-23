@@ -2789,19 +2789,21 @@ body {
     overflow: hidden;
 }
 
-/* A soft backlight in the accent colour, breathing slowly behind the content */
+/* A soft light in the accent colour rising from the bottom edge,
+   breathing very slowly */
 .logon-main::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 45% 40% at 50% 47%, color-mix(in srgb, var(--lg-a) 16%, transparent), transparent 100%);
-    animation: lg-breathe 6s ease-in-out infinite;
+    background: radial-gradient(ellipse 75% 55% at 50% 100%, color-mix(in srgb, var(--lg-a) 22%, transparent), transparent 100%);
+    transform-origin: 50% 100%;
+    animation: lg-breathe 12s ease-in-out infinite;
     pointer-events: none;
 }
 
 @keyframes lg-breathe {
-    0%, 100% { opacity: 0.35; transform: scale(0.94); }
-    50% { opacity: 1; transform: scale(1.06); }
+    0%, 100% { opacity: 0.3; transform: scaleY(0.85); }
+    50% { opacity: 1; transform: scaleY(1.1); }
 }
 
 /* The ID block: no panel or frame, just the content on the background */
@@ -2826,7 +2828,7 @@ body {
     column-gap: 20px;
 }
 
-/* The wolf, with a scan line passing over it */
+/* The wolf */
 .logon-glyph {
     position: relative;
     display: grid;
@@ -2834,24 +2836,6 @@ body {
     width: 96px;
     height: 96px;
     overflow: hidden;
-}
-
-.logon-glyph::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 18px;
-    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--lg-a) 30%, transparent) 90%, var(--lg-a));
-    opacity: 0.55;
-    animation: lg-scan 2.8s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes lg-scan {
-    from { transform: translateY(-18px); }
-    to   { transform: translateY(96px); }
 }
 
 /* Drawn at a normal text size (phones enforce minimum font sizes and use
@@ -2947,10 +2931,6 @@ body {
         height: 132px;
     }
 
-    .logon-glyph::after {
-        animation-name: lg-scan-lg;
-    }
-
     .logon-name {
         font-size: clamp(1rem, 6.6vw, 1.9rem); /* one line that fits, even at 320px */
         letter-spacing: 0.06em;
@@ -2970,16 +2950,7 @@ body {
     }
 }
 
-@keyframes lg-scan-lg {
-    from { transform: translateY(-18px); }
-    to   { transform: translateY(132px); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .logon-glyph::after {
-        display: none;
-    }
-
     .logon-main::after {
         animation: none;
         opacity: 0.7;
@@ -3337,17 +3308,13 @@ body {
         --droid-line: var(--muted);
     }
 
-    /* Log-on: ready-mixed colours from main.js (--lg-deep, --lg-glow, --lg-scan) */
+    /* Log-on: ready-mixed colours from main.js (--lg-deep, --lg-glow) */
     .js .logon:not([hidden]) {
         background: radial-gradient(ellipse at 50% 50%, var(--lg-b), var(--lg-deep, #000) 100%);
     }
 
     .logon-main::after {
-        background: radial-gradient(ellipse 45% 40% at 50% 47%, var(--lg-glow, transparent), transparent 100%);
-    }
-
-    .logon-glyph::after {
-        background: linear-gradient(180deg, transparent, var(--lg-scan, transparent) 90%, var(--lg-a));
+        background: radial-gradient(ellipse 75% 55% at 50% 100%, var(--lg-glow, transparent), transparent 100%);
     }
 
     .logon-wolf {
