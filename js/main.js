@@ -60,8 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let t = 0.15; luma(wolf) < 0.32 && t <= 0.9; t += 0.15) wolf = mix(accent, '#ffffff', t);
         const eyes = mix(wolf, '#ffffff', 0.8);
         // The log-on screen uses the same pair: always dark, lit by the accent.
-        root.style.setProperty('--lg-bg', mix(desktop, '#000000', 0.8));
+        const lgBg = mix(desktop, '#000000', 0.8);
+        root.style.setProperty('--lg-bg', lgBg);
         root.style.setProperty('--lg-accent', wolf);
+        // Ready-mixed versions for browsers without CSS color-mix().
+        const rgba = (h, a) => `rgba(${hexRgb(h).join(', ')}, ${a})`;
+        root.style.setProperty('--lg-deep', mix(lgBg, '#000000', 0.45));
+        root.style.setProperty('--lg-glow', rgba(wolf, 0.16));
+        root.style.setProperty('--lg-scan', rgba(wolf, 0.3));
         if (!faviconLink) return;
         const paint = (svg) => {
             const out = svg.replace(/#14171c/g, tile).replace(/#a6ff4d/g, wolf).replace(/#efffd9/g, eyes);
