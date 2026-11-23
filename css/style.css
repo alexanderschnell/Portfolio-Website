@@ -2751,16 +2751,13 @@ body {
 
 /* =========================================================
    Log-on screen (main.js). Only shown when JS is running.
-   A dark "secure terminal" in the current skin's colours:
-   --lg-bg (the skin's desktop, darkened) and --lg-accent (its
-   accent, lifted to read on dark) are set by main.js.
+   Strictly the current skin: its desktop background, desktop text
+   colours and shadow, the site's fonts, and the skin's highlight
+   colour (--lg-accent, set by main.js) for the wolf and the glow.
    ========================================================= */
 .logon {
     display: none;
     --lg-a: var(--lg-accent, var(--accent));
-    --lg-b: var(--lg-bg, #0b0d10);
-    --lg-mono: Consolas, 'SF Mono', Menlo, 'Courier New', monospace;
-    --lg-sans: Bahnschrift, 'DIN Alternate', 'Segoe UI', system-ui, sans-serif;
 }
 
 .js .logon:not([hidden]) {
@@ -2769,9 +2766,8 @@ body {
     z-index: 2000; /* above everything, including the droid */
     display: flex;
     flex-direction: column;
-    background:
-        radial-gradient(ellipse at 50% 50%, var(--lg-b), color-mix(in srgb, var(--lg-b) 55%, #000) 100%);
-    color: #e9edf2;
+    background: var(--desktop);
+    color: var(--icon-text);
     transition: opacity 0.42s ease;
 }
 
@@ -2795,7 +2791,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 75% 55% at 50% 100%, color-mix(in srgb, var(--lg-a) 22%, transparent), transparent 100%);
+    background: radial-gradient(ellipse 75% 55% at 50% 100%, color-mix(in srgb, var(--lg-a) 30%, transparent), transparent 100%);
     transform-origin: 50% 100%;
     animation: lg-breathe 12s ease-in-out infinite;
     pointer-events: none;
@@ -2850,7 +2846,7 @@ body {
     letter-spacing: 0;
     white-space: pre;
     color: var(--lg-a);
-    text-shadow: 0 0 7px color-mix(in srgb, var(--lg-a) 60%, transparent);
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
     transform: translate(-50%, -50%) scale(var(--wolf-k, 0.29));
     transform-origin: center;
     -webkit-text-size-adjust: none;
@@ -2860,19 +2856,21 @@ body {
 
 .logon-name {
     margin: 0;
-    font: 600 1.55rem / 1.1 var(--lg-sans);
-    letter-spacing: 0.08em;
+    font: bold 1.55rem / 1.1 var(--font-title);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #f3f6f9;
+    color: var(--icon-text);
+    text-shadow: var(--icon-shadow, none);
     white-space: nowrap;
 }
 
 .logon-role {
     margin: 8px 0 0;
-    font: 12px/1 var(--lg-mono);
+    font: bold 12px/1 var(--font-ui);
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--lg-a);
+    text-shadow: var(--icon-shadow, none);
 }
 
 /* blinking terminal caret */
@@ -3308,16 +3306,20 @@ body {
         --droid-line: var(--muted);
     }
 
-    /* Log-on: ready-mixed colours from main.js (--lg-deep, --lg-glow) */
-    .js .logon:not([hidden]) {
-        background: radial-gradient(ellipse at 50% 50%, var(--lg-b), var(--lg-deep, #000) 100%);
-    }
-
+    /* Log-on glow: ready-mixed colour from main.js (--lg-glow) */
     .logon-main::after {
         background: radial-gradient(ellipse 75% 55% at 50% 100%, var(--lg-glow, transparent), transparent 100%);
     }
+}
 
-    .logon-wolf {
-        text-shadow: 0 0 7px var(--lg-a);
-    }
+/* Log-on on the glossy (light) skins: the wolf and PORTFOLIO use the
+   desktop icon-label style (white with a dark shadow) so they read on the
+   bright desktops; the skin's highlight stays for the caret and glow. */
+[data-theme="light"] .logon-wolf {
+    color: var(--icon-text);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="light"] .logon-role {
+    color: var(--icon-text);
 }
