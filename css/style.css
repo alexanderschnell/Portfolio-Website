@@ -2854,13 +2854,23 @@ body {
     to   { transform: translateY(96px); }
 }
 
+/* Drawn at a normal text size (phones enforce minimum font sizes and use
+   other monospace fonts), then scaled to fit and centred in its box.
+   main.js measures it and sets --wolf-k. */
 .logon-wolf {
+    position: absolute;
+    left: 50%;
+    top: 50%;
     margin: 0;
-    font: bold 2.9px/1.92px Consolas, 'Lucida Console', 'Courier New', monospace;
+    font: bold 10px/6.62px Consolas, 'Lucida Console', 'Courier New', monospace;
     letter-spacing: 0;
     white-space: pre;
     color: var(--lg-a);
-    text-shadow: 0 0 2px color-mix(in srgb, var(--lg-a) 60%, transparent);
+    text-shadow: 0 0 7px color-mix(in srgb, var(--lg-a) 60%, transparent);
+    transform: translate(-50%, -50%) scale(var(--wolf-k, 0.29));
+    transform-origin: center;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
     user-select: none;
 }
 
@@ -2917,13 +2927,17 @@ body {
 /* Portrait phones: stack and centre everything, with a bigger wolf and the
    name on one line, sized to the screen width */
 @media (max-width: 600px) and (orientation: portrait) {
+    .logon-main {
+        padding: 24px max(12px, env(safe-area-inset-right, 0px)) 24px max(12px, env(safe-area-inset-left, 0px));
+    }
+
     .logon-card {
-        padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+        padding: 0;
         text-align: center;
     }
 
     .lg-id {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         justify-items: center;
         row-gap: 22px;
     }
@@ -2937,19 +2951,15 @@ body {
         animation-name: lg-scan-lg;
     }
 
-    .logon-wolf {
-        font-size: 3.98px;
-        line-height: 2.64px;
-    }
-
     .logon-name {
-        font-size: clamp(1.15rem, 7.2vw, 1.9rem);
+        font-size: clamp(1rem, 6.6vw, 1.9rem); /* one line that fits, even at 320px */
         letter-spacing: 0.06em;
     }
 
     .logon-role {
         margin-top: 10px;
         font-size: clamp(11px, 3.4vw, 13px);
+        padding-left: calc(0.55em + 4px); /* balances the caret so the word itself is centred */
     }
 
     .logon-btn {
@@ -3341,6 +3351,6 @@ body {
     }
 
     .logon-wolf {
-        text-shadow: 0 0 2px var(--lg-a);
+        text-shadow: 0 0 7px var(--lg-a);
     }
 }
