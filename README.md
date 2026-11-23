@@ -47,7 +47,7 @@ Messages go through [Formspree](https://formspree.io) and are delivered to the e
 
 ```
 ├── assets/
-│   └── images/            favicon, screenshots
+│   └── images/            wolf favicon, screenshots
 ├── css/
 │   └── style.css          all styles and skin colour variables
 ├── js/

@@ -33,7 +33,44 @@ document.addEventListener('DOMContentLoaded', () => {
         skinList.querySelectorAll('.skin-option').forEach((btn) => {
             btn.setAttribute('aria-pressed', String(btn.dataset.skinId === skin.id));
         });
+        updateFavicon(skin);
     }
+
+    // The tab icon is the wolf, recoloured to match the skin: the wolf takes
+    // the skin's accent, on a tile in a deep shade of its desktop colour. The
+    // file (assets/images/favicon.svg) is drawn in Night LCD colours, which
+    // are swapped out here.
+    const faviconLink = document.querySelector('link[rel="icon"]');
+    let faviconSvg = null;
+    const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const rgbHex = (c) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+    const mix = (a, b, t) => rgbHex(hexRgb(a).map((v, i) => v + (hexRgb(b)[i] - v) * t));
+    const luma = (h) => {
+        const [r, g, b] = hexRgb(h).map((v) => {
+            const s = v / 255;
+            return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    function updateFavicon(skin) {
+        if (!faviconLink) return;
+        const [desktop, , accent] = skin.swatch;
+        const tile = mix(desktop, '#000000', 0.7);
+        let wolf = accent;
+        // keep the wolf bright enough to read on the dark tile
+        for (let t = 0.15; luma(wolf) < 0.32 && t <= 0.9; t += 0.15) wolf = mix(accent, '#ffffff', t);
+        const eyes = mix(wolf, '#ffffff', 0.8);
+        const paint = (svg) => {
+            const out = svg.replace(/#14171c/g, tile).replace(/#a6ff4d/g, wolf).replace(/#efffd9/g, eyes);
+            faviconLink.href = 'data:image/svg+xml,' + encodeURIComponent(out);
+        };
+        if (faviconSvg) { paint(faviconSvg); return; }
+        fetch('assets/images/favicon.svg')
+            .then((r) => (r.ok ? r.text() : Promise.reject()))
+            .then((svg) => { faviconSvg = svg; paint(svg); })
+            .catch(() => { /* keep the static icon */ });
+    }
+    updateFavicon(SKINS.find((s) => s.id === root.dataset.skin) || SKINS[0]);
 
     if (skinList) {
         SKINS.forEach((skin) => {
