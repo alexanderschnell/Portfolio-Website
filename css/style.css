@@ -2914,34 +2914,55 @@ body {
     filter: blur(3px);
 }
 
-@media (max-width: 480px) {
+/* Portrait phones: stack and centre everything, with a bigger wolf and the
+   name on one line, sized to the screen width */
+@media (max-width: 600px) and (orientation: portrait) {
     .logon-card {
-        padding: 16px 18px 20px;
+        padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+        text-align: center;
     }
 
     .lg-id {
-        column-gap: 14px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        row-gap: 22px;
     }
 
     .logon-glyph {
-        width: 80px;
-        height: 80px;
+        width: 132px;
+        height: 132px;
+    }
+
+    .logon-glyph::after {
+        animation-name: lg-scan-lg;
     }
 
     .logon-wolf {
-        font-size: 2.2px;
-        line-height: 1.46px;
+        font-size: 3.98px;
+        line-height: 2.64px;
     }
 
     .logon-name {
-        font-size: 1.2rem;
-        white-space: normal;
+        font-size: clamp(1.15rem, 7.2vw, 1.9rem);
+        letter-spacing: 0.06em;
     }
 
     .logon-role {
-        font-size: 11px;
-        letter-spacing: 0.1em;
+        margin-top: 10px;
+        font-size: clamp(11px, 3.4vw, 13px);
     }
+
+    .logon-btn {
+        width: min(200px, 70vw);
+        margin-top: 34px;
+        padding: 10px 0;
+        font-size: 15px;
+    }
+}
+
+@keyframes lg-scan-lg {
+    from { transform: translateY(-18px); }
+    to   { transform: translateY(132px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
