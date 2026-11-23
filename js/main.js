@@ -641,6 +641,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         drawWolf();
         if (!reduceMotion) wolfTimer = setInterval(drawWolf, 140);
+
+        // Scale the drawing to fit its box exactly, whatever monospace font
+        // (and minimum text size) the device uses, so it stays centred.
+        const fitWolf = () => {
+            const box = wolfEl.parentElement;
+            const w = wolfEl.offsetWidth;
+            const h = wolfEl.offsetHeight;
+            if (!w || !h) return;
+            wolfEl.style.setProperty('--wolf-k', String(Math.min(box.clientWidth / w, box.clientHeight / h)));
+        };
+        fitWolf();
+        window.addEventListener('resize', fitWolf);
+        document.fonts?.ready.then(fitWolf);
     }
 
     // The name decrypts into place on load: each letter cycles through
