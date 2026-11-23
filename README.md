@@ -8,7 +8,7 @@ My personal portfolio, styled as an early-2000s desktop: each section is a windo
 
 ## Features
 
-- **Log-on screen:** an original ASCII wolf and a still night forest with living details: a great tree whose leafy crown and hanging strands sway in the wind alongside the ferns, data streaks running down the trunk and twinkling floor lights. Logging on plays a short synthesized startup chime.
+- **Log-on screen:** a clean card with an original animated ASCII wolf. Logging on plays a short synthesized startup chime, once per visit.
 - **Desktop layout:** Welcome and New Message windows, a Projects folder and readme.txt, with a taskbar that highlights the window you're viewing
 - **Projects folder:** goalstat.exe replays real reports from my COBOL project on a dot-matrix printer, myfinancepal.exe is a live debt payoff calculator on sample data, and visualizer.exe reacts to your microphone or a music file
 - **Real window buttons:** Minimize, Maximize/Restore (or double-click the title bar) and Close work on every window; the welcome.exe desktop icon or the taskbar brings Welcome back
@@ -51,7 +51,7 @@ Messages go through [Formspree](https://formspree.io) and are delivered to the e
 ├── css/
 │   └── style.css          all styles and skin colour variables
 ├── js/
-│   ├── main.js            log-on screen, skins, Start menu, clock, windows
+│   ├── main.js            log-on wolf, skins, Start menu, clock, windows
 │   ├── sound.js           startup chime and tray mute toggle
 │   ├── droid.js           Bit, the desktop droid
 │   ├── goalstat.js        goalstat.exe printer

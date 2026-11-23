@@ -2770,23 +2770,6 @@ body {
     pointer-events: none;
 }
 
-.logon-bar {
-    flex: 0 0 auto;
-    min-height: 64px;
-    background: linear-gradient(180deg, var(--task-b), var(--task-a) 70%, var(--task-c));
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
-}
-
-.logon-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 0 28px;
-    font-size: 13px;
-    color: var(--task-text);
-}
-
 .logon-main {
     flex: 1;
     display: grid;
@@ -2898,42 +2881,8 @@ body {
     background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent);
 }
 
-/* Animated ASCII cyber forest behind the log-on card (main.js) */
-.logon-forest {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    /* fade toward the top so the trees rise out of the dark */
-    -webkit-mask: linear-gradient(180deg, transparent 0%, #000 14%);
-    mask: linear-gradient(180deg, transparent 0%, #000 14%);
-}
-
-.lf-scene {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    /* tiny characters, so the scene reads like an image */
-    font: 6px/6px Consolas, 'Lucida Console', 'Courier New', monospace;
-    letter-spacing: 0;
-    white-space: pre;
-    overflow: hidden;
-    color: var(--accent);
-    opacity: 0.5;
-    text-shadow: 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent);
-    user-select: none;
-}
-
-/* keep the card above the forest */
 .logon-card {
     position: relative;
     z-index: 1;
 }
 
-/* The forest's lights: data streaks, glowing floor and motes, with a bloom */
-.lf-scene.lf-glow {
-    opacity: 1;
-    color: color-mix(in srgb, var(--accent) 70%, #ffffff);
-    text-shadow:
-        0 0 3px var(--accent),
-        0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
-}
