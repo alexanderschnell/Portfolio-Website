@@ -10,7 +10,9 @@
 :root {
     --font-ui: Tahoma, Verdana, 'Segoe UI', sans-serif;
     --font-title: 'Trebuchet MS', Tahoma, sans-serif;
-    --taskbar-h: 42px;
+    /* iPhones (viewport-fit=cover): keep the taskbar above the home bar */
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --taskbar-h: calc(42px + var(--safe-b));
 
     /* ---- Luna Blue (default light skin) ---- */
     --desktop: linear-gradient(180deg, #3a6fd8 0%, #5d94ec 45%, #8cbef4 100%);
@@ -1073,6 +1075,7 @@ h1, h2, h3 {
     display: flex;
     align-items: stretch;
     height: var(--taskbar-h);
+    padding: 0 env(safe-area-inset-right, 0px) var(--safe-b) env(safe-area-inset-left, 0px);
     background: linear-gradient(180deg, var(--task-b) 0%, var(--task-a) 10%, var(--task-a) 90%, var(--task-c) 100%);
     border-top: 1px solid rgba(255, 255, 255, 0.35);
     font-size: 13px;
@@ -2748,10 +2751,16 @@ body {
 
 /* =========================================================
    Log-on screen (main.js). Only shown when JS is running.
-   Built from the current skin's colours.
+   A dark "secure terminal" in the current skin's colours:
+   --lg-bg (the skin's desktop, darkened) and --lg-accent (its
+   accent, lifted to read on dark) are set by main.js.
    ========================================================= */
 .logon {
     display: none;
+    --lg-a: var(--lg-accent, var(--accent));
+    --lg-b: var(--lg-bg, #0b0d10);
+    --lg-mono: Consolas, 'SF Mono', Menlo, 'Courier New', monospace;
+    --lg-sans: Bahnschrift, 'DIN Alternate', 'Segoe UI', system-ui, sans-serif;
 }
 
 .js .logon:not([hidden]) {
@@ -2760,8 +2769,9 @@ body {
     z-index: 2000; /* above everything, including the droid */
     display: flex;
     flex-direction: column;
-    background: var(--desktop);
-    color: var(--icon-text);
+    background:
+        radial-gradient(ellipse at 50% 50%, var(--lg-b), color-mix(in srgb, var(--lg-b) 55%, #000) 100%);
+    color: #e9edf2;
     transition: opacity 0.42s ease;
 }
 
@@ -2777,43 +2787,71 @@ body {
     padding: 24px;
     position: relative;
     overflow: hidden;
-    background: radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.09), transparent 55%);
 }
 
-/* One consolidated log-on card */
+/* A soft backlight in the accent colour, breathing slowly behind the content */
+.logon-main::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 45% 40% at 50% 47%, color-mix(in srgb, var(--lg-a) 16%, transparent), transparent 100%);
+    animation: lg-breathe 6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes lg-breathe {
+    0%, 100% { opacity: 0.35; transform: scale(0.94); }
+    50% { opacity: 1; transform: scale(1.06); }
+}
+
+/* The ID block: no panel or frame, just the content on the background */
 .logon-card {
+    position: relative;
+    z-index: 1;
+    width: min(460px, 100%);
+    padding: 18px 26px 24px;
+    animation: lg-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: transform 0.42s ease, filter 0.42s ease;
+}
+
+@keyframes lg-in {
+    from { opacity: 0; transform: translateY(8px); clip-path: inset(0 0 100% 0); }
+    to   { opacity: 1; transform: none; clip-path: inset(-12px); }
+}
+
+.lg-id {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    column-gap: 18px;
-    width: min(440px, 100%);
-    padding: 24px 26px 22px;
-    color: var(--win-text);
-    /* early-2000s depth: a raised, beveled panel (light top-left edge, dark
-       bottom-right edge) with a soft sheen and a drop shadow, in the skin's
-       own bevel colours rather than an accent outline */
-    background: linear-gradient(180deg,
-        color-mix(in srgb, var(--win-body) 90%, #ffffff) 0%,
-        var(--win-body) 38%,
-        color-mix(in srgb, var(--win-body) 88%, #000000) 100%);
-    border: 1px solid rgba(0, 0, 0, 0.6);
-    border-radius: 3px;
-    box-shadow:
-        inset 1px 1px 0 var(--bevel-hi),
-        inset -1px -1px 0 var(--bevel-lo),
-        inset 2px 2px 0 color-mix(in srgb, var(--bevel-hi) 35%, transparent),
-        inset -2px -2px 0 color-mix(in srgb, var(--bevel-lo) 55%, transparent),
-        3px 3px 0 rgba(0, 0, 0, 0.28),
-        0 16px 40px rgba(0, 0, 0, 0.5);
+    column-gap: 20px;
 }
 
+/* The wolf, with a scan line passing over it */
 .logon-glyph {
+    position: relative;
     display: grid;
     place-items: center;
     width: 96px;
     height: 96px;
     overflow: hidden;
-    grid-row: 1 / span 2;
+}
+
+.logon-glyph::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 18px;
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--lg-a) 30%, transparent) 90%, var(--lg-a));
+    opacity: 0.55;
+    animation: lg-scan 2.8s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes lg-scan {
+    from { transform: translateY(-18px); }
+    to   { transform: translateY(96px); }
 }
 
 .logon-wolf {
@@ -2821,91 +2859,430 @@ body {
     font: bold 2.9px/1.92px Consolas, 'Lucida Console', 'Courier New', monospace;
     letter-spacing: 0;
     white-space: pre;
-    color: var(--accent);
-    text-shadow: 0 0 2px color-mix(in srgb, var(--accent) 60%, transparent);
+    color: var(--lg-a);
+    text-shadow: 0 0 2px color-mix(in srgb, var(--lg-a) 60%, transparent);
     user-select: none;
 }
 
 .logon-name {
     margin: 0;
-    font: bold 1.3rem / 1.2 var(--font-ui);
-    text-align: left;
-    align-self: end;
+    font: 600 1.55rem / 1.1 var(--lg-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f3f6f9;
+    white-space: nowrap;
 }
 
 .logon-role {
-    margin: 4px 0 0;
-    align-self: start;
-    font-size: 13px;
-    color: var(--muted);
+    margin: 8px 0 0;
+    font: 12px/1 var(--lg-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--lg-a);
 }
 
+/* blinking terminal caret */
+.logon-role::after {
+    content: '';
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 4px;
+    vertical-align: -2px;
+    background: var(--lg-a);
+    animation: lg-caret 1.05s steps(1) infinite;
+}
+
+@keyframes lg-caret {
+    50% { opacity: 0; }
+}
+
+/* Enter: the desktop's own primary button (.btn.btn-primary) in a compact,
+   chamfered shape (two corners cut off), centred under the name */
 .logon-btn {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    margin-top: 16px;
-    grid-column: 1 / -1;
-    grid-row: 4;
-    padding: 10px 16px;
-    font: bold 14px var(--font-ui);
-    color: var(--on-accent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 80%, #ffffff), var(--accent) 45%, color-mix(in srgb, var(--accent) 82%, #000000));
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, #000000);
-    border-radius: 3px;
-    /* raised, like a period push button */
-    box-shadow:
-        inset 1px 1px 0 rgba(255, 255, 255, 0.45),
-        inset -1px -1px 0 rgba(0, 0, 0, 0.25),
-        0 2px 10px color-mix(in srgb, var(--accent) 30%, transparent);
-    cursor: pointer;
-    transition: filter 0.15s, box-shadow 0.15s;
+    width: 150px;
+    margin: 26px auto 0;
+    padding: 7px 0;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    border-radius: 0;
 }
 
-.logon-btn svg {
-    width: 18px;
-    height: 18px;
-    transition: transform 0.15s;
+/* Access granted: the screen dives into the desktop */
+.logon.leaving .logon-card {
+    transform: scale(1.06);
+    filter: blur(3px);
 }
 
-.logon-btn:hover,
-.logon-btn:focus-visible {
-    filter: brightness(1.08);
-    box-shadow:
-        inset 1px 1px 0 rgba(255, 255, 255, 0.45),
-        inset -1px -1px 0 rgba(0, 0, 0, 0.25),
-        0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent),
-        0 4px 16px color-mix(in srgb, var(--accent) 45%, transparent);
-    outline: none;
+@media (max-width: 480px) {
+    .logon-card {
+        padding: 16px 18px 20px;
+    }
+
+    .lg-id {
+        column-gap: 14px;
+    }
+
+    .logon-glyph {
+        width: 80px;
+        height: 80px;
+    }
+
+    .logon-wolf {
+        font-size: 2.2px;
+        line-height: 1.46px;
+    }
+
+    .logon-name {
+        font-size: 1.2rem;
+        white-space: normal;
+    }
+
+    .logon-role {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+    }
 }
 
-/* pressed in: the bevel flips */
-.logon-btn:active {
-    box-shadow:
-        inset 1px 1px 2px rgba(0, 0, 0, 0.35),
-        inset -1px -1px 0 rgba(255, 255, 255, 0.25);
-    filter: brightness(0.96);
+@media (prefers-reduced-motion: reduce) {
+    .logon-glyph::after {
+        display: none;
+    }
+
+    .logon-main::after {
+        animation: none;
+        opacity: 0.7;
+    }
+
+    .logon-card,
+    .logon-role::after {
+        animation: none;
+    }
 }
 
-.logon-btn:hover svg,
-.logon-btn:focus-visible svg {
-    transform: translateX(3px);
+/* =========================================================
+   Phones and small screens
+   ========================================================= */
+/* Landscape notches: keep the icon column and windows clear of them */
+.desktop-icons {
+    left: env(safe-area-inset-left, 0px);
 }
 
-/* thin divider between the name and the button */
-.logon-card::after {
-    content: '';
-    grid-column: 1 / -1;
-    grid-row: 3;
-    height: 1px;
-    margin-top: 18px;
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent);
+.desktop {
+    padding-left: calc(75px + 22px + env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
 }
 
-.logon-card {
+/* Touch screens: 16px form text stops iOS Safari zooming in on focus,
+   and a little more room between the title bar buttons */
+@media (pointer: coarse) {
+    .field input,
+    .field textarea,
+    .gs-job-label select,
+    .viz-mode select {
+        font-size: 16px;
+    }
+
+    .titlebar-buttons {
+        gap: 6px;
+    }
+}
+
+/* Phones (portrait): the icons become a row across the top, so the
+   windows get the whole width of the screen */
+@media (max-width: 600px) {
+    .desktop {
+        padding: 0 max(10px, env(safe-area-inset-right, 0px)) 10px max(10px, env(safe-area-inset-left, 0px));
+    }
+
+    .hero {
+        grid-template-rows: auto 1fr;
+        gap: 6px;
+    }
+
+    .desktop-icons {
+        position: static;
+        justify-self: stretch;
+        grid-auto-flow: row;
+        grid-template-rows: none;
+        grid-template-columns: repeat(auto-fit, minmax(54px, 1fr));
+        grid-auto-columns: auto;
+        padding: 6px 0 0;
+    }
+
+    .desk-icon {
+        width: auto;
+        height: auto;
+        padding: 4px 0 3px;
+        font-size: 10px;
+    }
+
+    .desk-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .window-welcome {
+        width: 100%;
+    }
+
+    .hero-name {
+        font-size: clamp(2.1rem, 11.5vw, 3rem);
+    }
+
+    .hero-tagline {
+        margin-top: 10px;
+    }
+
+    .hero-cta {
+        margin-top: 24px;
+    }
+
+    .hero-cta .btn {
+        flex: 1 1 auto;
+    }
+
+    /* Pop-ups use nearly the whole screen */
+    .section.popup {
+        padding: 6px;
+    }
+
+    .popup > .window {
+        width: 100%;
+    }
+
+    .window-printer .window-body.printer-body,
+    .window-visualizer .window-body.viz-body,
+    .window-finance .window-body.finance-body {
+        padding: 12px;
+    }
+
+    .viz-mode {
+        margin-left: 0;
+    }
+
+    .start-menu {
+        width: min(260px, calc(100vw - 16px));
+    }
+}
+
+/* Landscape phones: a shorter icon column that still fits all six icons,
+   and a tighter Welcome window */
+@media (max-height: 520px) and (min-width: 601px) {
+    .desktop-icons {
+        --cell: 58px;
+        grid-template-rows: repeat(auto-fill, min(var(--cell), calc((100dvh - var(--taskbar-h) - 6px) / 6)));
+    }
+
+    .desk-icon {
+        height: auto;
+        gap: 1px;
+        padding-top: 2px;
+        font-size: 10px;
+    }
+
+    .desk-icon svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .desktop {
+        padding-top: 8px;
+        padding-left: calc(58px + 14px + env(safe-area-inset-left, 0px));
+    }
+
+    .hero-body {
+        padding: 16px clamp(16px, 4vw, 40px);
+    }
+
+    .hero-name {
+        font-size: clamp(1.8rem, 11vh, 3rem);
+    }
+
+    .hero-lede {
+        margin-top: 6px;
+    }
+
+    .hero-cta {
+        margin-top: 12px;
+    }
+
+    .section.popup {
+        padding: 6px;
+    }
+}
+
+/* The smallest phones (320px): keep all six icons on one row */
+@media (max-width: 340px) {
+    .desktop-icons {
+        grid-template-columns: repeat(auto-fit, minmax(46px, 1fr));
+    }
+
+    .desk-icon {
+        font-size: 9px;
+    }
+
+    .desk-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* myfinancepal.exe on phones: one strategy card per row, a tighter table */
+@media (max-width: 600px) {
+    .strategy-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .finance-panel {
+        padding: 8px 8px 10px;
+    }
+
+    .debt-table th,
+    .debt-table td {
+        padding: 5px;
+    }
+}
+
+/* =========================================================
+   Resizable windows (main.js: edges/corners with a mouse, pinch on touch)
+   ========================================================= */
+.popup > .window:not(.maximized):not(.resized) {
     position: relative;
-    z-index: 1;
 }
 
+/* Once resized, a window keeps its own size and place */
+.window.resized.resized:not(.maximized) {
+    position: fixed;
+    left: var(--win-l);
+    top: var(--win-t);
+    width: var(--win-w);
+    height: var(--win-h);
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.window.resized > .titlebar,
+.window.resized > .menu-bar,
+.window.resized > .address-bar,
+.window.resized > .statusbar {
+    flex-shrink: 0;
+}
+
+.window.resized > .window-body {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+
+.window-welcome.resized > .hero-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* No text selection or animation fighting the drag */
+.window.resizing,
+.window.resizing * {
+    user-select: none;
+    transition: none !important;
+}
+
+/* Invisible grab zones along every edge and corner */
+.rz {
+    position: absolute;
+    z-index: 5;
+    touch-action: none;
+}
+
+.rz-n { left: 6px; right: 6px; height: 4px; cursor: ns-resize; }
+.rz-s { left: 14px; right: 14px; height: 5px; cursor: ns-resize; }
+.rz-e, .rz-w { top: 6px; bottom: 14px; width: 5px; cursor: ew-resize; }
+.rz-n { top: 0; }
+.rz-s { bottom: 0; }
+.rz-e { right: 0; }
+.rz-w { left: 0; }
+.rz-se, .rz-sw { width: 14px; height: 14px; }
+.rz-ne, .rz-nw { width: 6px; height: 6px; } /* small, to stay clear of the title bar buttons */
+.rz-ne { top: 0; right: 0; cursor: nesw-resize; }
+.rz-sw { bottom: 0; left: 0; cursor: nesw-resize; }
+.rz-nw { top: 0; left: 0; cursor: nwse-resize; }
+.rz-se { bottom: 0; right: 0; cursor: nwse-resize; }
+
+/* A faint size grip in the bottom-right corner, like the classic status bar grip */
+.rz-se::after {
+    content: '';
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 9px;
+    height: 9px;
+    opacity: 0.55;
+    background: linear-gradient(135deg,
+        transparent 0 45%, var(--muted) 45% 52%,
+        transparent 52% 65%, var(--muted) 65% 72%,
+        transparent 72% 85%, var(--muted) 85% 92%, transparent 92%);
+    pointer-events: none;
+}
+
+/* Hidden while maximized, on the "Not Responding" trail copies, and on touch-only
+   screens (those pinch instead) */
+.window.maximized > .rz,
+.trail > .rz {
+    display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .rz {
+        display: none;
+    }
+}
+
+/* =========================================================
+   Scroll bars in the current skin's colours
+   (thumb = a raised skin button, track = the sunken panel)
+   ========================================================= */
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--panel);
+    box-shadow: inset 1px 1px 0 var(--bevel-lo);
+}
+
+::-webkit-scrollbar-thumb {
+    min-height: 28px;
+    background: linear-gradient(90deg, var(--btn-a), var(--btn-b));
+    border: 1px solid var(--btn-border);
+    box-shadow: inset 1px 1px 0 var(--bevel-hi), inset -1px -1px 0 var(--bevel-mid);
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    background: linear-gradient(180deg, var(--btn-a), var(--btn-b));
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--btn-a);
+    box-shadow: inset 1px 1px 0 var(--bevel-hi), inset -1px -1px 0 var(--bevel-mid), inset 0 0 0 20px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: var(--select);
+    box-shadow: inset 1px 1px 0 var(--bevel-lo);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--win-body);
+}
+
+/* Firefox (no ::-webkit-scrollbar): flat skin colours */
+@supports not selector(::-webkit-scrollbar) {
+    html {
+        scrollbar-color: var(--btn-a) var(--panel);
+    }
+}

@@ -53,13 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
     };
     function updateFavicon(skin) {
-        if (!faviconLink) return;
         const [desktop, , accent] = skin.swatch;
         const tile = mix(desktop, '#000000', 0.7);
         let wolf = accent;
         // keep the wolf bright enough to read on the dark tile
         for (let t = 0.15; luma(wolf) < 0.32 && t <= 0.9; t += 0.15) wolf = mix(accent, '#ffffff', t);
         const eyes = mix(wolf, '#ffffff', 0.8);
+        // The log-on screen uses the same pair: always dark, lit by the accent.
+        root.style.setProperty('--lg-bg', mix(desktop, '#000000', 0.8));
+        root.style.setProperty('--lg-accent', wolf);
+        if (!faviconLink) return;
         const paint = (svg) => {
             const out = svg.replace(/#14171c/g, tile).replace(/#a6ff4d/g, wolf).replace(/#efffd9/g, eyes);
             faviconLink.href = 'data:image/svg+xml,' + encodeURIComponent(out);
@@ -343,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const r = move.rect;
             // Keep at least the title bar reachable on screen.
             const dx = Math.min(Math.max(e.clientX - move.startX, 80 - r.right), window.innerWidth - 80 - r.left);
-            const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
+            const dy = Math.min(Math.max(e.clientY - move.startY, -r.top), window.innerHeight - taskbarH() - 32 - r.top);
             win.dataset.x = move.baseX + dx;
             win.dataset.y = move.baseY + dy;
             win.style.transform = `translate(${move.baseX + dx}px, ${move.baseY + dy}px)`;
@@ -352,6 +355,146 @@ document.addEventListener('DOMContentLoaded', () => {
         bar?.addEventListener('pointerup', stopMove);
         bar?.addEventListener('pointercancel', stopMove);
     }
+
+    /* ---------- Resizable windows ---------- */
+    // Mouse or pen: drag any edge or corner. Touch: pinch a window with two
+    // fingers (the midpoint between them also moves it). The first resize
+    // lifts the window out of the page flow (.resized, position: fixed) so
+    // its size and place are just four numbers; close() puts it back.
+    const MIN_W = 260;
+    const MIN_H = 150;
+    const RZ_DIRS = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
+
+    // Room a window may use: the screen above the taskbar.
+    const desk = () => ({ w: window.innerWidth, h: window.innerHeight - taskbarH() });
+
+    // Detach a window at its current on-screen rect (translate included).
+    function detach(win) {
+        const r = win.getBoundingClientRect();
+        setRect(win, r.left, r.top, r.width, r.height);
+        win.classList.add('resized');
+        return { left: r.left, top: r.top, width: r.width, height: r.height };
+    }
+
+    function setRect(win, left, top, width, height) {
+        const d = desk();
+        width = Math.min(Math.max(width, Math.min(MIN_W, d.w)), d.w);
+        height = Math.min(Math.max(height, Math.min(MIN_H, d.h)), d.h);
+        left = Math.min(Math.max(left, 0), d.w - width);
+        top = Math.min(Math.max(top, 0), d.h - height);
+        win.style.transform = '';
+        win.dataset.x = win.dataset.y = '0';
+        win.style.setProperty('--win-l', `${left}px`);
+        win.style.setProperty('--win-t', `${top}px`);
+        win.style.setProperty('--win-w', `${width}px`);
+        win.style.setProperty('--win-h', `${height}px`);
+    }
+
+    function unsize(win) {
+        win.classList.remove('resized');
+        ['--win-l', '--win-t', '--win-w', '--win-h'].forEach((p) => win.style.removeProperty(p));
+    }
+
+    function makeResizable(win) {
+        RZ_DIRS.forEach((dir) => {
+            const h = document.createElement('div');
+            h.className = `rz rz-${dir}`;
+            h.dataset.dir = dir;
+            h.setAttribute('aria-hidden', 'true');
+            win.append(h);
+        });
+
+        // Edge and corner handles.
+        let rs = null;
+        win.addEventListener('pointerdown', (e) => {
+            const h = e.target.closest('.rz');
+            if (!h || h.parentElement !== win || e.button !== 0 || win.classList.contains('maximized')) return;
+            e.preventDefault();
+            e.stopPropagation();
+            h.setPointerCapture(e.pointerId);
+            rs = { dir: h.dataset.dir, x: e.clientX, y: e.clientY, r: detach(win) };
+            win.classList.add('resizing');
+        });
+        win.addEventListener('pointermove', (e) => {
+            if (!rs) return;
+            const { dir, r } = rs;
+            const d = desk();
+            // Clamp the pointer to the desk so the opposite edge never moves.
+            const dx = Math.min(Math.max(e.clientX, 0), d.w) - rs.x;
+            const dy = Math.min(Math.max(e.clientY, 0), d.h) - rs.y;
+            let { left, top, width, height } = r;
+            if (dir.includes('e')) width = r.width + dx;
+            if (dir.includes('s')) height = r.height + dy;
+            if (dir.includes('w')) {
+                width = Math.max(r.width - dx, Math.min(MIN_W, d.w));
+                left = r.left + r.width - width;
+            }
+            if (dir.includes('n')) {
+                height = Math.max(r.height - dy, Math.min(MIN_H, d.h));
+                top = r.top + r.height - height;
+            }
+            setRect(win, left, top, width, height);
+        });
+        const stop = () => {
+            if (!rs) return;
+            rs = null;
+            win.classList.remove('resizing');
+        };
+        win.addEventListener('pointerup', stop);
+        win.addEventListener('pointercancel', stop);
+        win.addEventListener('lostpointercapture', stop);
+
+        // Two-finger pinch (touch events, so we can stop the page zooming).
+        let pinch = null;
+        const span = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+        const mid = (t) => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+        win.addEventListener('touchstart', (e) => {
+            if (e.targetTouches.length !== 2 || win.classList.contains('maximized')) return;
+            e.preventDefault();
+            raise(win);
+            pinch = { d0: span(e.targetTouches) || 1, m0: mid(e.targetTouches), r: detach(win) };
+            win.classList.add('resizing');
+        }, { passive: false });
+        win.addEventListener('touchmove', (e) => {
+            if (!pinch || e.targetTouches.length !== 2) return;
+            e.preventDefault();
+            const { r, m0 } = pinch;
+            const k = span(e.targetTouches) / pinch.d0;
+            const m = mid(e.targetTouches);
+            const d = desk();
+            const width = Math.min(Math.max(r.width * k, Math.min(MIN_W, d.w)), d.w);
+            const height = Math.min(Math.max(r.height * k, Math.min(MIN_H, d.h)), d.h);
+            // Keep the spot between the fingers under the fingers.
+            const left = m.x - (m0.x - r.left) * (width / r.width);
+            const top = m.y - (m0.y - r.top) * (height / r.height);
+            setRect(win, left, top, width, height);
+        }, { passive: false });
+        const endPinch = (e) => {
+            if (!pinch || e.targetTouches.length >= 2) return;
+            pinch = null;
+            win.classList.remove('resizing');
+        };
+        win.addEventListener('touchend', endPinch);
+        win.addEventListener('touchcancel', endPinch);
+        win.addEventListener('gesturestart', (e) => e.preventDefault()); // iOS Safari page zoom
+
+        // Closing puts the window back at its starting size and place.
+        win.addEventListener('winclose', () => unsize(win));
+    }
+
+    Object.values(windows).forEach(({ win }) => makeResizable(win));
+
+    // Keep sized windows on screen when the browser window shrinks or a phone rotates.
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.window.resized').forEach((win) => {
+            const s = win.style;
+            setRect(win,
+                parseFloat(s.getPropertyValue('--win-l')) + Number(win.dataset.x || 0),
+                parseFloat(s.getPropertyValue('--win-t')) + Number(win.dataset.y || 0),
+                parseFloat(s.getPropertyValue('--win-w')),
+                parseFloat(s.getPropertyValue('--win-h')));
+        });
+    });
 
     /* ---------- Launch Welcome ---------- */
     // On page load, and whenever welcome.exe (or Start > Welcome) starts it
@@ -494,18 +637,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!reduceMotion) wolfTimer = setInterval(drawWolf, 140);
     }
 
+    // The name decrypts into place on load: each letter cycles through
+    // random characters before settling, left to right. Purely decorative
+    // (screen readers get the plain name), and the button works throughout.
+    const nameEl = document.getElementById('logon-name');
+    if (nameEl && !reduceMotion) {
+        const real = nameEl.textContent;
+        const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$/<>';
+        const start = performance.now();
+        const decrypt = () => {
+            const settled = Math.floor((performance.now() - start - 250) / 38); // letters done so far
+            nameEl.textContent = [...real].map((ch, i) => (ch === ' ' || i < settled ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join('');
+            if (settled < real.length) setTimeout(decrypt, 40);
+        };
+        decrypt();
+    }
+
     if (logon && logonUser) {
         logonUser.focus({ preventScroll: true });
         logonUser.addEventListener('click', () => {
-            if (logon.classList.contains('leaving')) return;
-            logon.classList.add('leaving');
-            document.getElementById('logon-status').textContent = 'Welcome';
+            if (logon.classList.contains('granted')) return;
+            // A brief "access granted" beat, then the panel dives into the desktop.
+            logon.classList.add('granted');
+            const btnText = document.getElementById('logon-btn-text');
+            if (btnText) btnText.textContent = 'Access granted';
+            document.getElementById('logon-status').textContent = 'Access granted. Welcome';
             setTimeout(() => {
-                clearInterval(wolfTimer); // the wolf can rest once the desktop is up
-                logon.hidden = true;
-                document.dispatchEvent(new CustomEvent('logon'));
-                openWelcome();
-            }, reduceMotion ? 0 : 420);
+                logon.classList.add('leaving');
+                setTimeout(() => {
+                    clearInterval(wolfTimer); // the wolf can rest once the desktop is up
+                    logon.hidden = true;
+                    document.dispatchEvent(new CustomEvent('logon'));
+                    openWelcome();
+                }, reduceMotion ? 0 : 420);
+            }, reduceMotion ? 0 : 280);
         });
     } else {
         openWelcome(); // no log-on screen: boot straight away
@@ -601,7 +766,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Drag with a mouse or pen. A short click still opens the link; a drag
     // (more than a few pixels) moves the icon and swallows the click.
     // Touch is left alone so phones can still scroll past the icons.
-    const TASKBAR_H = 42;
+    // Measured, since iPhones add the home-bar inset to the taskbar.
+    const taskbarH = () => document.querySelector('.taskbar')?.offsetHeight || 42;
     let iconLayer = 3;
 
     document.querySelectorAll('.desk-icon').forEach((icon) => {
@@ -635,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Keep the icon on screen and above the taskbar.
             const r = drag.rect;
             dx = Math.min(Math.max(dx, -r.left), window.innerWidth - r.right);
-            dy = Math.min(Math.max(dy, -r.top), window.innerHeight - TASKBAR_H - r.bottom);
+            dy = Math.min(Math.max(dy, -r.top), window.innerHeight - taskbarH() - r.bottom);
             const x = drag.baseX + dx;
             const y = drag.baseY + dy;
             icon.dataset.x = x;
@@ -738,7 +904,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const r = drag.rect;
             // Keep at least the title bar reachable on screen.
             const dx = Math.min(Math.max(e.clientX - drag.startX, 80 - r.right), window.innerWidth - 80 - r.left);
-            const dy = Math.min(Math.max(e.clientY - drag.startY, -r.top), window.innerHeight - TASKBAR_H - 32 - r.top);
+            const dy = Math.min(Math.max(e.clientY - drag.startY, -r.top), window.innerHeight - taskbarH() - 32 - r.top);
             const x = drag.baseX + dx;
             const y = drag.baseY + dy;
             hungWindow.dataset.x = x;

@@ -5,7 +5,8 @@
 // clicked, can be picked up and dropped, and dozes off when the visitor goes
 // idle. Its colours come from the current skin.
 document.addEventListener('DOMContentLoaded', () => {
-    const TASKBAR_H = 42;
+    // Measured, since iPhones add the home-bar inset to the taskbar.
+    const taskbarH = () => document.querySelector('.taskbar')?.offsetHeight || 42;
     const W = 46;
     const H = 52;
     const GRAVITY = 1500;      // px/s²
@@ -72,14 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleTimer = 0;
 
     function ground() {
-        return window.innerHeight - TASKBAR_H - H + 4; // boots rest on the taskbar edge
+        return window.innerHeight - taskbarH() - H + 4; // boots rest on the taskbar edge
     }
 
     function visibleWindows() {
         return [...document.querySelectorAll('.window')].filter((w) => {
             if (w.classList.contains('trail') || w.closest('[hidden]') || w.hidden) return false;
             const r = w.getBoundingClientRect();
-            return r.width > 120 && r.top > H + 10 && r.top < window.innerHeight - TASKBAR_H - 60;
+            return r.width > 120 && r.top > H + 10 && r.top < window.innerHeight - taskbarH() - 60;
         });
     }
 
