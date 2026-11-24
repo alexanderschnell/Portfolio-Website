@@ -459,19 +459,26 @@ document.addEventListener('DOMContentLoaded', () => {
         let pinch = null;
         const span = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
         const mid = (t) => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+        // Fingers on this window. Not targetTouches: that only counts fingers that
+        // landed on the same element, so a pinch with one finger on a label and
+        // the other on a field or button never registered (only readme.txt,
+        // which is one big text box, could be pinched).
+        const fingers = (e) => [...e.touches].filter((t) => win.contains(t.target));
         win.addEventListener('touchstart', (e) => {
-            if (e.targetTouches.length !== 2 || win.classList.contains('maximized')) return;
+            const t = fingers(e);
+            if (t.length !== 2 || win.classList.contains('maximized')) return;
             e.preventDefault();
             raise(win);
-            pinch = { d0: span(e.targetTouches) || 1, m0: mid(e.targetTouches), r: detach(win) };
+            pinch = { d0: span(t) || 1, m0: mid(t), r: detach(win) };
             win.classList.add('resizing');
         }, { passive: false });
         win.addEventListener('touchmove', (e) => {
-            if (!pinch || e.targetTouches.length !== 2) return;
+            const t = fingers(e);
+            if (!pinch || t.length !== 2) return;
             e.preventDefault();
             const { r, m0 } = pinch;
-            const k = span(e.targetTouches) / pinch.d0;
-            const m = mid(e.targetTouches);
+            const k = span(t) / pinch.d0;
+            const m = mid(t);
             const d = desk();
             const width = Math.min(Math.max(r.width * k, Math.min(MIN_W, d.w)), d.w);
             const height = Math.min(Math.max(r.height * k, Math.min(MIN_H, d.h)), d.h);
@@ -481,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setRect(win, left, top, width, height);
         }, { passive: false });
         const endPinch = (e) => {
-            if (!pinch || e.targetTouches.length >= 2) return;
+            if (!pinch || fingers(e).length >= 2) return;
             pinch = null;
             win.classList.remove('resizing');
         };
