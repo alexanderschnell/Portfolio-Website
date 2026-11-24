@@ -22,33 +22,12 @@
             document.documentElement.dataset.theme = families[skin];
         })();
     </script>
-    <link rel="stylesheet" href="css/style.css?v=20261123d">
+    <link rel="stylesheet" href="css/style.css?v=20261123e">
+    <link rel="stylesheet" href="css/wolf.css?v=20261123e">
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 </head>
 <body>
-    <!-- Log-on screen: shown on every visit (with JS). Clicking the user tile
-         boots the desktop, and that click also lets the startup chime play,
-         since browsers only allow sound after an interaction. -->
-    <div class="logon" id="logon" role="dialog" aria-modal="true" aria-label="Log on">
-        <div class="logon-main">
-            <div class="logon-card">
-                <div class="lg-id">
-                    <span class="logon-glyph" aria-hidden="true">
-                        <pre class="logon-wolf" id="logon-wolf"></pre>
-                    </span>
-                    <div>
-                        <p class="logon-name"><span class="visually-hidden">Alexander Schnell</span><span id="logon-name" aria-hidden="true">Alexander Schnell</span></p>
-                        <p class="logon-role">Portfolio</p>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-primary logon-btn" id="logon-user" aria-label="Enter as Alexander Schnell">
-                    <span id="logon-btn-text">Enter</span>
-                </button>
-            </div>
-        </div>
-        <span class="visually-hidden" id="logon-status" aria-live="polite"></span>
-    </div>
     <main class="desktop">
         <!-- Desktop: shortcut icons + welcome window -->
         <section id="home" class="hero">
@@ -406,7 +385,7 @@
             </button>
             <div class="start-menu" id="start-menu" hidden>
                 <div class="start-head">
-                    <span class="start-avatar" aria-hidden="true">AS</span>
+                    <span class="start-avatar ascii-wolf-box" aria-hidden="true"><pre class="ascii-wolf" id="start-wolf"></pre></span>
                     <span>Alexander Schnell</span>
                 </div>
                 <ul class="start-list">
@@ -432,13 +411,6 @@
         </ul>
 
         <div class="tray">
-            <button class="tray-btn sound-btn" id="sound-btn" type="button" aria-pressed="true" aria-label="System sounds on" title="System sounds: on">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/>
-                    <path class="sound-waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path class="sound-x" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </button>
             <div class="tray-wrap">
                 <button class="tray-btn" id="skin-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="skin-menu" aria-label="Change theme" title="Display Properties">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -457,12 +429,12 @@
         </div>
     </nav>
 
-    <script src="js/sound.js?v=20261123d"></script>
-    <script src="js/main.js?v=20261123d"></script>
-    <script src="js/contact.js?v=20261123d"></script>
-    <script src="js/goalstat.js?v=20261123d"></script>
-    <script src="js/myfinancepal.js?v=20261123d"></script>
-    <script src="js/visualizer.js?v=20261123d"></script>
-    <script src="js/droid.js?v=20261123d"></script>
+    <script src="js/wolf.js?v=20261123e"></script>
+    <script src="js/main.js?v=20261123e"></script>
+    <script src="js/contact.js?v=20261123e"></script>
+    <script src="js/goalstat.js?v=20261123e"></script>
+    <script src="js/myfinancepal.js?v=20261123e"></script>
+    <script src="js/visualizer.js?v=20261123e"></script>
+    <script src="js/droid.js?v=20261123e"></script>
 </body>
 </html>

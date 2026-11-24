@@ -1,7 +1,7 @@
 // Desktop pet: "Bit", a small original maintenance droid with jet boots. It
 // hovers along the top of the taskbar, stops to look around, sometimes jets
 // up onto a window's title bar (and rides along if the window is dragged),
-// walks off a window's edge and jets back down, beeps and hops when
+// walks off a window's edge and jets back down, chirps and hops when
 // clicked, can be picked up and dropped, and dozes off when the visitor goes
 // idle. Its colours come from the current skin.
 document.addEventListener('DOMContentLoaded', () => {
@@ -110,9 +110,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
+    // Things Bit says when clicked: one per line in assets/textfiles/
+    // robottalklines.txt (surrounding quotes are optional). Until the file
+    // has loaded, or if it can't be fetched, Bit just chirps.
+    let talkLines = [];
+    let lastLine = '';
+    fetch('assets/textfiles/robottalklines.txt?v=20261123e')
+        .then((r) => (r.ok ? r.text() : Promise.reject()))
+        .then((text) => {
+            talkLines = text.split(/\r?\n/)
+                .map((l) => l.trim().replace(/^["“]|["”]$/g, '').trim())
+                .filter(Boolean);
+        })
+        .catch(() => { /* keep the chirps */ });
+
+    function randomLine() {
+        const pool = talkLines.length ? talkLines : ['beep-boop!', 'bweee?', '*whirr*', 'bip bip!'];
+        let line = pool[Math.floor(Math.random() * pool.length)];
+        if (pool.length > 1 && line === lastLine) line = pool[(pool.indexOf(line) + 1) % pool.length];
+        lastLine = line;
+        return line;
+    }
+
     function say(text, ms = 1600) {
         bubble.textContent = text;
         bubble.classList.add('show');
+        // Long lines stay up longer, and the bubble is nudged sideways so it
+        // never runs off the edge of the screen.
+        ms = Math.max(ms, 900 + text.length * 55);
+        bubble.style.setProperty('--bubble-dx', '0px');
+        const r = bubble.getBoundingClientRect();
+        const dx = Math.max(6 - r.left, Math.min(0, innerWidth - 6 - r.right));
+        bubble.style.setProperty('--bubble-dx', `${dx}px`);
         clearTimeout(bubbleTimer);
         bubbleTimer = setTimeout(() => bubble.classList.remove('show'), ms);
     }
@@ -174,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
         hop = { fromX: x, fromY: y, toX: tx, toY: ty, t: 0, dur: 0.7, to: toWindow, rect };
         facing = tx >= x ? 1 : -1;
         mode = 'hop';
-        window.systemSound?.beep(1200, 1);
     }
 
     // Land on a window title bar if falling through its top edge, else the taskbar.
@@ -245,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 moving = stepX;
                 if (Math.abs(d) < 1) {
-                    if (mode === 'enter') { say('beep!'); window.systemSound?.beep(900, 2); }
+                    if (mode === 'enter') { say('beep!'); }
                     lookAround(900 + Math.random() * 1500);
                 }
                 break;
@@ -303,7 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (mode === 'hop') z = hop?.to ? layerZ(hop.to) : GROUND_Z;
         else if (mode !== 'fall') z = surface ? layerZ(surface) : GROUND_Z;
         else if (z === CARRIED_Z) z = GROUND_Z; // just dropped: fall at desktop level
-        el.style.zIndex = String(z);
+        // While talking it comes to the front, so the bubble isn't hidden behind a window.
+        el.style.zIndex = String(bubble.classList.contains('show') ? Math.max(z, CARRIED_Z) : z);
 
         el.dataset.state = mode; // handy for styling and debugging
         el.dataset.on = surface ? (surface.closest('section')?.id || 'window') : 'taskbar';
@@ -336,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
             el.classList.add('carried');
             el.classList.remove('asleep');
             say('whoa!', 900);
-            window.systemSound?.beep(1500, 2);
         }
         x = e.clientX - drag.ox;
         y = Math.max(0, Math.min(ground(), e.clientY - drag.oy)); // keep it on screen
@@ -353,13 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
             mode = 'fall';
             return;
         }
-        // A click: wake up, beep, hop on the spot.
+        // A click: wake up, say something, hop on the spot.
         el.classList.remove('asleep');
         el.classList.add('happy');
         setTimeout(() => el.classList.remove('happy'), 900);
-        const lines = ['beep-boop!', 'bweee?', '*whirr*', 'bip bip!', 'hello, human', '01101000 01101001'];
-        say(lines[Math.floor(Math.random() * lines.length)]);
-        window.systemSound?.beep(700 + Math.random() * 700, 3 + Math.floor(Math.random() * 3));
+        say(randomLine());
         if (!reduceMotion && mode !== 'fall' && mode !== 'hop') {
             startHop(x, y, surface, null);
             hop.toY = y;
@@ -387,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
         el.classList.remove('asleep');
         if (mode === 'sleep') lookAround(800);
         say('uh oh…', 1800);
-        window.systemSound?.beep(420, 4);
     });
 
     window.addEventListener('resize', () => {
@@ -403,11 +428,8 @@ document.addEventListener('DOMContentLoaded', () => {
         until = Infinity; // wait for the roll-in below
         mode = 'look';
         x = -W;
-        // Wait for the visitor to log on (if there's a log-on screen), then roll in.
-        const rollIn = () => setTimeout(() => { targetX = 110 + Math.random() * 80; mode = 'enter'; }, 1500);
-        const logon = document.getElementById('logon');
-        if (logon && !logon.hidden) document.addEventListener('logon', rollIn, { once: true });
-        else rollIn();
+        // Roll in shortly after the desktop appears.
+        setTimeout(() => { targetX = 110 + Math.random() * 80; mode = 'enter'; }, 1500);
     }
     requestAnimationFrame(step);
 });

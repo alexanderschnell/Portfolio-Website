@@ -2446,14 +2446,6 @@ body {
 }
 
 /* =========================================================
-   Tray: system sounds toggle (js/sound.js)
-   ========================================================= */
-.sound-btn .sound-x { display: none; }
-.sound-btn.muted .sound-waves { display: none; }
-.sound-btn.muted .sound-x { display: inline; }
-.sound-btn.muted { opacity: 0.7; }
-
-/* =========================================================
    visualizer.exe (js/visualizer.js)
    ========================================================= */
 .titlebar-icon.icon-viz {
@@ -2722,7 +2714,11 @@ body {
     left: 50%;
     padding: 3px 8px;
     font: 11px Consolas, 'Lucida Console', monospace;
-    white-space: nowrap;
+    width: max-content;
+    max-width: 220px;
+    margin-left: var(--bubble-dx, 0px); /* nudged by droid.js to stay on screen */
+    text-align: center;
+    line-height: 1.35;
     color: var(--menu-text);
     background: var(--menu-bg);
     border: 1px solid var(--menu-border);
@@ -2738,7 +2734,7 @@ body {
     content: '';
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: calc(50% - var(--bubble-dx, 0px)); /* keep pointing at Bit */
     margin-left: -4px;
     border: 4px solid transparent;
     border-top-color: var(--menu-border);
@@ -2747,217 +2743,6 @@ body {
 .droid-bubble.show {
     opacity: 1;
     transform: translate(-50%, 0);
-}
-
-/* =========================================================
-   Log-on screen (main.js). Only shown when JS is running.
-   Strictly the current skin: its desktop background, desktop text
-   colours and shadow, the site's fonts, and the skin's highlight
-   colour (--lg-accent, set by main.js) for the wolf and the glow.
-   ========================================================= */
-.logon {
-    display: none;
-    --lg-a: var(--lg-accent, var(--accent));
-}
-
-.js .logon:not([hidden]) {
-    position: fixed;
-    inset: 0;
-    z-index: 2000; /* above everything, including the droid */
-    display: flex;
-    flex-direction: column;
-    background: var(--desktop);
-    color: var(--icon-text);
-    transition: opacity 0.42s ease;
-}
-
-.logon.leaving {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.logon-main {
-    flex: 1;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* A soft light in the accent colour rising from the bottom edge,
-   breathing very slowly */
-.logon-main::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 75% 55% at 50% 100%, color-mix(in srgb, var(--lg-a) 30%, transparent), transparent 100%);
-    transform-origin: 50% 100%;
-    animation: lg-breathe 12s ease-in-out infinite;
-    pointer-events: none;
-}
-
-@keyframes lg-breathe {
-    0%, 100% { opacity: 0.3; transform: scaleY(0.85); }
-    50% { opacity: 1; transform: scaleY(1.1); }
-}
-
-/* The ID block: no panel or frame, just the content on the background */
-.logon-card {
-    position: relative;
-    z-index: 1;
-    width: min(460px, 100%);
-    padding: 18px 26px 24px;
-    animation: lg-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
-    transition: transform 0.42s ease, filter 0.42s ease;
-}
-
-@keyframes lg-in {
-    from { opacity: 0; transform: translateY(8px); clip-path: inset(0 0 100% 0); }
-    to   { opacity: 1; transform: none; clip-path: inset(-12px); }
-}
-
-.lg-id {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    column-gap: 20px;
-}
-
-/* The wolf */
-.logon-glyph {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 96px;
-    height: 96px;
-    overflow: hidden;
-}
-
-/* Drawn at a normal text size (phones enforce minimum font sizes and use
-   other monospace fonts), then scaled to fit and centred in its box.
-   main.js measures it and sets --wolf-k. */
-.logon-wolf {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: 0;
-    font: bold 10px/6.62px Consolas, 'Lucida Console', 'Courier New', monospace;
-    letter-spacing: 0;
-    white-space: pre;
-    color: var(--lg-a);
-    text-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
-    transform: translate(-50%, -50%) scale(var(--wolf-k, 0.29));
-    transform-origin: center;
-    -webkit-text-size-adjust: none;
-    text-size-adjust: none;
-    user-select: none;
-}
-
-.logon-name {
-    margin: 0;
-    font: bold 1.55rem / 1.1 var(--font-title);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--icon-text);
-    text-shadow: var(--icon-shadow, none);
-    white-space: nowrap;
-}
-
-.logon-role {
-    margin: 8px 0 0;
-    font: bold 12px/1 var(--font-ui);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--lg-a);
-    text-shadow: var(--icon-shadow, none);
-}
-
-/* blinking terminal caret */
-.logon-role::after {
-    content: '';
-    display: inline-block;
-    width: 0.55em;
-    height: 1em;
-    margin-left: 4px;
-    vertical-align: -2px;
-    background: var(--lg-a);
-    animation: lg-caret 1.05s steps(1) infinite;
-}
-
-@keyframes lg-caret {
-    50% { opacity: 0; }
-}
-
-/* Enter: the desktop's own primary button (.btn.btn-primary) in a compact,
-   chamfered shape (two corners cut off), centred under the name */
-.logon-btn {
-    display: flex;
-    width: 150px;
-    margin: 26px auto 0;
-    padding: 7px 0;
-    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-    border-radius: 0;
-}
-
-/* Access granted: the screen dives into the desktop */
-.logon.leaving .logon-card {
-    transform: scale(1.06);
-    filter: blur(3px);
-}
-
-/* Portrait phones: stack and centre everything, with a bigger wolf and the
-   name on one line, sized to the screen width */
-@media (max-width: 600px) and (orientation: portrait) {
-    .logon-main {
-        padding: 24px max(12px, env(safe-area-inset-right, 0px)) 24px max(12px, env(safe-area-inset-left, 0px));
-    }
-
-    .logon-card {
-        padding: 0;
-        text-align: center;
-    }
-
-    .lg-id {
-        grid-template-columns: minmax(0, 1fr);
-        justify-items: center;
-        row-gap: 22px;
-    }
-
-    .logon-glyph {
-        width: 132px;
-        height: 132px;
-    }
-
-    .logon-name {
-        font-size: clamp(1rem, 6.6vw, 1.9rem); /* one line that fits, even at 320px */
-        letter-spacing: 0.06em;
-    }
-
-    .logon-role {
-        margin-top: 10px;
-        font-size: clamp(11px, 3.4vw, 13px);
-        padding-left: calc(0.55em + 4px); /* balances the caret so the word itself is centred */
-    }
-
-    .logon-btn {
-        width: min(200px, 70vw);
-        margin-top: 34px;
-        padding: 10px 0;
-        font-size: 15px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .logon-main::after {
-        animation: none;
-        opacity: 0.7;
-    }
-
-    .logon-card,
-    .logon-role::after {
-        animation: none;
-    }
 }
 
 /* =========================================================
@@ -3305,21 +3090,19 @@ body {
     .droid {
         --droid-line: var(--muted);
     }
-
-    /* Log-on glow: ready-mixed colour from main.js (--lg-glow) */
-    .logon-main::after {
-        background: radial-gradient(ellipse 75% 55% at 50% 100%, var(--lg-glow, transparent), transparent 100%);
-    }
 }
 
-/* Log-on on the glossy (light) skins: the wolf and PORTFOLIO use the
-   desktop icon-label style (white with a dark shadow) so they read on the
-   bright desktops; the skin's highlight stays for the caret and glow. */
-[data-theme="light"] .logon-wolf {
-    color: var(--icon-text);
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.55);
+/* Start menu avatar: the ASCII wolf (js/wolf.js, css/wolf.css) on a tile
+   in the favicon's colours (--wolf-tile / --wolf-colour, set by main.js). */
+.start-avatar.ascii-wolf-box,
+[data-theme="dark"] .start-avatar.ascii-wolf-box {
+    display: block;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    background: var(--wolf-tile, #14171c);
 }
 
-[data-theme="light"] .logon-role {
-    color: var(--icon-text);
+.start-avatar .ascii-wolf {
+    text-shadow: none;
 }

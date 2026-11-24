@@ -4,18 +4,17 @@
 
 My personal portfolio, styled as an early-2000s desktop: each section is a window, the navigation is a taskbar, and there's a Start menu. It's a single page built with plain HTML, CSS and JavaScript. No frameworks, no build step, no backend.
 
-![Log-on screen](./assets/images/screenshot-logon.png)
+![Desktop](./assets/images/screenshot-home.png)
 
 ## Features
 
-- **Log-on screen:** a minimal entry screen on the current skin's own desktop, in its fonts and colours: an original animated ASCII wolf, a name that decrypts into place and a slow glow rising from the bottom. Pressing Enter plays a short synthesized startup chime, once per visit.
 - **Desktop layout:** Welcome and New Message windows, a Projects folder and readme.txt, with a taskbar that highlights the window you're viewing
 - **Projects folder:** goalstat.exe replays real reports from my COBOL project on a dot-matrix printer, myfinancepal.exe is a live debt payoff calculator on sample data, and visualizer.exe reacts to your microphone or a music file
 - **Real window buttons:** Minimize, Maximize/Restore (or double-click the title bar) and Close work on every window; the welcome.exe desktop icon or the taskbar brings Welcome back
-- **Start menu and clock:** the Start button opens a menu with every section and link, and the tray shows the time
+- **Start menu and clock:** the Start button opens a menu, headed by an original animated ASCII wolf, with every section and link, and the tray shows the time
 - **Six skins:** Display Properties (the monitor icon in the tray) switches between Night LCD (the default), Olive Drab, Luna Blue, Silver Metal, Aero Glass and Y2K Cyber. The site remembers your choice.
 - **Movable icons:** drag the desktop shortcuts anywhere with a mouse. A quick click still opens them.
-- **Bit the desktop droid:** a small original robot on jet boots that flies around the desktop and lands on windows
+- **Bit the desktop droid:** a small original robot on jet boots that flies around the desktop and lands on windows. Click it and it says a random line from `assets/textfiles/robottalklines.txt` (one line each).
 - **"Not Responding" easter egg:** shake the Welcome window hard while dragging it and it panics, leaving a frozen trail across the screen
 - **Contact form:** sends messages through Formspree, so no email address or password lives in the code
 - **Responsive:** works on phones, tablets and desktops; on small screens the icons line up across the top and the Start menu handles navigation
@@ -47,12 +46,14 @@ Messages go through [Formspree](https://formspree.io) and are delivered to the e
 
 ```
 ├── assets/
-│   └── images/            wolf favicon, screenshots
+│   ├── images/            wolf favicon, screenshots
+│   └── textfiles/         robottalklines.txt: what Bit says when clicked
 ├── css/
-│   └── style.css          all styles and skin colour variables
+│   ├── style.css          all styles and skin colour variables
+│   └── wolf.css           styles for the ASCII wolf
 ├── js/
-│   ├── main.js            log-on wolf, skins, Start menu, clock, windows
-│   ├── sound.js           startup chime and tray mute toggle
+│   ├── main.js            skins, wolf favicon, Start menu, clock, windows
+│   ├── wolf.js            the animated ASCII wolf (Start menu avatar)
 │   ├── droid.js           Bit, the desktop droid
 │   ├── goalstat.js        goalstat.exe printer
 │   ├── myfinancepal.js    myfinancepal.exe calculator
@@ -64,6 +65,6 @@ Messages go through [Formspree](https://formspree.io) and are delivered to the e
 
 ## Screenshots
 
-| Desktop | New Message | Projects |
-|---|---|---|
-| ![Desktop](./assets/images/screenshot-home.png) | ![New Message](./assets/images/screenshot-contact.png) | ![Projects](./assets/images/screenshot-projects.png) |
+| New Message | Projects |
+|---|---|
+| ![New Message](./assets/images/screenshot-contact.png) | ![Projects](./assets/images/screenshot-projects.png) |
