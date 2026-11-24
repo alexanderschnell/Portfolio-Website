@@ -1,0 +1,29 @@
+/* The ASCII wolf (js/wolf.js), used as the Start menu avatar.
+   Drawn at a normal text size (phones enforce minimum font sizes and use
+   other monospace fonts), then scaled to fit and centred in its box:
+   wolf.js measures it and sets --wolf-k. Set --wolf-colour to tint it. */
+.ascii-wolf-box {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 96px;
+    overflow: hidden;
+}
+
+.ascii-wolf {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: 0;
+    font: bold 10px/6.62px Consolas, 'Lucida Console', 'Courier New', monospace;
+    letter-spacing: 0;
+    white-space: pre;
+    color: var(--wolf-colour, var(--accent));
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+    transform: translate(-50%, -50%) scale(var(--wolf-k, 0.29));
+    transform-origin: center;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    user-select: none;
+}
