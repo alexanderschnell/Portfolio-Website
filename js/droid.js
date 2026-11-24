@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // has loaded, or if it can't be fetched, Bit just chirps.
     let talkLines = [];
     let lastLine = '';
-    fetch('assets/textfiles/robottalklines.txt?v=20261123e')
+    fetch('assets/textfiles/robottalklines.txt?v=20261123f')
         .then((r) => (r.ok ? r.text() : Promise.reject()))
         .then((text) => {
             talkLines = text.split(/\r?\n/)
